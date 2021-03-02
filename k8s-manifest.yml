@@ -1,0 +1,279 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: steadybit-demo
+  labels:
+    app: steadybit-demo
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: steadybit-demo
+      namespace: steadybit-demo
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: steadybit-demo:view
+      namespace: steadybit-demo
+    roleRef:
+      kind: ClusterRole
+      apiGroup: rbac.authorization.k8s.io
+      name: view
+    subjects:
+      - kind: Group
+        name: system:serviceaccounts:steadybit-demo
+        apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: steadybit-agent
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  allowedHostPaths:
+    - pathPrefix: "/var/run"
+    - pathPrefix: "/var/log"
+  volumes:
+    - configMap
+    - downwardAPI
+    - emptyDir
+    - persistentVolumeClaim
+    - secret
+    - projected
+    - hostPath
+  hostNetwork: true
+  hostPorts:
+    - min: 0
+      max: 65535
+  hostIPC: true
+  hostPID: true
+  runAsUser:
+    rule: "RunAsAny"
+  seLinux:
+    rule: "RunAsAny"
+  supplementalGroups:
+    rule: "RunAsAny"
+  fsGroup:
+    rule: "RunAsAny"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: gateway
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: gateway-exposed
+  template:
+    metadata:
+      labels:
+        run: gateway-exposed
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/gateway
+          imagePullPolicy: Always
+          name: gateway
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 90
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: gateway
+  name: gateway
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    run: gateway-exposed
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: fashion-bestseller
+  name: fashion-bestseller
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      run: fashion-bestseller-exposed
+  template:
+    metadata:
+      labels:
+        run: fashion-bestseller-exposed
+    spec:
+      serviceAccountName: steadybit-demo
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: run
+                      operator: In
+                      values:
+                        - fashion-bestseller-exposed
+                topologyKey: "kubernetes.io/hostname"
+      containers:
+        - image: steadybit/bestseller-fashion
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "1000m"
+          imagePullPolicy: Always
+          name: fashion-bestseller
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            initialDelaySeconds: 90
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            initialDelaySeconds: 90
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: fashion-bestseller
+  name: fashion-bestseller
+spec:
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    run: fashion-bestseller-exposed
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: toys-bestseller
+  name: toys-bestseller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: toys-bestseller-exposed
+  template:
+    metadata:
+      labels:
+        run: toys-bestseller-exposed
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/bestseller-toys:latest
+          imagePullPolicy: IfNotPresent
+          name: toys-bestseller
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: toys-bestseller
+  name: toys-bestseller
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    run: toys-bestseller-exposed
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: hot-deals
+  name: hot-deals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: hot-deals-exposed
+  template:
+    metadata:
+      labels:
+        run: hot-deals-exposed
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/hot-deals
+          imagePullPolicy: Always
+          name: hot-deals
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8083
+            initialDelaySeconds: 90
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: hot-deals
+  name: hot-deals
+spec:
+  ports:
+    - port: 8083
+      protocol: TCP
+      targetPort: 8083
+  selector:
+    run: hot-deals-exposed
+  type: NodePort

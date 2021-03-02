@@ -1,0 +1,38 @@
+// Base colors
+$color-white: #FFF;
+$color-black: #000;
+
+//Extended
+$color-coral-red: #ED220B;
+$color-sunset-orange: #FF4F43;
+$color-isabelline: #EEE8E1;
+
+//Neutrals
+$color-neutral-50: #FAFBFC;
+$color-neutral-100: #F6F7F8;
+$color-neutral-200: #F1F2F4;
+$color-neutral-300: #E2E5E8;
+$color-neutral-400: #BBC0C4;
+$color-neutral-500: #8E969D;
+$color-neutral-600: #788189;
+$color-neutral-700: #4D5964;
+$color-neutral-800: #34424E;
+$color-neutral-900: #1D2D3A;
+
+//Interaction
+$color-interaction-regular: $color-coral-red;
+$color-link: #2A81A6;
+
+//Feedback
+$color-success: #2AA66A;
+$color-success-light: #AFDAC5;
+$color-warning: #FFC90B;
+$color-warning-light: #FDEEB9;
+$color-error: $color-coral-red;
+$color-error-light: #F8D4D0;
+$color-information: $color-link;
+$color-information-light: #DBEEF5;
+
+//Text
+$color-text: $color-neutral-900;
+$color-text-muted: $color-neutral-500;

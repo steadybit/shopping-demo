@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    platform: hsqldb
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true

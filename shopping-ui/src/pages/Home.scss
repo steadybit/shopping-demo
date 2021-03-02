@@ -1,0 +1,61 @@
+@import "src/styles/colors";
+@import "src/styles/typography";
+@import "src/styles/helpers";
+
+.home {
+  margin-top: 12px;
+
+  &__debug {
+    position: fixed;
+    bottom: 4px;
+    right: 8px;
+    width: auto;
+    align-items: center;
+    display: grid;
+    grid-template-areas: 'loading version' 'lastUpdate lastUpdate';
+    grid-template-columns: 1fr auto;
+  }
+
+  &__version {
+    grid-area: version;
+  }
+
+  &__loading {
+    grid-area: loading;
+    margin-left: auto;
+    margin-right: 8px;
+
+    &--hidden {
+      visibility: hidden;
+    }
+  }
+
+  &__loading svg {
+    animation: rotation 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+
+  &__lastUpdate {
+    grid-area: lastUpdate;
+    font-size: 10px;
+    text-align: right;
+  }
+
+  &__deals {
+    padding: 12px 32px;
+
+    h3 {
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+  }
+}

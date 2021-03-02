@@ -1,0 +1,27 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: hotdeals
+  datasource:
+    platform: hsqldb
+  cloud:
+    kubernetes:
+      enabled: false
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles: 0.95
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
+  endpoint:
+    health:
+      probes:
+        enabled: true

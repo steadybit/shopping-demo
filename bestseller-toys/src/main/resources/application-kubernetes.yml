@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    platform: hsqldb
+  cloud:
+    kubernetes:
+      enabled: true
+      reload:
+        enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false

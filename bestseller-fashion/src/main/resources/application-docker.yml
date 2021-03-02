@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://fashion-db:5432/postgres
+    username: postgres

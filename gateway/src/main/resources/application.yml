@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+    kubernetes:
+      enabled: false
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles: 0.95
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+hystrix:
+  metrics:
+    enabled: true
+  command:
+    fashion:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+    hotdeals:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+    toys:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+
+rest:
+  endpoint:
+    fashion: "http://localhost:8082/fashion/bestseller"
+    toys: "http://localhost:8081/toys/bestseller"
+    hotdeals: "http://localhost:8083/hotdeals"

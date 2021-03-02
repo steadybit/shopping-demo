@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  gateway:
+    image: steadybit/gateway:latest
+    ports:
+    - "8080:8080"
+
+  fashion:
+    image: steadybit/bestseller-fashion:latest
+    ports:
+    - "8082:8082"
+
+  toys:
+    image: steadybit/bestseller-toys:latest
+    ports:
+    - "8081:8081"
+
+  hot-deals:
+    image: steadybit/hot-deals:latest
+    ports:
+    - "8083:8083"

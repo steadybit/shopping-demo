@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://hot-deals-db:5432/postgres
+    username: postgres
