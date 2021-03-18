@@ -5,9 +5,9 @@
 In order to give you a quick and easy start, we provide you a small demo application. Our shopping demo is a small product catalog provided by 4 distributed
 services.
 
-![Architecture](./architecture.png)
+![Architecture](./architecture.jpg)
 
-Each of the 3 backend services (`fashion`, `toys` and `hot-deals`) provides a list of products, which are aggregated by the `gateway` service and compiled in a
+Each of the 3 backend services (`bestseller-fashion`, `bestseller-toys` and `hot-deals`) provides a list of products, which are aggregated by the `gateway` service and compiled in a
 list. This list of products is accessible from `/products` at the `gateway` component.
 
 Fallbacks, timeouts and circuit breakers are configured within the gateway service.
