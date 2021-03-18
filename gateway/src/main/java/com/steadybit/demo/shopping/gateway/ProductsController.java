@@ -74,8 +74,8 @@ public class ProductsController {
     public ProductsController(WebClient webClient) {
         this.webClient = webClient;
         this.restClient = new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofMillis(1000))
-                .setReadTimeout(Duration.ofMillis(1000))
+                .setConnectTimeout(Duration.ofMillis(2000))
+                .setReadTimeout(Duration.ofMillis(2000))
                 .build();
         this.errorResponse = new ProductResponse();
         errorResponse.setResponseType(ResponseType.ERROR);
