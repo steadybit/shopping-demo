@@ -9,18 +9,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Benjamin Wilms
- */
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@JsonPropertyOrder({ "fashionResponse", "toysResponse", "hotDealsResponse", "duration"})
 public class Products {
 
-    private long duration;
-    private ProductResponse fashionResponse;
-    private ProductResponse toysResponse;
-    private ProductResponse hotDealsResponse;
+    private List<Product> hotDeals;
+    private List<Product> fashion;
+    private List<Product> toys;
 }
