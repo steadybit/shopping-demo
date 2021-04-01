@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.29.814 on 2021-03-02 11:22:41.
+// Generated using typescript-generator version 2.30.840 on 2021-03-29 17:21:35.
 
 export interface Product {
     id: string;
@@ -10,18 +10,10 @@ export interface Product {
     price: number;
 }
 
-export interface ProductResponse {
-    responseType: ResponseType;
-    products: Product[];
-}
-
 export interface Products {
-    fashionResponse: ProductResponse;
-    toysResponse: ProductResponse;
-    hotDealsResponse: ProductResponse;
-    duration: number;
+    fashion: Product[];
+    toys: Product[];
+    hotDeals: Product[];
 }
 
-export type ProductCategory = 'FASHION' | 'TOYS' | 'BOOKS';
-
-export type ResponseType = 'REMOTE_SERVICE' | 'SECOND_TRY' | 'FALLBACK' | 'ERROR';
+export type ProductCategory = 'FASHION' | 'TOYS';

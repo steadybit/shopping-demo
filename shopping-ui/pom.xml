@@ -35,9 +35,6 @@
                     <classPatterns>
                         <classPattern>com.steadybit.shopping.domain.**</classPattern>
                     </classPatterns>
-                    <excludeClasses>
-                        <class>com.steadybit.shopping.domain.ProductBuilder</class>
-                    </excludeClasses>
                     <stringQuotes>singleQuotes</stringQuotes>
                     <outputFileType>implementationFile</outputFileType>
                     <outputKind>module</outputKind>

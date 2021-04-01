@@ -4,9 +4,6 @@
 
 package com.steadybit.shopping.domain;
 
-/**
- * @author Benjamin Wilms
- */
 public enum ProductCategory {
-    FASHION, TOYS, BOOKS;
+    FASHION, TOYS;
 }

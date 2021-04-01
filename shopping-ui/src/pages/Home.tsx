@@ -2,23 +2,19 @@ import React from 'react';
 import { Card, Col, Container, Dropdown, DropdownButton, Jumbotron, Row } from 'react-bootstrap';
 import Deal from '../components/Deal/Deal';
 import useAsync from '../utils/useAsync';
-import { Product, ProductResponse, Products } from '../../src-gen/ui-api';
+import { Product, Products } from '../../src-gen/ui-api';
 import classname from '../utils/classname';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { ProductService } from '../services/ProductService';
 import './Home.scss';
 import { AiOutlineLoading } from 'react-icons/all';
 
-const EmptyProductResponse: ProductResponse = {
-    responseType: 'REMOTE_SERVICE',
-    products: []
-};
 const EmptyStartpage: Products = {
-    fashionResponse: EmptyProductResponse,
-    hotDealsResponse: EmptyProductResponse,
-    toysResponse: EmptyProductResponse,
-    duration: 0,
+    fashion: [],
+    toys: [],
+    hotDeals: []
 };
+
 const block = classname('home');
 const Home: React.FC = () => {
     return <Router>
@@ -52,9 +48,9 @@ const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version: 'v1
         {error
             ? <Error error={error.toString()} />
             : <>
-                <Deals title={'Hot Deals'} loaded={products.hotDealsResponse.responseType === 'REMOTE_SERVICE'} products={products.hotDealsResponse.products} />
-                <Deals title={'Fashion'} loaded={products.fashionResponse.responseType === 'REMOTE_SERVICE'} products={products.fashionResponse.products} />
-                <Deals title={'Toys'} loaded={products.toysResponse.responseType === 'REMOTE_SERVICE'} products={products.toysResponse.products} />
+                <Deals title={'Hot Deals'} products={products.hotDeals} />
+                <Deals title={'Fashion'} products={products.fashion} />
+                <Deals title={'Toys'} products={products.toys} />
             </>}
         <div className={block('debug')}>
             <div className={block(isLoading ? 'loading' : 'loading--hidden')}>
@@ -70,8 +66,8 @@ const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version: 'v1
     </Container>;
 };
 
-const Deals: React.FC<{ title: string, loaded: boolean, products: Product[] }> = ({ title, loaded, products }) => {
-    return loaded
+const Deals: React.FC<{ title: string, products: Product[] }> = ({ title, products }) => {
+    return products?.length > 0
         ? <Jumbotron className={block('deals')}>
             <Container>
                 <Row>

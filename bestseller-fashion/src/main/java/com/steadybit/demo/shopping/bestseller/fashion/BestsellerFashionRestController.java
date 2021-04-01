@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author Benjamin Wilms
- */
 @RestController
 @RequestMapping("/fashion")
 public class BestsellerFashionRestController {
