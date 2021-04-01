@@ -57,11 +57,21 @@ public class ProductsController {
         return products;
     }
 
+    @GetMapping("/parallel")
+    public Mono<Products> getProductsParallel() {
+        Mono<List<Product>> hotdeals = getProductReactive("/products/hotdeals");
+        Mono<List<Product>> fashion = getProductReactive("/products/fashion");
+        Mono<List<Product>> toys = getProductReactive("/products/toys");
+
+        return Mono.zip(hotdeals, fashion, toys)
+                .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
+    }
+
     @GetMapping({ "/circuitbreaker", "/cb", "/v2" })
     public Mono<Products> getProductsCircuitBreaker() {
-        Mono<List<Product>> hotdeals = getProductCircuitBreaker("/products/hotdeals/circuitbreaker");
-        Mono<List<Product>> fashion = getProductCircuitBreaker("/products/fashion/circuitbreaker");
-        Mono<List<Product>> toys = getProductCircuitBreaker("/products/toys/circuitbreaker");
+        Mono<List<Product>> hotdeals = getProductReactive("/products/hotdeals/circuitbreaker");
+        Mono<List<Product>> fashion = getProductReactive("/products/fashion/circuitbreaker");
+        Mono<List<Product>> toys = getProductReactive("/products/toys/circuitbreaker");
 
         return Mono.zip(hotdeals, fashion, toys)
                 .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
@@ -79,13 +89,12 @@ public class ProductsController {
         return restTemplate.exchange(url, HttpMethod.GET, null, productListTypeReference).getBody();
     }
 
-    private Mono<List<Product>> getProductCircuitBreaker(String uri) {
+    private Mono<List<Product>> getProductReactive(String uri) {
         return webClient.get().uri(uri)
-                .exchange()
-                .flatMap(response -> response.bodyToFlux(productTypeReference)
-                        .collectList()
-                        .flatMap(Mono::just))
-                .doOnError(throwable -> log.error("Error occured", throwable))
-                .onErrorResume(throwable -> Mono.just(Collections.emptyList()));
+                .retrieve()
+                .bodyToFlux(productTypeReference)
+                .collectList()
+                .flatMap(Mono::just)
+                .doOnError(throwable -> log.error("Error occured", throwable));
     }
 }

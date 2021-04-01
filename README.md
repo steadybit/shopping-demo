@@ -120,8 +120,7 @@ public class ProductsController {
                 .flatMap(response -> response.bodyToFlux(productTypeReference)
                         .collectList()
                         .flatMap(Mono::just))
-                .doOnError(throwable -> log.error("Error occured", throwable))
-                .onErrorResume(throwable -> Mono.just(Collections.emptyList()));
+                .doOnError(throwable -> log.error("Error occured", throwable));
     }
 }
 ```

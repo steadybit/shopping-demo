@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, Col, Container, Dropdown, DropdownButton, Jumbotron, Row } from 'react-bootstrap';
 import Deal from '../components/Deal/Deal';
 import useAsync from '../utils/useAsync';
@@ -20,17 +20,43 @@ const Home: React.FC = () => {
     return <Router>
         <Switch>
             <Route exact path={'/'}>
-                <HomeDeals fetchProducts={ProductService.legacy.fetch} />
+                <HomeDeals />
             </Route>
             <Route exact path={'/circuitbreaker'}>
-                <HomeDeals fetchProducts={ProductService.circuitBreaker.fetch} version={'circuitBreaker'} />
+                <HomeDeals version={'circuitBreaker'} />
+            </Route>
+            <Route exact path={'/parallel'}>
+                <HomeDeals version={'parallel'} />
             </Route>
         </Switch>
     </Router>;
 };
 
-const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version?: undefined | 'circuitBreaker' }> = ({ fetchProducts, version }) => {
+type Version = undefined | 'parallel' | 'circuitBreaker';
+
+const getEndpointName = function(version: Version) {
+    switch (version) {
+        case 'circuitBreaker':
+            return 'with Circuit Breaker';
+        case 'parallel':
+            return 'with parallelization';
+        default:
+            return 'as basic implementation';
+
+    }
+};
+const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
     const [timestamp, setTimestamp] = React.useState(new Date());
+    const fetchProducts = useMemo(() => {
+        switch (version) {
+            case 'parallel':
+                return ProductService.parallel.fetch;
+            case 'circuitBreaker':
+                return ProductService.circuitBreaker.fetch;
+            default:
+                return ProductService.legacy.fetch;
+        }
+    }, [version]);
     const [products, { error, isLoading }] = useAsync(EmptyStartpage, () => fetchProducts(), [timestamp]);
     React.useEffect(() => {
         const handle = setInterval(() => {
@@ -55,12 +81,11 @@ const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version?: un
         <div className={block('debug')}>
             <div className={block('title')}>Endpoint</div>
             <DropdownButton size={'sm'} drop={'up'} variant='secondary'
-                            title={<span>{version === 'circuitBreaker' ? 'with Circuit Breaker' : 'without Circuit Breaker'}</span>}
+                            title={<span>{getEndpointName(version)}</span>}
                             className={block('version')}>
-                <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>with Circuit Breaker</Dropdown.Item>
-                <Dropdown.Item href={'/#'} active={version === undefined}>
-                    without Circuit Breaker
-                </Dropdown.Item>
+                <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>{getEndpointName('circuitBreaker')}</Dropdown.Item>
+                <Dropdown.Item href={'/#/parallel'} active={version === 'parallel'}>{getEndpointName('parallel')}</Dropdown.Item>
+                <Dropdown.Item href={'/#'} active={version === undefined}>{getEndpointName(undefined)}</Dropdown.Item>
             </DropdownButton>
             <div className={block('lastUpdate')}>
                 <div className={block('loading', isLoading ? [block('loading--hidden')] : [])}>
