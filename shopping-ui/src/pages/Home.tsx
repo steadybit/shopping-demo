@@ -19,17 +19,17 @@ const block = classname('home');
 const Home: React.FC = () => {
     return <Router>
         <Switch>
-            <Route exact path={'/(V1)?'}>
-                <HomeDeals fetchProducts={ProductService.legacy.fetch} version={'v1'} />
+            <Route exact path={'/'}>
+                <HomeDeals fetchProducts={ProductService.legacy.fetch} />
             </Route>
-            <Route exact path={'/V2'}>
-                <HomeDeals fetchProducts={ProductService.circuitBreaker.fetch} version={'v2'} />
+            <Route exact path={'/circuitbreaker'}>
+                <HomeDeals fetchProducts={ProductService.circuitBreaker.fetch} version={'circuitBreaker'} />
             </Route>
         </Switch>
     </Router>;
 };
 
-const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version: 'v1' | 'v2' }> = ({ fetchProducts, version }) => {
+const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version?: undefined | 'circuitBreaker' }> = ({ fetchProducts, version }) => {
     const [timestamp, setTimestamp] = React.useState(new Date());
     const [products, { error, isLoading }] = useAsync(EmptyStartpage, () => fetchProducts(), [timestamp]);
     React.useEffect(() => {
@@ -53,15 +53,20 @@ const HomeDeals: React.FC<{ fetchProducts: () => Promise<Products>, version: 'v1
                 <Deals title={'Toys'} products={products.toys} />
             </>}
         <div className={block('debug')}>
-            <div className={block(isLoading ? 'loading' : 'loading--hidden')}>
-                <AiOutlineLoading />
-            </div>
-            <DropdownButton drop={'up'} variant='secondary' title={version.toUpperCase()} className={'version'}>
-                {version === 'v1'
-                    ? <Dropdown.Item href={'/#/V2'}>V2</Dropdown.Item>
-                    : <Dropdown.Item href={'/#/V1'}>V1</Dropdown.Item>}
+            <div className={block('title')}>Endpoint</div>
+            <DropdownButton size={'sm'} drop={'up'} variant='secondary'
+                            title={<span>{version === 'circuitBreaker' ? 'with Circuit Breaker' : 'without Circuit Breaker'}</span>}
+                            className={block('version')}>
+                <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>with Circuit Breaker</Dropdown.Item>
+                <Dropdown.Item href={'/#'} active={version === undefined}>
+                    without Circuit Breaker
+                </Dropdown.Item>
             </DropdownButton>
-            <div className={block('lastUpdate')}>Last refresh: {timestamp.toLocaleTimeString()}</div>
+            <div className={block('lastUpdate')}>
+                <div className={block('loading', isLoading ? [block('loading--hidden')] : [])}>
+                    <AiOutlineLoading />
+                </div>
+                Last refresh: {timestamp.toLocaleTimeString()}</div>
         </div>
     </Container>;
 };

@@ -55,7 +55,7 @@ public class ProductsController {
         }
         return clientResponse.bodyToFlux(productTypeReference)
                 .collectList()
-                .flatMap(products -> Mono.just(products));
+                .flatMap(Mono::just);
     };
 
     public ProductsController(RestTemplate restTemplate, WebClient webClient) {
@@ -96,7 +96,7 @@ public class ProductsController {
     }
 
     private boolean isCircuitBraker(@PathVariable Optional<String> version) {
-        return version.map(v -> v.equalsIgnoreCase("cb") || v.equalsIgnoreCase("v2")).orElse(false);
+        return version.map(v -> v.equalsIgnoreCase("circuitbreaker") || v.equalsIgnoreCase("cb") || v.equalsIgnoreCase("v2")).orElse(false);
     }
 
     private Mono<Products> getProducts() {
@@ -126,9 +126,9 @@ public class ProductsController {
     private Mono<List<Product>> getProductCircuitBreaker(String uri) {
         return webClient.get().uri(uri)
                 .exchange()
-                .flatMap(responseProcessor).doOnError(t -> {
-                    System.out.println("on error");
-                }).onErrorResume(t -> {
+                .flatMap(responseProcessor)
+                .doOnError(t -> System.out.println("on error"))
+                .onErrorResume(t -> {
                     t.printStackTrace();
                     return Mono.just(Collections.emptyList());
                 });
