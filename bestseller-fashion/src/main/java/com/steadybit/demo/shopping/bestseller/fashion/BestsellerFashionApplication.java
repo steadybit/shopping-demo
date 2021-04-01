@@ -45,7 +45,7 @@ public class BestsellerFashionApplication implements CommandLineRunner {
         List<Object[]> products = Stream.of(
                 new Object[] { randomUUID(), "Bob Mailor Slim Jeans", ProductCategory.FASHION.toString(), "jeans", new BigDecimal("69.99") },
                 new Object[] { randomUUID(), "Sun Glasses", ProductCategory.FASHION.toString(), "sunglasses",  new BigDecimal("49.99") },
-                new Object[] { randomUUID(), "Urban Classics Shirt", ProductCategory.TOYS.toString(), "shirt", new BigDecimal("19.99") })
+                new Object[] { randomUUID(), "Urban Classics Shirt", ProductCategory.FASHION.toString(), "shirt", new BigDecimal("19.99") })
                 .collect(Collectors.toList());
         jdbcTemplate.batchUpdate("INSERT INTO products_fashion(id, name, category, imageId, price) VALUES (?,?,?,?,?)", products);
         log.info("Data inserted");

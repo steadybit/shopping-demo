@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/fashion")
+@RequestMapping("/products")
 public class BestsellerFashionRestController {
 
     private JdbcTemplate jdbcTemplate;
@@ -23,7 +23,7 @@ public class BestsellerFashionRestController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @GetMapping("/bestseller")
+    @GetMapping
     public List<Product> getBestsellerProducts() {
         return jdbcTemplate.query("SELECT id, name, category, imageId, price FROM products_fashion",
                 (rs, rowNum) -> new Product(rs.getString("id"), rs.getString("name"), ProductCategory.valueOf(rs.getString("category")), rs.getString("imageId"), rs.getBigDecimal("price")));
