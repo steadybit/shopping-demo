@@ -6,131 +6,95 @@ package com.steadybit.demo.shopping.gateway;
 
 import com.steadybit.shopping.domain.Product;
 import com.steadybit.shopping.domain.Products;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 @RestController
+@RequestMapping("/products")
 public class ProductsController {
 
-    private static final String URI_TOYS_BESTSELLER_CIRCUIT_BREAKER = "/cb/toys/bestseller";
-    private static final String URI_FASHION_BESTSELLER_CIRCUIT_BREAKER = "/cb/fashion/bestseller";
-    private static final String URI_HOTDEALS_CIRCUIT_BREAKER = "/cb/hotdeals";
+    private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
+
+    private final RestTemplate restTemplate;
+    private final WebClient webClient;
+    private final ParameterizedTypeReference<Product> productTypeReference = new ParameterizedTypeReference<Product>() {
+    };
+    private final ParameterizedTypeReference<List<Product>> productListTypeReference = new ParameterizedTypeReference<List<Product>>() {
+    };
 
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
-
     @Value("${rest.endpoint.toys}")
     private String urlToys;
-
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
-
-    private RestTemplate restTemplate;
-
-    private WebClient webClient;
-
-    private ParameterizedTypeReference<Product> productTypeReference = new ParameterizedTypeReference<Product>() {
-    };
-    private ParameterizedTypeReference<List<Product>> productListTypeReference = new ParameterizedTypeReference<List<Product>>() {
-    };
-    private Function<ClientResponse, Mono<List<Product>>> responseProcessor = clientResponse -> {
-        HttpHeaders headers = clientResponse.headers().asHttpHeaders();
-        if (headers.containsKey("fallback") && headers.get("fallback").contains("true")) {
-            return Mono.just(Collections.emptyList());
-        }
-        return clientResponse.bodyToFlux(productTypeReference)
-                .collectList()
-                .flatMap(products -> Mono.just(products));
-    };
 
     public ProductsController(RestTemplate restTemplate, WebClient webClient) {
         this.restTemplate = restTemplate;
         this.webClient = webClient;
     }
 
-    @RequestMapping(value = { "/products", "/products/{version}" }, method = RequestMethod.GET)
-    public Mono<Products> getProducts(@PathVariable Optional<String> version) {
-        if (isCircuitBraker(version)) {
-            return getProductsCircuitBreaker();
-        }
-        return getProducts();
-    }
-
-    @RequestMapping(value = { "/hotdeals", "/hotdeals/{version}" }, method = RequestMethod.GET)
-    public Mono<List<Product>> getHotDeals(@PathVariable Optional<String> version) {
-        if (isCircuitBraker(version)) {
-            return getProductCircuitBreaker(URI_HOTDEALS_CIRCUIT_BREAKER);
-        }
-        return Mono.just(getProduct(urlHotDeals));
-    }
-
-    @RequestMapping(value = { "/fashion", "/fashion/{version}" }, method = RequestMethod.GET)
-    public Mono<List<Product>> getFashion(@PathVariable Optional<String> version) {
-        if (isCircuitBraker(version)) {
-            return getProductCircuitBreaker(URI_FASHION_BESTSELLER_CIRCUIT_BREAKER);
-        }
-        return Mono.just(getProduct(urlFashion));
-    }
-
-    @RequestMapping(value = { "/toys", "/toys/{version}" }, method = RequestMethod.GET)
-    public Mono<List<Product>> getToys(@PathVariable Optional<String> version) {
-        if (isCircuitBraker(version)) {
-            return getProductCircuitBreaker(URI_TOYS_BESTSELLER_CIRCUIT_BREAKER);
-        }
-        return Mono.just(getProduct(urlToys));
-    }
-
-    private boolean isCircuitBraker(@PathVariable Optional<String> version) {
-        return version.map(v -> v.equalsIgnoreCase("cb") || v.equalsIgnoreCase("v2")).orElse(false);
-    }
-
-    private Mono<Products> getProducts() {
+    @GetMapping
+    public Products getProducts() {
         Products products = new Products();
-
         products.setFashion(getProduct(urlFashion));
         products.setToys(getProduct(urlToys));
         products.setHotDeals(getProduct(urlHotDeals));
+        return products;
+    }
 
-        return Mono.just(products);
+    @GetMapping("/parallel")
+    public Mono<Products> getProductsParallel() {
+        Mono<List<Product>> hotdeals = getProductReactive("/products/hotdeals");
+        Mono<List<Product>> fashion = getProductReactive("/products/fashion");
+        Mono<List<Product>> toys = getProductReactive("/products/toys");
 
+        return Mono.zip(hotdeals, fashion, toys)
+                .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
+    }
+
+    @GetMapping({ "/circuitbreaker", "/cb", "/v2" })
+    public Mono<Products> getProductsCircuitBreaker() {
+        Mono<List<Product>> hotdeals = getProductReactive("/products/hotdeals/circuitbreaker");
+        Mono<List<Product>> fashion = getProductReactive("/products/fashion/circuitbreaker");
+        Mono<List<Product>> toys = getProductReactive("/products/toys/circuitbreaker");
+
+        return Mono.zip(hotdeals, fashion, toys)
+                .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
+    }
+
+    @GetMapping("/fallback")
+    public ResponseEntity<List<Product>> getProductsFallback() {
+        log.info("fallback enabled");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("fallback", "true");
+        return ResponseEntity.ok().headers(headers).body(Collections.emptyList());
     }
 
     private List<Product> getProduct(String url) {
         return restTemplate.exchange(url, HttpMethod.GET, null, productListTypeReference).getBody();
     }
 
-    private Mono<Products> getProductsCircuitBreaker() {
-        Mono<List<Product>> hotdeals = getProductCircuitBreaker(URI_HOTDEALS_CIRCUIT_BREAKER);
-        Mono<List<Product>> fashionBestSellers = getProductCircuitBreaker(URI_FASHION_BESTSELLER_CIRCUIT_BREAKER);
-        Mono<List<Product>> toysBestSellers = getProductCircuitBreaker(URI_TOYS_BESTSELLER_CIRCUIT_BREAKER);
-
-        return Mono.zip(hotdeals, fashionBestSellers, toysBestSellers)
-                .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
-    }
-
-    private Mono<List<Product>> getProductCircuitBreaker(String uri) {
+    private Mono<List<Product>> getProductReactive(String uri) {
         return webClient.get().uri(uri)
-                .exchange()
-                .flatMap(responseProcessor).doOnError(t -> {
-                    System.out.println("on error");
-                }).onErrorResume(t -> {
-                    t.printStackTrace();
-                    return Mono.just(Collections.emptyList());
-                });
+                .retrieve()
+                .bodyToFlux(productTypeReference)
+                .collectList()
+                .flatMap(Mono::just)
+                .doOnError(throwable -> log.error("Error occured", throwable));
     }
 }
