@@ -36,13 +36,36 @@ docker-compose up
 open http://localhost:8080
 ```
 
-### Kubernetes
+### Kubernetes (local)
 
 ```sh
 minikube start
 minikube addons enable ingress
 kubectl apply -f k8s-manifest.yml
+kubectl apply -f k8s-manifest-minikube-ingress.yml
 open http://<minikube-ip>:8080
+```
+
+### Kubernetes (AWS EKS)
+
+Install `eksctl` CLI
+
+```sh
+brew tap weaveworks/tap
+brew install weaveworks/tap/eksctl
+```
+
+Create a new cluster in:
+
+```sh
+eksctl create cluster -f aws-eks-kubernetes/aws-eks-demo.yaml --alb-ingress-access
+```
+
+Deploy demo application:
+
+```sh
+kubectl apply -f k8s-manifest.yml
+kubectl apply -f k8s-manifest-eks-ingress.yml
 ```
 
 ## Implementation
