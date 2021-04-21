@@ -145,9 +145,13 @@ spec:
       containers:
         - image: steadybit/bestseller-fashion
           resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
             limits:
               memory: "2048Mi"
               cpu: "1000m"
+
           imagePullPolicy: Always
           name: fashion-bestseller
           ports:
