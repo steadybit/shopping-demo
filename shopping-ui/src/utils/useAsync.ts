@@ -1,13 +1,17 @@
 import * as React from 'react';
 
-const useAsync = <S = undefined>(initalState: S, stateProvider: (() => Promise<S>) | Promise<S>, deps?: React.DependencyList):
-    [S, { isLoading: boolean; error: Error | undefined }, (v: S) => void] => {
+const useAsync = <S = undefined>(
+    initalState: S,
+    stateProvider: (() => Promise<S>) | Promise<S>,
+    deps?: React.DependencyList
+): [S, { isLoading: boolean; error: Error | undefined }, (v: S) => void] => {
     const [data, setData] = React.useState<S>(initalState);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState(undefined);
 
     const normStateProvider = typeof stateProvider === 'function' ? stateProvider : () => stateProvider;
     const normDeps = deps || (typeof stateProvider === 'function' ? [] : [stateProvider]);
+    // eslint-disable-next-line
     const memoizedStateProvider = React.useCallback(normStateProvider, normDeps);
 
     React.useEffect(() => {
@@ -28,10 +32,10 @@ const useAsync = <S = undefined>(initalState: S, stateProvider: (() => Promise<S
 
         return () => {
             canceled = true;
-        }
+        };
     }, [memoizedStateProvider]);
 
-    return [data, {isLoading, error}, setData];
+    return [data, { isLoading, error }, setData];
 };
 
 export default useAsync;

@@ -1,18 +1,18 @@
 .deal {
-  cursor: pointer;
+    cursor: pointer;
 
-  &__title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    &__title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-  &__body {
-    display: flex;
-  }
+    &__body {
+        display: flex;
+    }
 
-  &__price {
-    white-space: nowrap;
-    margin-left: auto;
-  }
+    &__price {
+        white-space: nowrap;
+        margin-left: auto;
+    }
 }

@@ -1,44 +1,45 @@
 /*!
  * Copyright 2019 steadybit GmbH. All rights reserved.
  */
-@import "./_typography.scss";
-@import "./_colors.scss";
+@import './_typography.scss';
+@import './_colors.scss';
 
 .table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 
-  td, th {
-    padding: 8px 16px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    td,
+    th {
+        padding: 8px 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-  td.wrapping {
-    white-space: normal;
-  }
+    td.wrapping {
+        white-space: normal;
+    }
 
-  td {
-    vertical-align: middle;
-  }
+    td {
+        vertical-align: middle;
+    }
 
-  th {
-    @include font('small', 'bold');
-    color: $color-neutral-500;
-    text-align: left;
-    border-bottom: 1px solid $color-neutral-200;
-    text-transform: uppercase;
-  }
+    th {
+        @include font('small', 'bold');
+        color: $color-neutral-500;
+        text-align: left;
+        border-bottom: 1px solid $color-neutral-200;
+        text-transform: uppercase;
+    }
 
-  tr + tr > td {
-    border-top: 1px solid $color-neutral-200;
-  }
+    tr + tr > td {
+        border-top: 1px solid $color-neutral-200;
+    }
 
-  &--fullwidth {
-    width: 100%;
-  }
+    &--fullwidth {
+        width: 100%;
+    }
 
-  &--fixed {
-    table-layout: fixed;
-  }
+    &--fixed {
+        table-layout: fixed;
+    }
 }

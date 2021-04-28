@@ -3,62 +3,74 @@
  */
 
 $font-defs: (
-        'small': (
-                'size': 12px,
-                'line-height': 20px,
-                'weights': ('regular': 400, 'bold': 600)
+    'small': (
+        'size': 12px,
+        'line-height': 20px,
+        'weights': (
+            'regular': 400,
+            'bold': 600,
         ),
-        'regular': (
-                'size': 14px,
-                'line-height': 20px,
-                'weights': ('regular': 400, 'bold': 600)
+    ),
+    'regular': (
+        'size': 14px,
+        'line-height': 20px,
+        'weights': (
+            'regular': 400,
+            'bold': 600,
         ),
-        'large': (
-                'size': 16px,
-                'line-height': 24px,
-                'weights': ('regular': 400, 'bold': 600)
+    ),
+    'large': (
+        'size': 16px,
+        'line-height': 24px,
+        'weights': (
+            'regular': 400,
+            'bold': 600,
         ),
-        'x-large': (
-                'size': 21px,
-                'line-height': 28px,
-                'weights': ('regular': 400, 'bold': 700)
-        )
+    ),
+    'x-large': (
+        'size': 21px,
+        'line-height': 28px,
+        'weights': (
+            'regular': 400,
+            'bold': 700,
+        ),
+    ),
 );
 
 @mixin font($size: 'regular', $weight: 'regular') {
-  $def: map-get($font-defs, $size);
-  $weights: map-get($def, 'weights');
-  font-size: map-get($def, 'size');
-  line-height: map-get($def, 'line-height');
-  font-weight: map-get($weights, $weight);
+    $def: map-get($font-defs, $size);
+    $weights: map-get($def, 'weights');
+    font-size: map-get($def, 'size');
+    line-height: map-get($def, 'line-height');
+    font-weight: map-get($weights, $weight);
 }
 
 @mixin font-h100 {
-  font-size: 21px;
-  line-height: 28px;
-  font-weight: 700;
+    font-size: 21px;
+    line-height: 28px;
+    font-weight: 700;
 }
 
 @mixin font-h200 {
-  font-size: 24px;
-  line-height: 36px;
-  font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 600;
 }
 
 @mixin font-h300 {
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 700;
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 700;
 }
 
 @mixin font-h400 {
-  font-size: 48px;
-  line-height: 64px;
-  font-weight: 500;
+    font-size: 48px;
+    line-height: 64px;
+    font-weight: 500;
 }
 
 @mixin font-h500 {
-  font-size: 72px;
-  line-height: 92px;
-  font-weight: 500;
+    font-size: 72px;
+    line-height: 92px;
+    font-weight: 500;
 }
