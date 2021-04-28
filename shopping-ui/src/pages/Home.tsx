@@ -12,29 +12,31 @@ import { AiOutlineLoading } from 'react-icons/all';
 const EmptyStartpage: Products = {
     fashion: [],
     toys: [],
-    hotDeals: []
+    hotDeals: [],
 };
 
 const block = classname('home');
 const Home: React.FC = () => {
-    return <Router>
-        <Switch>
-            <Route exact path={'/'}>
-                <HomeDeals />
-            </Route>
-            <Route exact path={'/circuitbreaker'}>
-                <HomeDeals version={'circuitBreaker'} />
-            </Route>
-            <Route exact path={'/parallel'}>
-                <HomeDeals version={'parallel'} />
-            </Route>
-        </Switch>
-    </Router>;
+    return (
+        <Router>
+            <Switch>
+                <Route exact path={'/'}>
+                    <HomeDeals />
+                </Route>
+                <Route exact path={'/circuitbreaker'}>
+                    <HomeDeals version={'circuitBreaker'} />
+                </Route>
+                <Route exact path={'/parallel'}>
+                    <HomeDeals version={'parallel'} />
+                </Route>
+            </Switch>
+        </Router>
+    );
 };
 
 type Version = undefined | 'parallel' | 'circuitBreaker';
 
-const getEndpointName = function(version: Version) {
+const getEndpointName = function (version: Version): string {
     switch (version) {
         case 'circuitBreaker':
             return 'with Circuit Breaker';
@@ -42,7 +44,6 @@ const getEndpointName = function(version: Version) {
             return 'with parallelization';
         default:
             return 'as basic implementation';
-
     }
 };
 const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
@@ -67,62 +68,74 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
         return () => {
             clearInterval(handle);
         };
-
     });
 
-    return <Container className={block()}>
-        {error
-            ? <Error error={error.toString()} />
-            : <>
-                <Deals title={'Hot Deals'} products={products.hotDeals} />
-                <Deals title={'Fashion'} products={products.fashion} />
-                <Deals title={'Toys'} products={products.toys} />
-            </>}
-        <div className={block('debug')}>
-            <div className={block('title')}>Endpoint</div>
-            <DropdownButton size={'sm'} drop={'up'} variant='secondary'
-                            title={<span>{getEndpointName(version)}</span>}
-                            className={block('version')}>
-                <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>{getEndpointName('circuitBreaker')}</Dropdown.Item>
-                <Dropdown.Item href={'/#/parallel'} active={version === 'parallel'}>{getEndpointName('parallel')}</Dropdown.Item>
-                <Dropdown.Item href={'/#'} active={version === undefined}>{getEndpointName(undefined)}</Dropdown.Item>
-            </DropdownButton>
-            <div className={block('lastUpdate')}>
-                <div className={block('loading', isLoading ? [block('loading--hidden')] : [])}>
-                    <AiOutlineLoading />
+    return (
+        <Container className={block()}>
+            {error ? (
+                <Error error={error.toString()} />
+            ) : (
+                <>
+                    <Deals title={'Hot Deals'} products={products.hotDeals} />
+                    <Deals title={'Fashion'} products={products.fashion} />
+                    <Deals title={'Toys'} products={products.toys} />
+                </>
+            )}
+            <div className={block('debug')}>
+                <div className={block('title')}>Endpoint</div>
+                <DropdownButton size={'sm'} drop={'up'} variant="secondary" title={<span>{getEndpointName(version)}</span>} className={block('version')}>
+                    <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>
+                        {getEndpointName('circuitBreaker')}
+                    </Dropdown.Item>
+                    <Dropdown.Item href={'/#/parallel'} active={version === 'parallel'}>
+                        {getEndpointName('parallel')}
+                    </Dropdown.Item>
+                    <Dropdown.Item href={'/#'} active={version === undefined}>
+                        {getEndpointName(undefined)}
+                    </Dropdown.Item>
+                </DropdownButton>
+                <div className={block('lastUpdate')}>
+                    <div className={block('loading', isLoading ? [block('loading--hidden')] : [])}>
+                        <AiOutlineLoading />
+                    </div>
+                    Last refresh: {timestamp.toLocaleTimeString()}
                 </div>
-                Last refresh: {timestamp.toLocaleTimeString()}</div>
-        </div>
-    </Container>;
+            </div>
+        </Container>
+    );
 };
 
-const Deals: React.FC<{ title: string, products: Product[] }> = ({ title, products }) => {
-    return products?.length > 0
-        ? <Jumbotron className={block('deals')}>
+const Deals: React.FC<{ title: string; products: Product[] }> = ({ title, products }) => {
+    return products?.length > 0 ? (
+        <Jumbotron className={block('deals')}>
             <Container>
                 <Row>
                     <h3>{title}</h3>
                 </Row>
                 <Row>
-                    <Col xs={4}><Deal product={products?.[0]} /></Col>
-                    <Col xs={4}><Deal product={products?.[1]} /></Col>
-                    <Col xs={4}><Deal product={products?.[2]} /></Col>
+                    <Col xs={4}>
+                        <Deal product={products?.[0]} />
+                    </Col>
+                    <Col xs={4}>
+                        <Deal product={products?.[1]} />
+                    </Col>
+                    <Col xs={4}>
+                        <Deal product={products?.[2]} />
+                    </Col>
                 </Row>
             </Container>
         </Jumbotron>
-        : null;
-
+    ) : null;
 };
 
 const Error: React.FC<{ error: string }> = ({ error }) => {
-    return <Card bg={'danger'} text={'white'}
-    >
-        <Card.Header>Error: Could not load products</Card.Header>
-        <Card.Body>
-            <Card.Text>
-                {error}
-            </Card.Text>
-        </Card.Body>
-    </Card>;
+    return (
+        <Card bg={'danger'} text={'white'}>
+            <Card.Header>Error: Could not load products</Card.Header>
+            <Card.Body>
+                <Card.Text>{error}</Card.Text>
+            </Card.Body>
+        </Card>
+    );
 };
 export default Home;

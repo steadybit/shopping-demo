@@ -3,86 +3,98 @@
  */
 
 //noinspection CssInvalidAtRule
-@import-normalize ;
-@import "~inter-ui/inter.scss";
-@import "./_typography.scss";
-@import "./_colors.scss";
-@import "./_helpers.scss";
-@import "./table.scss";
+@import-normalize;
+@import '~inter-ui/inter.scss';
+@import './_typography.scss';
+@import './_colors.scss';
+@import './_helpers.scss';
+@import './table.scss';
 
 /**
   Default styles for elements
 **/
 
-html, body, input, textarea, button {
-  @include font();
-  font-family: 'Inter', sans-serif;
-  color: $color-text;
+html,
+body,
+input,
+textarea,
+button {
+    @include font();
+    font-family: 'Inter', sans-serif;
+    color: $color-text;
 }
 
 @supports (font-variation-settings: normal) {
-  html, body, input, textarea, button {
-    font-family: 'Inter var', sans-serif;
-  }
+    html,
+    body,
+    input,
+    textarea,
+    button {
+        font-family: 'Inter var', sans-serif;
+    }
 }
 
 body {
-  margin: 0;
-  background-color: $color-white;
+    margin: 0;
+    background-color: $color-white;
 }
 
-input[type="checkbox"] {
-  margin-right: .25em;
+input[type='checkbox'] {
+    margin-right: 0.25em;
 }
 
 a {
-  text-decoration: none;
-  color: $color-link;
+    text-decoration: none;
+    color: $color-link;
 
-  &:hover {
-    text-decoration: underline;
-  }
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 ul {
-  padding-inline-start: 8px;
-  list-style: none;
+    padding-inline-start: 8px;
+    list-style: none;
 
-  li {
-    &::before {
-      color: currentColor;
-      content: "\2022";
-      margin-right: 8px;
+    li {
+        &::before {
+            color: currentColor;
+            content: '\2022';
+            margin-right: 8px;
+        }
     }
-  }
 }
 
 h1 {
-  @include font-h500();
+    @include font-h500();
 }
 
 h2 {
-  @include font-h400();
+    @include font-h400();
 }
 
 h3 {
-  @include font-h300();
+    @include font-h300();
 }
 
 h4 {
-  @include font-h200();
+    @include font-h200();
 }
 
 h5 {
-  @include font-h100();
+    @include font-h100();
 }
 
-h1, h2, h3, h4, h5 {
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5 {
+    margin: 0;
 
-  &:not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
+    &:not(:last-child) {
+        margin-bottom: 1.5rem;
+    }
 }
 
 /**
@@ -90,67 +102,67 @@ h1, h2, h3, h4, h5 {
  **/
 
 .error {
-  color: $color-error;
+    color: $color-error;
 }
 
 .page-content {
-  margin: 32px 40px;
+    margin: 32px 40px;
 }
 
 .page-header {
-  @include font-h300();
-  display: inline-flex;
-  align-items: center;
-  margin-top: 0;
-  margin-bottom: 48px;
-  & > * {
-    margin-left: 8px;
-  }
+    @include font-h300();
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 48px;
+    & > * {
+        margin-left: 8px;
+    }
 }
 
 .page-subheader {
-  @include font('large');
-  margin-top: -48px;
-  margin-bottom: 24px;
+    @include font('large');
+    margin-top: -48px;
+    margin-bottom: 24px;
 }
 
 .is-muted {
-  color: $color-text-muted;
+    color: $color-text-muted;
 }
 
 .has-shadow-small {
-  box-shadow: $shadow-small;
+    box-shadow: $shadow-small;
 }
 
 .has-shadow-medium {
-  box-shadow: $shadow-medium;
+    box-shadow: $shadow-medium;
 }
 
 .has-shadow-large {
-  box-shadow: $shadow-large;
+    box-shadow: $shadow-large;
 }
 
 .has-text-right {
-  text-align: right;
+    text-align: right;
 }
 
 .top-header {
-  height: 3rem;
-  border-bottom: 1px solid #E2E5E8;
+    height: 3rem;
+    border-bottom: 1px solid #e2e5e8;
 }
 
 .column {
-  display: table-cell;
+    display: table-cell;
 }
 
 /* Clear floats after the columns */
 .row {
-  display: table;
-  width: 100%; /*Optional*/
-  table-layout: fixed; /*Optional*/
-  border-spacing: 10px; /*Optional*/
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
 }
 
 .response-type {
-  text-align: center;
+    text-align: center;
 }

@@ -6,41 +6,41 @@ import classname from '../../utils/classname';
 import './Deal.scss';
 
 export type DealProps = {
-    product?: Product
+    product?: Product;
 };
 
 const block = classname('deal');
 
 const Deal: React.FC<DealProps> = ({ product }) => {
-    return product ? <Card bg={'secondary'} text={'light'} className={block()}>
-        <DealImage imageId={product.imageId} />
-        <Card.Body className={block('body')}>
-            <Card.Title className={block('title')}>{product.name}</Card.Title>
-            <Card.Text className={block('price')}>
-                {product.price} $
-            </Card.Text>
-        </Card.Body>
-    </Card> : null;
+    return product ? (
+        <Card bg={'secondary'} text={'light'} className={block()}>
+            <DealImage imageId={product.imageId} />
+            <Card.Body className={block('body')}>
+                <Card.Title className={block('title')}>{product.name}</Card.Title>
+                <Card.Text className={block('price')}>{product.price} $</Card.Text>
+            </Card.Body>
+        </Card>
+    ) : null;
 };
 
 const DealImage: React.FC<{ imageId: string }> = ({ imageId }) => {
     switch (imageId) {
         case 'car':
-            return <Card.Img variant='top' src={ImgCar} />;
+            return <Card.Img variant="top" src={ImgCar} />;
         case 'drone':
-            return <Card.Img variant='top' src={ImgDrone} />;
+            return <Card.Img variant="top" src={ImgDrone} />;
         case 'excavator':
-            return <Card.Img variant='top' src={ImgExcavator} />;
+            return <Card.Img variant="top" src={ImgExcavator} />;
         case 'jeans':
-            return <Card.Img variant='top' src={ImgJeans} />;
+            return <Card.Img variant="top" src={ImgJeans} />;
         case 'shirt':
-            return <Card.Img variant='top' src={ImgShirt} />;
+            return <Card.Img variant="top" src={ImgShirt} />;
         case 'socks':
-            return <Card.Img variant='top' src={ImgSocks} />;
+            return <Card.Img variant="top" src={ImgSocks} />;
         case 'sunglasses':
-            return <Card.Img variant='top' src={ImgSunglasses} />;
+            return <Card.Img variant="top" src={ImgSunglasses} />;
         case 'teddy':
-            return <Card.Img variant='top' src={ImgTeddy} />;
+            return <Card.Img variant="top" src={ImgTeddy} />;
         default:
             return null;
     }
