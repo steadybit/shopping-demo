@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -57,6 +58,15 @@ public class ProductsController {
         return products;
     }
 
+    @GetMapping("/exception")
+    public Products getProductsBasicExceptionHandling() {
+        Products products = new Products();
+        products.setFashion(this.getProductBasicExceptionHandling(this.urlFashion));
+        products.setToys(this.getProductBasicExceptionHandling(this.urlToys));
+        products.setHotDeals(this.getProductBasicExceptionHandling(this.urlHotDeals));
+        return products;
+    }
+
     @GetMapping("/parallel")
     public Mono<Products> getProductsParallel() {
         Mono<List<Product>> hotdeals = this.getProductReactive("/products/hotdeals");
@@ -66,7 +76,7 @@ public class ProductsController {
         return Mono.zip(hotdeals, fashion, toys)
                 .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
     }
-    
+
     @GetMapping({ "/circuitbreaker", "/cb", "/v2" })
     public Mono<Products> getProductsCircuitBreaker() {
         Mono<List<Product>> hotdeals = this.getProductReactive("/products/hotdeals/circuitbreaker");
@@ -87,6 +97,15 @@ public class ProductsController {
 
     private List<Product> getProduct(String url) {
         return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+    }
+
+    private List<Product> getProductBasicExceptionHandling(String url) {
+        try {
+            return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+        } catch (RestClientException e) {
+            log.error("RestClientException occured when fetching products", e);
+            return Collections.emptyList();
+        }
     }
 
     private Mono<List<Product>> getProductReactive(String uri) {
