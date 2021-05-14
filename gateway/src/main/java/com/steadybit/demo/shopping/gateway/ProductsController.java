@@ -9,6 +9,7 @@ import com.steadybit.shopping.domain.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,15 +22,15 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
-
     private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
-
+    private final RestTemplate restTemplateWithoutTimeout;
     private final RestTemplate restTemplate;
     private final WebClient webClient;
     private final ParameterizedTypeReference<Product> productTypeReference = new ParameterizedTypeReference<Product>() {
@@ -44,8 +45,9 @@ public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
 
-    public ProductsController(RestTemplate restTemplate, WebClient webClient) {
-        this.restTemplate = restTemplate;
+    public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient) {
+        this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
+        this.restTemplateWithoutTimeout = restTemplateBuilder.build();
         this.webClient = webClient;
     }
 
@@ -64,6 +66,15 @@ public class ProductsController {
         products.setFashion(this.getProductBasicExceptionHandling(this.urlFashion));
         products.setToys(this.getProductBasicExceptionHandling(this.urlToys));
         products.setHotDeals(this.getProductBasicExceptionHandling(this.urlHotDeals));
+        return products;
+    }
+
+    @GetMapping("/timeout")
+    public Products getProductsWithTimeout() {
+        Products products = new Products();
+        products.setFashion(this.getProductWithTimeout(this.urlFashion));
+        products.setToys(this.getProductWithTimeout(this.urlToys));
+        products.setHotDeals(this.getProductWithTimeout(this.urlHotDeals));
         return products;
     }
 
@@ -96,14 +107,23 @@ public class ProductsController {
     }
 
     private List<Product> getProduct(String url) {
-        return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+        return this.restTemplateWithoutTimeout.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
     private List<Product> getProductBasicExceptionHandling(String url) {
         try {
+            return this.getProduct(url);
+        } catch (RestClientException e) {
+            log.error("RestClientException occurred when fetching products", e);
+            return Collections.emptyList();
+        }
+    }
+
+    private List<Product> getProductWithTimeout(String url) {
+        try {
             return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
         } catch (RestClientException e) {
-            log.error("RestClientException occured when fetching products", e);
+            log.error("RestClientException occurred when fetching products", e);
             return Collections.emptyList();
         }
     }
@@ -114,6 +134,6 @@ public class ProductsController {
                 .bodyToFlux(this.productTypeReference)
                 .collectList()
                 .flatMap(Mono::just)
-                .doOnError(throwable -> log.error("Error occured", throwable));
+                .doOnError(throwable -> log.error("Error occurred", throwable));
     }
 }

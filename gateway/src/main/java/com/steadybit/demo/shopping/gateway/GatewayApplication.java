@@ -78,11 +78,8 @@ public class GatewayApplication implements WebFluxConfigurer {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofMillis(2000))
-                .setReadTimeout(Duration.ofMillis(2000))
-                .build();
+    public RestTemplateBuilder restTemplateBuilder() {
+        return new RestTemplateBuilder();
     }
 
 }
