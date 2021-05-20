@@ -29,12 +29,15 @@ const Home: React.FC = () => {
                 <Route exact path={'/parallel'}>
                     <HomeDeals version={'parallel'} />
                 </Route>
+                <Route exact path={'/exception'}>
+                    <HomeDeals version={'exception'} />
+                </Route>
             </Switch>
         </Router>
     );
 };
 
-type Version = undefined | 'parallel' | 'circuitBreaker';
+type Version = undefined | 'exception' | 'parallel' | 'circuitBreaker';
 
 const getEndpointName = function (version: Version): string {
     switch (version) {
@@ -42,6 +45,8 @@ const getEndpointName = function (version: Version): string {
             return 'with Circuit Breaker';
         case 'parallel':
             return 'with parallelization';
+        case 'exception':
+            return 'with basic exception handling';
         default:
             return 'as basic implementation';
     }
@@ -50,6 +55,8 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
     const [timestamp, setTimestamp] = React.useState(new Date());
     const fetchProducts = useMemo(() => {
         switch (version) {
+            case 'exception':
+                return ProductService.basicExceptionHandling.fetch;
             case 'parallel':
                 return ProductService.parallel.fetch;
             case 'circuitBreaker':
@@ -89,6 +96,9 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#/parallel'} active={version === 'parallel'}>
                         {getEndpointName('parallel')}
+                    </Dropdown.Item>
+                    <Dropdown.Item href={'/#/exception'} active={version === 'exception'}>
+                        {getEndpointName('exception')}
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#'} active={version === undefined}>
                         {getEndpointName(undefined)}

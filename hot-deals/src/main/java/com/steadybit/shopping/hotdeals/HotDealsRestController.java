@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class HotDealsRestController {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public HotDealsRestController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -25,8 +25,9 @@ public class HotDealsRestController {
 
     @GetMapping
     public List<Product> getHotDeals() {
-        return jdbcTemplate.query("SELECT id, name, category, imageId, price FROM products_hotdeals",
-                (rs, rowNum) -> new Product(rs.getString("id"), rs.getString("name"), ProductCategory.valueOf(rs.getString("category")), rs.getString("imageId"), rs.getBigDecimal("price")));
+        return this.jdbcTemplate.query("SELECT id, name, category, imageId, price FROM products_hotdeals",
+                (rs, rowNum) -> new Product(rs.getString("id"), rs.getString("name"), ProductCategory.valueOf(rs.getString("category")),
+                        rs.getString("imageId"), rs.getBigDecimal("price")));
     }
 
 }

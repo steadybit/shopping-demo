@@ -70,8 +70,8 @@ kubectl apply -f k8s-manifest-eks-ingress.yml
 
 ## Implementation
 
-As mentioned above the `gateway` is the entrypoint for the UI. It is based on Spring Boot and Spring Cloud projects.
-We will cover its most important parts in this section
+As mentioned above the `gateway` is the entrypoint for the UI. It is based on Spring Boot and Spring Cloud projects. We will cover its most important parts in
+this section
 
 ### Products REST Endpoint - Basic Implementation
 
@@ -86,7 +86,7 @@ basic implementation of this endpoint.
 public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
-    
+
     private RestTemplate restTemplate;
     //...
 
@@ -109,12 +109,14 @@ So, whenever the UI requests an update by calling `/products`-Endpoint the `gate
 
 ### Products REST Endpoint - Circuit Breaker with Fallback
 
-Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker (via [Hystrix](https://www.baeldung.com/spring-cloud-netflix-hystrix)).
-In order to reach that version of the endpoint, the `gateway`'s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
-Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative response.
-This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
+Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker (
+via [Hystrix](https://www.baeldung.com/spring-cloud-netflix-hystrix)). In order to reach that version of the endpoint, the `gateway`'
+s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
+Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative
+response. This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
 
 ```java
+
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
@@ -148,15 +150,18 @@ public class ProductsController {
 }
 ```
 
-The routing of the Circuit Breaker is implemented in the Main Class of the `gateway`: [GatewayApplication](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/GatewayApplication.java).
+The routing of the Circuit Breaker is implemented in the Main Class of
+the `gateway`: [GatewayApplication](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/GatewayApplication.java).
 
 ````java
+
 @SpringBootApplication
 @EnableDiscoveryClient
 public class GatewayApplication implements WebFluxConfigurer {
 
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
+
     //...
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
@@ -174,6 +179,7 @@ public class GatewayApplication implements WebFluxConfigurer {
 ````
 
 ### Additional REST Endpoints
+
 There are some additional endpoints which are helpful for HTTP Health Schecks during experiments, such as:
 
 - `/product/hotdeals` to reach `hot-deals` products-list and check it's availability

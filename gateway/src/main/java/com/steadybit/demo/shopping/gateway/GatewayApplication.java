@@ -46,43 +46,40 @@ public class GatewayApplication implements WebFluxConfigurer {
                 // Legacy routes
                 .route("legacy-hotdeals", p -> p.path("/products/hotdeals**")//
                         .filters(c -> c.setPath(URI_PRODUCTS))//
-                        .uri(urlHotDeals))//
+                        .uri(this.urlHotDeals))//
                 .route("legacy-fashion", p -> p.path("/products/fashion**")
                         .filters(c -> c.setPath(URI_PRODUCTS))//
-                        .uri(urlFashion))//
+                        .uri(this.urlFashion))//
                 .route("legacy-toys", p -> p.path("/products/toys**")//
                         .filters(c -> c.setPath(URI_PRODUCTS))//
-                        .uri(urlToys))//
+                        .uri(this.urlToys))//
                 // Circuit-Breaker routes
                 .route("cb-hotdeals", p -> p.path("/products/hotdeals/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
-                        .uri(urlHotDeals))//
+                        .uri(this.urlHotDeals))//
                 .route("cb-fashion", p -> p.path("/products/fashion/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .hystrix(c -> c.setName("fashion").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
-                        .uri(urlFashion))
+                        .uri(this.urlFashion))
                 .route("cb-toys", p -> p.path("/products/toys/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .hystrix(c -> c.setName("toys").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
-                        .uri(urlToys))
+                        .uri(this.urlToys))
                 .build();
     }
 
     @Bean
     public WebClient webClient() {
-        return WebClient.builder().baseUrl("http://localhost:" + serverPort).build();
+        return WebClient.builder().baseUrl("http://localhost:" + this.serverPort).build();
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplateBuilder()
-                .setConnectTimeout(Duration.ofMillis(2000))
-                .setReadTimeout(Duration.ofMillis(2000))
-                .build();
+    public RestTemplateBuilder restTemplateBuilder() {
+        return new RestTemplateBuilder();
     }
 
 }
