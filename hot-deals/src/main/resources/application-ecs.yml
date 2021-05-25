@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    kubernetes:
+      enabled: false
+      reload:
+        enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false
