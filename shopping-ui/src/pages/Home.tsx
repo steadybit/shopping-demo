@@ -53,7 +53,7 @@ const getEndpointName = function (version: Version): string {
         case 'timeout':
             return 'with timeout and exception handling';
         default:
-            return 'as default implementation';
+            return 'as simple implementation';
     }
 };
 const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
@@ -63,7 +63,7 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
             case 'timeout':
                 return ProductService.timeoutHandling.fetch;
             case 'exception':
-                return ProductService.basicExceptionHandling.fetch;
+                return ProductService.exceptionHandling.fetch;
             case 'parallel':
                 return ProductService.parallel.fetch;
             case 'circuitBreaker':
