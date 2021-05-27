@@ -32,12 +32,15 @@ const Home: React.FC = () => {
                 <Route exact path={'/exception'}>
                     <HomeDeals version={'exception'} />
                 </Route>
+                <Route exact path={'/timeout'}>
+                    <HomeDeals version={'timeout'} />
+                </Route>
             </Switch>
         </Router>
     );
 };
 
-type Version = undefined | 'exception' | 'parallel' | 'circuitBreaker';
+type Version = undefined | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker';
 
 const getEndpointName = function (version: Version): string {
     switch (version) {
@@ -46,15 +49,19 @@ const getEndpointName = function (version: Version): string {
         case 'parallel':
             return 'with parallelization';
         case 'exception':
-            return 'with basic exception handling';
+            return 'with exception handling';
+        case 'timeout':
+            return 'with timeout and exception handling';
         default:
-            return 'as basic implementation';
+            return 'as default implementation';
     }
 };
 const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
     const [timestamp, setTimestamp] = React.useState(new Date());
     const fetchProducts = useMemo(() => {
         switch (version) {
+            case 'timeout':
+                return ProductService.timeoutHandling.fetch;
             case 'exception':
                 return ProductService.basicExceptionHandling.fetch;
             case 'parallel':
@@ -96,6 +103,9 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#/parallel'} active={version === 'parallel'}>
                         {getEndpointName('parallel')}
+                    </Dropdown.Item>
+                    <Dropdown.Item href={'/#/timeout'} active={version === 'timeout'}>
+                        {getEndpointName('timeout')}
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#/exception'} active={version === 'exception'}>
                         {getEndpointName('exception')}
