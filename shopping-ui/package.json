@@ -8,8 +8,7 @@
         "test": "react-scripts test",
         "lint": "eslint --ext js,ts,tsx src",
         "prettier": "prettier --write src",
-        "eject": "react-scripts eject",
-        "generate-api": "pushd ../platform-ui-api; mvn install; popd; mvn typescript-generator:generate"
+        "eject": "react-scripts eject"
     },
     "dependencies": {
         "@bem-react/classname": "^1.5.8",
