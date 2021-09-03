@@ -47,6 +47,13 @@ hystrix:
           thread:
             timeoutInMilliseconds: 1000
 
+resilience4j:
+  retry:
+    instances:
+      productSearch:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+
 rest:
   endpoint:
     fashion: "http://localhost:8082/products"

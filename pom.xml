@@ -99,6 +99,11 @@
                 <version>${lombok.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot2</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+            <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-registry-prometheus</artifactId>
                 <version>1.5.5</version>
