@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -56,11 +57,17 @@ public class ProductsController {
     }
 
     @GetMapping("/resilience4j")
-    public Products getProductsResilience4j() {
+    public Products getProductsResilience4j(@RequestParam(required = false) boolean withCircuitBreaker) {
         Products products = new Products();
-        products.setFashion(this.productService.getProductsResilience4j(this.urlFashion));
-        products.setToys(this.productService.getProductsResilience4j(this.urlToys));
-        products.setHotDeals(this.productService.getProductsResilience4j(this.urlHotDeals));
+        if (withCircuitBreaker) {
+            products.setFashion(this.productService.getProductsResilience4jRetry(this.urlFashion));
+            products.setToys(this.productService.getProductsResilience4jRetry(this.urlToys));
+            products.setHotDeals(this.productService.getProductsResilience4jRetry(this.urlHotDeals));
+        } else {
+            products.setFashion(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlFashion));
+            products.setToys(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlToys));
+            products.setHotDeals(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlHotDeals));
+        }
         return products;
     }
 

@@ -53,6 +53,12 @@ resilience4j:
       productSearch:
         maxRetryAttempts: 3
         waitDuration: 500ms
+  circuitbreaker:
+    instances:
+      productSearch:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
 
 rest:
   endpoint:

@@ -5,6 +5,7 @@
 package com.steadybit.demo.shopping.gateway;
 
 import com.steadybit.shopping.domain.Product;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,13 @@ public class ProductService {
     }
 
     @Retry(name = "productSearch", fallbackMethod = "getProductsFallback")
-    public List<Product> getProductsResilience4j(String url) {
+    public List<Product> getProductsResilience4jRetry(String url) {
+        return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+    }
+
+    @Retry(name = "productSearch", fallbackMethod = "getProductsFallback")
+    @CircuitBreaker(name="productSearch", fallbackMethod = "getProductsFallback")
+    public List<Product> getProductsResilience4jRetryAndCircuitBreaker(String url) {
         return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
