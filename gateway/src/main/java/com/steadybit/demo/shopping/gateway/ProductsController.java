@@ -26,6 +26,7 @@ public class ProductsController {
     private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
 
     private final ProductService productService;
+    private final Resilience4jProductService resilience4jProductService;
 
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
@@ -34,8 +35,9 @@ public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
 
-    public ProductsController(ProductService productService) {
+    public ProductsController(ProductService productService, Resilience4jProductService resilience4jProductService) {
         this.productService = productService;
+        this.resilience4jProductService = resilience4jProductService;
     }
 
     @GetMapping
@@ -60,13 +62,13 @@ public class ProductsController {
     public Products getProductsResilience4j(@RequestParam(required = false) boolean withCircuitBreaker) {
         Products products = new Products();
         if (withCircuitBreaker) {
-            products.setFashion(this.productService.getProductsResilience4jRetry(this.urlFashion));
-            products.setToys(this.productService.getProductsResilience4jRetry(this.urlToys));
-            products.setHotDeals(this.productService.getProductsResilience4jRetry(this.urlHotDeals));
+            products.setFashion(this.resilience4jProductService.getFashionWithRetry());
+            products.setToys(this.resilience4jProductService.getToysWithRetry());
+            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetry());
         } else {
-            products.setFashion(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlFashion));
-            products.setToys(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlToys));
-            products.setHotDeals(this.productService.getProductsResilience4jRetryAndCircuitBreaker(this.urlHotDeals));
+            products.setFashion(this.resilience4jProductService.getFashionWithRetryAndCircuitBreaker());
+            products.setToys(this.resilience4jProductService.getToysWithRetryAndCircuitBreaker());
+            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetryAndCircuitBreaker());
         }
         return products;
     }

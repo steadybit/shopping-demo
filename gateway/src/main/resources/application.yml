@@ -50,12 +50,26 @@ hystrix:
 resilience4j:
   retry:
     instances:
-      productSearch:
+      fashion:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+      toys:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+      hotdeals:
         maxRetryAttempts: 3
         waitDuration: 500ms
   circuitbreaker:
     instances:
-      productSearch:
+      fashion:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
+      toys:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
+      hotdeals:
         failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10

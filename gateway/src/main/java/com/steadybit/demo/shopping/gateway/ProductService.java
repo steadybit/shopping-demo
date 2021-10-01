@@ -5,8 +5,6 @@
 package com.steadybit.demo.shopping.gateway;
 
 import com.steadybit.shopping.domain.Product;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -41,22 +39,6 @@ public class ProductService {
 
     public List<Product> getProduct(String url) {
         return this.restTemplateWithoutTimeout.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
-    }
-
-    @Retry(name = "productSearch", fallbackMethod = "getProductsFallback")
-    public List<Product> getProductsResilience4jRetry(String url) {
-        return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
-    }
-
-    @Retry(name = "productSearch", fallbackMethod = "getProductsFallback")
-    @CircuitBreaker(name="productSearch", fallbackMethod = "getProductsFallback")
-    public List<Product> getProductsResilience4jRetryAndCircuitBreaker(String url) {
-        return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
-    }
-
-    private List<Product> getProductsFallback(String url, RuntimeException exception) {
-        log.info("resilience4j fallback enabled - cause: " + exception.getMessage());
-        return Collections.emptyList();
     }
 
     public List<Product> getProductBasicExceptionHandling(String url) {
