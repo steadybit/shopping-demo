@@ -6,9 +6,6 @@ spring:
     name: hotdeals
   datasource:
     platform: hsqldb
-  cloud:
-    kubernetes:
-      enabled: false
 
 management:
   metrics:

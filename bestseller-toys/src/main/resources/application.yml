@@ -6,9 +6,6 @@ spring:
     name: toys-bestseller
   datasource:
     platform: hsqldb
-  cloud:
-    kubernetes:
-      enabled: false
 
 management:
   metrics:
