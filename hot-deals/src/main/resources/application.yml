@@ -6,6 +6,8 @@ spring:
     name: hotdeals
   datasource:
     platform: hsqldb
+  jmx:
+    enabled: true
 
 management:
   metrics:

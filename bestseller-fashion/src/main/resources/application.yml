@@ -6,6 +6,8 @@ spring:
     name: fashion-bestseller
   datasource:
     platform: hsqldb
+  jmx:
+    enabled: true
 
 management:
   metrics:

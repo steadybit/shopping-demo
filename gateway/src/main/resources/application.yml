@@ -4,13 +4,9 @@ server:
 spring:
   application:
     name: gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          lowerCaseServiceId: true
-    kubernetes:
-      enabled: false
+  jmx:
+    enabled: true
+
 management:
   metrics:
     web:
