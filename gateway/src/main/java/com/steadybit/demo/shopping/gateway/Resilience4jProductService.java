@@ -72,7 +72,7 @@ public class Resilience4jProductService {
         return this.restTemplate.exchange(this.urlHotDeals, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    private List<Product> getProductsFallback(String url, RuntimeException exception) {
+    private List<Product> getProductsFallback(RuntimeException exception) {
         log.info("resilience4j fallback enabled - cause: " + exception.getMessage());
         return Collections.emptyList();
     }
