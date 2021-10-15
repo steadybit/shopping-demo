@@ -85,13 +85,13 @@ public class ProductsController {
     public Products getProductsResilience4j(@RequestParam(required = false) boolean withCircuitBreaker) {
         Products products = new Products();
         if (withCircuitBreaker) {
-            products.setFashion(this.resilience4jProductService.getFashionWithRetry());
-            products.setToys(this.resilience4jProductService.getToysWithRetry());
-            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetry());
-        } else {
             products.setFashion(this.resilience4jProductService.getFashionWithRetryAndCircuitBreaker());
             products.setToys(this.resilience4jProductService.getToysWithRetryAndCircuitBreaker());
             products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetryAndCircuitBreaker());
+        } else {
+            products.setFashion(this.resilience4jProductService.getFashionWithRetry());
+            products.setToys(this.resilience4jProductService.getToysWithRetry());
+            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetry());
         }
         return products;
     }
