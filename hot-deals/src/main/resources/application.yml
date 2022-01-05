@@ -6,9 +6,8 @@ spring:
     name: hotdeals
   datasource:
     platform: hsqldb
-  cloud:
-    kubernetes:
-      enabled: false
+  jmx:
+    enabled: true
 
 management:
   metrics:

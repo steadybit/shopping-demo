@@ -4,13 +4,9 @@ server:
 spring:
   application:
     name: gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          lowerCaseServiceId: true
-    kubernetes:
-      enabled: false
+  jmx:
+    enabled: true
+
 management:
   metrics:
     web:
@@ -21,7 +17,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: metrics,prometheus,health
+        include: metrics,prometheus,health,mappings
   endpoint:
     health:
       probes:
@@ -46,6 +42,33 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 1000
+
+resilience4j:
+  retry:
+    instances:
+      fashion:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+      toys:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+      hotdeals:
+        maxRetryAttempts: 3
+        waitDuration: 500ms
+  circuitbreaker:
+    instances:
+      fashion:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
+      toys:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
+      hotdeals:
+        failureRateThreshold: 50
+        slidingWindowType: TIME_BASED
+        slidingWindowSize: 10
 
 rest:
   endpoint:

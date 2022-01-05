@@ -35,12 +35,15 @@ const Home: React.FC = () => {
                 <Route exact path={'/timeout'}>
                     <HomeDeals version={'timeout'} />
                 </Route>
+                <Route exact path={'/resilience4j'}>
+                    <HomeDeals version={'resilience4j'} />
+                </Route>
             </Switch>
         </Router>
     );
 };
 
-type Version = undefined | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker';
+type Version = undefined | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker' | 'resilience4j';
 
 const getEndpointName = function (version: Version): string {
     switch (version) {
@@ -52,6 +55,8 @@ const getEndpointName = function (version: Version): string {
             return 'with exception handling';
         case 'timeout':
             return 'with timeout and exception handling';
+        case 'resilience4j':
+            return 'with resilience4j';
         default:
             return 'as simple implementation';
     }
@@ -68,6 +73,8 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                 return ProductService.parallel.fetch;
             case 'circuitBreaker':
                 return ProductService.circuitBreaker.fetch;
+            case 'resilience4j':
+                return ProductService.resilience4j.fetch;
             default:
                 return ProductService.legacy.fetch;
         }
@@ -109,6 +116,9 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#/exception'} active={version === 'exception'}>
                         {getEndpointName('exception')}
+                    </Dropdown.Item>{' '}
+                    <Dropdown.Item href={'/#/resilience4j'} active={version === 'resilience4j'}>
+                        {getEndpointName('resilience4j')}
                     </Dropdown.Item>
                     <Dropdown.Item href={'/#'} active={version === undefined}>
                         {getEndpointName(undefined)}
