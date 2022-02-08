@@ -1,0 +1,10 @@
+name: gateway
+desiredResilienceLevel: F
+mapping:
+  kubernetes:
+    cluster: demo-dev
+    namespace: steadybit-demo
+    deployment: gateway
+health:
+  - type: HTTP
+    url: http://k8s.demo.steadybit.io/products
