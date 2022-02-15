@@ -1,10 +1,11 @@
+id: 80fe7f52-75c7-4620-8a5c-b0e85a3a549e
 name: gateway
-desiredResilienceLevel: F
+desiredResilienceLevel: E
 mapping:
   kubernetes:
-    cluster: demo-dev
+    cluster: minikube
     namespace: steadybit-demo
     deployment: gateway
 health:
   - type: HTTP
-    url: http://k8s.demo.steadybit.io/products
+    url: http://localhost:8888/products
