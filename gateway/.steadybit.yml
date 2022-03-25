@@ -1,0 +1,17 @@
+name: gateway
+policies:
+  - name: steadybit/definitions/kubernetes/deployments/policies/recovery-pod
+    version: 0.2.2
+  - name: steadybit/definitions/kubernetes/deployments/policies/rolling-update
+    version: 0.2.2
+  - name: steadybit/definitions/kubernetes/deployments/policies/loose-coupling-on-startup
+    version: 0.2.2
+mapping:
+  kubernetes:
+    cluster: bestseller
+    namespace: online-shop
+    deployment: gateway
+parameters:
+  httpEndpoint: https://bestsellers.io/products
+  teamKey: BS
+  environmentName: Online Shop
