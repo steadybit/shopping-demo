@@ -25,7 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring-boot-dependencies.version>2.3.3.RELEASE</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.5.12</spring-boot-dependencies.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <lombok.version>1.18.20</lombok.version>
         <postgresql.version>42.2.25</postgresql.version>
