@@ -39,11 +39,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      run: gateway-exposed
+      run: gateway
   template:
     metadata:
       labels:
-        run: gateway-exposed
+        run: gateway
     spec:
       serviceAccountName: steadybit-demo
       containers:
@@ -80,7 +80,7 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    run: gateway-exposed
+    run: gateway
   type: LoadBalancer
 ---
 apiVersion: apps/v1
@@ -94,11 +94,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      run: fashion-bestseller-exposed
+      run: fashion-bestseller
   template:
     metadata:
       labels:
-        run: fashion-bestseller-exposed
+        run: fashion-bestseller
     spec:
       serviceAccountName: steadybit-demo
       affinity:
@@ -111,7 +111,7 @@ spec:
                     - key: run
                       operator: In
                       values:
-                        - fashion-bestseller-exposed
+                        - fashion-bestseller
                 topologyKey: "kubernetes.io/hostname"
       containers:
         - image: steadybit/bestseller-fashion
@@ -154,7 +154,7 @@ spec:
       protocol: TCP
       targetPort: 8082
   selector:
-    run: fashion-bestseller-exposed
+    run: fashion-bestseller
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -168,11 +168,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      run: toys-bestseller-exposed
+      run: toys-bestseller
   template:
     metadata:
       labels:
-        run: toys-bestseller-exposed
+        run: toys-bestseller
     spec:
       serviceAccountName: steadybit-demo
       containers:
@@ -211,7 +211,7 @@ spec:
       protocol: TCP
       targetPort: 8081
   selector:
-    run: toys-bestseller-exposed
+    run: toys-bestseller
   type: NodePort
 ---
 apiVersion: v1
@@ -269,11 +269,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      run: hot-deals-exposed
+      run: hot-deals
   template:
     metadata:
       labels:
-        run: hot-deals-exposed
+        run: hot-deals
     spec:
       serviceAccountName: steadybit-demo
       containers:
@@ -311,5 +311,5 @@ spec:
       protocol: TCP
       targetPort: 8083
   selector:
-    run: hot-deals-exposed
+    run: hot-deals
   type: NodePort

@@ -1,0 +1,17 @@
+name: Run Steadybit Experiments
+
+on:
+  workflow_dispatch: { }
+
+jobs:
+  build:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Online shop survives outage of hot-deals
+        uses: steadybit/run-experiment@v1
+        with:
+          apiAccessToken: ${{ secrets.STEADYBIT_ACCESS_TOKEN }}
+          experimentKey: 'GITHUB-17'
+          maxRetriesOnExpectationFailure: 3
+          delayBetweenRetriesOnExpectationFailure: 300000 # 5min
