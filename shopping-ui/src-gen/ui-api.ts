@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.30.840 on 2021-03-29 17:21:35.
+// Generated using typescript-generator version 3.1.1185 on 2023-01-02 12:59:06.
 
 export interface Product {
     id: string;
@@ -11,9 +11,9 @@ export interface Product {
 }
 
 export interface Products {
+    hotDeals: Product[];
     fashion: Product[];
     toys: Product[];
-    hotDeals: Product[];
 }
 
 export type ProductCategory = 'FASHION' | 'TOYS';
