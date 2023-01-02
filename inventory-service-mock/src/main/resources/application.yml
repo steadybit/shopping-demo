@@ -1,0 +1,24 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: inventory
+  jmx:
+    enabled: true
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles: 0.75
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
+  endpoint:
+    health:
+      probes:
+        enabled: true

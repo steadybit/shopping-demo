@@ -17,6 +17,7 @@
         <module>gateway</module>
         <module>shared</module>
         <module>shopping-ui</module>
+        <module>inventory-service-mock</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
