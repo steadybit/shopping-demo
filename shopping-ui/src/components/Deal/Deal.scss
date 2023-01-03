@@ -1,3 +1,17 @@
+@import 'src/styles/colors';
+
+.bg-available {
+    background-color: $color-success;
+}
+
+.bg-unavailable {
+    background-color: $color-warning;
+}
+
+.bg-unknown {
+    background-color: $color-neutral-700;
+}
+
 .deal {
     cursor: pointer;
 

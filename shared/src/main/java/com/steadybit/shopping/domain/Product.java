@@ -4,21 +4,21 @@
 
 package com.steadybit.shopping.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Data
 public class Product {
 
-    private String id;
-    private String name;
-    private ProductCategory category;
-    private String imageId;
-    private BigDecimal price;
+    @NonNull private String id;
+    @NonNull private String name;
+    @NonNull private ProductCategory category;
+    @NonNull private String imageId;
+    @NonNull private BigDecimal price;
+    private Availability availability;
 
 }

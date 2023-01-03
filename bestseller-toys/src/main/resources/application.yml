@@ -24,3 +24,7 @@ management:
     health:
       probes:
         enabled: true
+
+rest:
+  endpoint:
+    inventory: "http://localhost:8084/inventory"

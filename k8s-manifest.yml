@@ -48,7 +48,7 @@ spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: steadybit/gateway
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: gateway
           ports:
             - containerPort: 8080
@@ -122,7 +122,7 @@ spec:
             limits:
               memory: "768Mi"
               cpu: "1000m"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: fashion-bestseller
           ports:
             - containerPort: 8082
@@ -278,7 +278,7 @@ spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: steadybit/hot-deals
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: hot-deals
           env:
             - name: SPRING_PROFILES_ACTIVE

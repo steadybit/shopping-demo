@@ -1,0 +1,3 @@
+rest:
+  endpoint:
+    inventory: "http://inventory:8084/inventory"
