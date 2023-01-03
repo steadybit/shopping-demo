@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class InventoryRestController {
 
     @GetMapping
-    public boolean isAvailable(@RequestParam(value = "id") long id) {
-        return Math.random() > 0.05;
+    public boolean isAvailable(@RequestParam(value = "id") String id) {
+        return Math.random() > 0.005;
     }
 
 }
