@@ -13,7 +13,7 @@ const block = classname('deal');
 
 const Deal: React.FC<DealProps> = ({ product }) => {
     return product ? (
-        <Card bg={'secondary'} text={'light'} className={block()}>
+        <Card bg={product.availability ? product.availability.toLowerCase() : 'secondary'} text={'light'} className={block()}>
             <DealImage imageId={product.imageId} />
             <Card.Body className={block('body')}>
                 <Card.Title className={block('title')}>{product.name}</Card.Title>

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -49,5 +51,10 @@ public class BestsellerToysApplication implements CommandLineRunner {
         jdbcTemplate.query("SELECT id, name, category, imageId, price FROM products_toys",
                 (rs, rowNum) -> new Product(rs.getString("id"), rs.getString("name"), ProductCategory.valueOf(rs.getString("category")), rs.getString("imageId"), rs.getBigDecimal("price")))
                 .forEach(product -> log.info(product.toString()));
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

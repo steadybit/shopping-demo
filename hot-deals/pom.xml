@@ -10,10 +10,53 @@
         <artifactId>shopping-demo-parent</artifactId>
         <groupId>com.steadybit.demo.shopping</groupId>
         <version>${revision}</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hot-deals</artifactId>
     <name>steadybit Shopping Demo - Hot Deals</name>
+    <profiles>
+        <profile>
+            <id>arm64</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <from>
+                                <image>gcr.io/distroless/java17-debian11:debug</image>
+                                <platforms>
+                                    <platform>
+                                        <architecture>arm64</architecture>
+                                        <os>linux</os>
+                                    </platform>
+                                </platforms>
+                            </from>
+                            <to>
+                                <image>${docker.image.prefix}/hot-deals</image>
+                                <tags>${project.version}</tags>
+                            </to>
+                            <container>
+                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                            </container>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>com.steadybit.demo.shopping</groupId>
@@ -81,7 +124,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>gcr.io/distroless/java:11</image>
+                        <image>gcr.io/distroless/java17-debian11:debug</image>
                     </from>
                     <to>
                         <image>${docker.image.prefix}/hot-deals</image>

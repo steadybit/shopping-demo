@@ -7,7 +7,7 @@ const useAsync = <S = undefined>(
 ): [S, { isLoading: boolean; error: Error | undefined }, (v: S) => void] => {
     const [data, setData] = React.useState<S>(initalState);
     const [isLoading, setIsLoading] = React.useState(true);
-    const [error, setError] = React.useState(undefined);
+    const [error, setError] = React.useState<Error | undefined>(undefined);
 
     const normStateProvider = typeof stateProvider === 'function' ? stateProvider : () => stateProvider;
     const normDeps = deps || (typeof stateProvider === 'function' ? [] : [stateProvider]);
@@ -24,7 +24,7 @@ const useAsync = <S = undefined>(
                 !canceled && setData(result);
                 setError(undefined);
             } catch (e) {
-                !canceled && setError(e);
+                !canceled && setError(e as Error);
             } finally {
                 !canceled && setIsLoading(false);
             }

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card, Col, Container, Dropdown, DropdownButton, Jumbotron, Row } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
 import Deal from '../components/Deal/Deal';
 import useAsync from '../utils/useAsync';
 import { Product, Products } from '../../src-gen/ui-api';
@@ -7,12 +7,12 @@ import classname from '../utils/classname';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import { ProductService } from '../services/ProductService';
 import './Home.scss';
-import { AiOutlineLoading } from 'react-icons/all';
+import { AiOutlineLoading } from 'react-icons/ai';
 
 const EmptyStartpage: Products = {
     fashion: [],
     toys: [],
-    hotDeals: [],
+    hotDeals: []
 };
 
 const block = classname('home');
@@ -20,32 +20,19 @@ const Home: React.FC = () => {
     return (
         <Router>
             <Switch>
-                <Route exact path={'/'}>
-                    <HomeDeals />
-                </Route>
-                <Route exact path={'/circuitbreaker'}>
-                    <HomeDeals version={'circuitBreaker'} />
-                </Route>
-                <Route exact path={'/parallel'}>
-                    <HomeDeals version={'parallel'} />
-                </Route>
-                <Route exact path={'/exception'}>
-                    <HomeDeals version={'exception'} />
-                </Route>
-                <Route exact path={'/timeout'}>
-                    <HomeDeals version={'timeout'} />
-                </Route>
-                <Route exact path={'/resilience4j'}>
-                    <HomeDeals version={'resilience4j'} />
+                <Route path={'/:version?'} >
+                    {({ match }) => (
+                        <HomeDeals version={match?.params.version as Version} />
+                    )}
                 </Route>
             </Switch>
         </Router>
     );
 };
 
-type Version = undefined | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker' | 'resilience4j';
+type Version = 'simple' | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker';
 
-const getEndpointName = function (version: Version): string {
+const getEndpointName = function(version: Version = 'simple'): string {
     switch (version) {
         case 'circuitBreaker':
             return 'with Circuit Breaker';
@@ -55,8 +42,6 @@ const getEndpointName = function (version: Version): string {
             return 'with exception handling';
         case 'timeout':
             return 'with timeout and exception handling';
-        case 'resilience4j':
-            return 'with resilience4j';
         default:
             return 'as simple implementation';
     }
@@ -73,13 +58,13 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                 return ProductService.parallel.fetch;
             case 'circuitBreaker':
                 return ProductService.circuitBreaker.fetch;
-            case 'resilience4j':
-                return ProductService.resilience4j.fetch;
             default:
                 return ProductService.legacy.fetch;
         }
     }, [version]);
+    console.log(version);
     const [products, { error, isLoading }] = useAsync(EmptyStartpage, () => fetchProducts(), [timestamp]);
+
     React.useEffect(() => {
         const handle = setInterval(() => {
             if (!isLoading) {
@@ -104,7 +89,7 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
             )}
             <div className={block('debug')}>
                 <div className={block('title')}>Endpoint</div>
-                <DropdownButton size={'sm'} drop={'up'} variant="secondary" title={<span>{getEndpointName(version)}</span>} className={block('version')}>
+                <DropdownButton size={'sm'} drop={'up'} variant='secondary' title={<span>{getEndpointName(version)}</span>} className={block('version')}>
                     <Dropdown.Item href={'/#/circuitBreaker'} active={version === 'circuitBreaker'}>
                         {getEndpointName('circuitBreaker')}
                     </Dropdown.Item>
@@ -117,9 +102,6 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
                     <Dropdown.Item href={'/#/exception'} active={version === 'exception'}>
                         {getEndpointName('exception')}
                     </Dropdown.Item>{' '}
-                    <Dropdown.Item href={'/#/resilience4j'} active={version === 'resilience4j'}>
-                        {getEndpointName('resilience4j')}
-                    </Dropdown.Item>
                     <Dropdown.Item href={'/#'} active={version === undefined}>
                         {getEndpointName(undefined)}
                     </Dropdown.Item>
@@ -137,7 +119,7 @@ const HomeDeals: React.FC<{ version?: Version }> = ({ version }) => {
 
 const Deals: React.FC<{ title: string; products: Product[] }> = ({ title, products }) => {
     return products?.length > 0 ? (
-        <Jumbotron className={block('deals')}>
+        <div className={block('deals')}>
             <Container>
                 <Row>
                     <h3>{title}</h3>
@@ -154,7 +136,7 @@ const Deals: React.FC<{ title: string; products: Product[] }> = ({ title, produc
                     </Col>
                 </Row>
             </Container>
-        </Jumbotron>
+        </div>
     ) : null;
 };
 

@@ -1,3 +1,7 @@
 spring:
   datasource:
     platform: hsqldb
+
+rest:
+  endpoint:
+    inventory: "http://localhost:8084/inventory"

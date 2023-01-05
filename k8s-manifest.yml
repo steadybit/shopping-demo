@@ -48,7 +48,7 @@ spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: steadybit/gateway
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: gateway
           ports:
             - containerPort: 8080
@@ -122,7 +122,7 @@ spec:
             limits:
               memory: "768Mi"
               cpu: "1000m"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: fashion-bestseller
           ports:
             - containerPort: 8082
@@ -278,7 +278,7 @@ spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: steadybit/hot-deals
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: hot-deals
           env:
             - name: SPRING_PROFILES_ACTIVE
@@ -312,4 +312,78 @@ spec:
       targetPort: 8083
   selector:
     run: hot-deals
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: inventory
+  name: inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: inventory
+  template:
+    metadata:
+      labels:
+        run: inventory
+    spec:
+      serviceAccountName: steadybit-demo
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: run
+                      operator: In
+                      values:
+                        - inventory
+                topologyKey: "kubernetes.io/hostname"
+      containers:
+        - image: steadybit/inventory
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "768Mi"
+              cpu: "1000m"
+          imagePullPolicy: IfNotPresent
+          name: inventory
+          ports:
+            - containerPort: 8084
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8084
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8084
+            initialDelaySeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: inventory
+  name: inventory
+spec:
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084
+  selector:
+    run: inventory
   type: NodePort

@@ -16,7 +16,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +37,6 @@ public class ProductsController {
     };
     private final ParameterizedTypeReference<List<Product>> productListTypeReference = new ParameterizedTypeReference<List<Product>>() {
     };
-    private final Resilience4jProductService resilience4jProductService;
 
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
@@ -47,11 +45,10 @@ public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
 
-    public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient,  Resilience4jProductService resilience4jProductService) {
+    public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient) {
         this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
         this.restTemplateWithoutTimeout = restTemplateBuilder.build();
         this.webClient = webClient;
-        this.resilience4jProductService = resilience4jProductService;
     }
 
     @GetMapping
@@ -78,21 +75,6 @@ public class ProductsController {
         products.setFashion(this.getProductWithTimeout(this.urlFashion));
         products.setToys(this.getProductWithTimeout(this.urlToys));
         products.setHotDeals(this.getProductWithTimeout(this.urlHotDeals));
-        return products;
-    }
-
-    @GetMapping("/resilience4j")
-    public Products getProductsResilience4j(@RequestParam(required = false) boolean withCircuitBreaker) {
-        Products products = new Products();
-        if (withCircuitBreaker) {
-            products.setFashion(this.resilience4jProductService.getFashionWithRetryAndCircuitBreaker());
-            products.setToys(this.resilience4jProductService.getToysWithRetryAndCircuitBreaker());
-            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetryAndCircuitBreaker());
-        } else {
-            products.setFashion(this.resilience4jProductService.getFashionWithRetry());
-            products.setToys(this.resilience4jProductService.getToysWithRetry());
-            products.setHotDeals(this.resilience4jProductService.getHotDealsWithRetry());
-        }
         return products;
     }
 

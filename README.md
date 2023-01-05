@@ -109,8 +109,7 @@ So, whenever the UI requests an update by calling `/products`-Endpoint the `gate
 
 ### Products REST Endpoint - Circuit Breaker with Fallback
 
-Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker (
-via [Hystrix](https://www.baeldung.com/spring-cloud-netflix-hystrix)). In order to reach that version of the endpoint, the `gateway`'
+Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker. In order to reach that version of the endpoint, the `gateway`'
 s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
 Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative
 response. This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
