@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.1.1185 on 2023-01-03 12:23:09.
+// Generated using typescript-generator version 3.1.1185 on 2023-01-05 12:30:08.
 
 export interface Product {
     id: string;

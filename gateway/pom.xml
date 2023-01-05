@@ -14,6 +14,48 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gateway</artifactId>
     <name>steadybit Shopping Demo - Gateway</name>
+    <profiles>
+        <profile>
+            <id>arm64</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <from>
+                                <image>gcr.io/distroless/java11-debian11:debug</image>
+                                <platforms>
+                                    <platform>
+                                        <architecture>arm64</architecture>
+                                        <os>linux</os>
+                                    </platform>
+                                </platforms>
+                            </from>
+                            <to>
+                                <image>${docker.image.prefix}/gateway</image>
+                                <tags>${project.version}</tags>
+                            </to>
+                            <container>
+                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                            </container>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>com.steadybit.demo.shopping</groupId>
