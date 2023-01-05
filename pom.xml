@@ -25,12 +25,12 @@
         <docker.image.prefix>steadybit</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <spring-boot-dependencies.version>2.7.7</spring-boot-dependencies.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <!--plugins-->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <jib-maven-plugin.version>2.7.1</jib-maven-plugin.version>
+        <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
         <postgresql.version>42.5.1</postgresql.version>
         <testcontainers.version>1.17.6</testcontainers.version>
@@ -138,8 +138,10 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <source>8</source>
-                        <target>8</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <showWarnings>true</showWarnings>
+                        <parameters>true</parameters>
                     </configuration>
                 </plugin>
                 <plugin>

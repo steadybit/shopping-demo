@@ -10,6 +10,7 @@
         <artifactId>shopping-demo-parent</artifactId>
         <groupId>com.steadybit.demo.shopping</groupId>
         <version>${revision}</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gateway</artifactId>
@@ -35,7 +36,7 @@
                         </executions>
                         <configuration>
                             <from>
-                                <image>gcr.io/distroless/java11-debian11:debug</image>
+                                <image>gcr.io/distroless/java17-debian11:debug</image>
                                 <platforms>
                                     <platform>
                                         <architecture>arm64</architecture>
@@ -110,7 +111,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>gcr.io/distroless/java:11</image>
+                        <image>gcr.io/distroless/java17-debian11:debug</image>
                     </from>
                     <to>
                         <image>${docker.image.prefix}/gateway</image>
