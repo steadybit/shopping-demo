@@ -15,10 +15,13 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Setup Node.js v14
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: v14
+          node-version: v18
+          cache: 'npm'
+          cache-dependency-path: |
+            shopping-ui/package-lock.json
 
       - name: Build and Deploy with Maven
         run: mvn -s .github/workflows/maven-settings.xml install -B -V

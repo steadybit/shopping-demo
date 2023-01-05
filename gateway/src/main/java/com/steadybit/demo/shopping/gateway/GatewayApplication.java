@@ -51,17 +51,17 @@ public class GatewayApplication implements WebFluxConfigurer {
                 // Circuit-Breaker routes
                 .route("cb-hotdeals", p -> p.path("/products/hotdeals/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
-                                .hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/products/fallback"))
+                                .circuitBreaker(c -> c.setName("hotdeals").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
                         .uri(this.urlHotDeals))//
                 .route("cb-fashion", p -> p.path("/products/fashion/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
-                                .hystrix(c -> c.setName("fashion").setFallbackUri("forward:/products/fallback"))
+                                .circuitBreaker(c -> c.setName("fashion").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
                         .uri(this.urlFashion))
                 .route("cb-toys", p -> p.path("/products/toys/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
-                                .hystrix(c -> c.setName("toys").setFallbackUri("forward:/products/fallback"))
+                                .circuitBreaker(c -> c.setName("toys").setFallbackUri("forward:/products/fallback"))
                                 .setPath(URI_PRODUCTS))//
                         .uri(this.urlToys))
                 .build();

@@ -1,14 +1,24 @@
-import { mount } from 'enzyme';
 import * as React from 'react';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
-jest.mock('react-icons/all', () => ({
-    AiOutlineShop: 'AiOutlineShop',
-    AiOutlineLoading: 'AiOutlineLoading',
-}));
+jest.mock('react-icons/ai', () => {
+    const icons = {
+        __esModule: true
+    };
 
-describe('App', () => {
-    it('should initially render', () => {
-        expect(mount(<App />)).toHaveLength(1);
-    });
+    const handler = {
+        get: function(_: any, prop: any) {
+            return () => <div className={`mock_${prop}Icon`} />;
+        }
+    };
+
+    return new Proxy(icons, handler);
 });
+
+test('render', () => {
+    render(<App />);
+    const el = screen.getByText(/Bestsellers/i);
+    expect(el).toBeInTheDocument();
+});
+

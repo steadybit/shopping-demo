@@ -23,26 +23,6 @@ management:
       probes:
         enabled: true
 
-hystrix:
-  metrics:
-    enabled: true
-  command:
-    fashion:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 1000
-    hotdeals:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 1000
-    toys:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 1000
-
 resilience4j:
   retry:
     instances:
