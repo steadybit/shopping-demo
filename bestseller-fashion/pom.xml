@@ -115,7 +115,7 @@
                 </executions>
                 <configuration>
                     <from>
-                        <image>gcr.io/distroless/java:11-debug</image>
+                        <image>gcr.io/distroless/java17-debian11:debug</image>
                     </from>
                     <to>
                         <image>${docker.image.prefix}/bestseller-fashion</image>
