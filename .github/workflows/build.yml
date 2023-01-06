@@ -36,6 +36,7 @@ jobs:
           docker push steadybit/bestseller-toys
           docker push steadybit/bestseller-fashion
           docker push steadybit/hot-deals
+          docker push steadybit/inventory
 
       - name: Notify Slack channel
         uses: 8398a7/action-slack@v3
