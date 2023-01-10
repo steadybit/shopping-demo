@@ -11,5 +11,5 @@ jobs:
     - name: Run Resilience Regression Test in Steadybit
       uses: steadybit/run-experiment@v1
       with:
-        apiAccessToken: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
+        apiAccessToken: ${{ secrets.API_ACCESS_TOKEN }}
         experimentKey: 'RESTEST-9'
