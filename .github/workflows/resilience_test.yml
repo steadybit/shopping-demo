@@ -17,5 +17,5 @@ jobs:
             --request POST \
             "https://platform.steadybit.com/api/experiments/RESTEST-9/execute?allowParallel=true" \       
             -H "Authorization: accessToken $API_ACCESS_TOKEN" \
-            -H "Accept: application/json"
+            -H "Accept: application/json" \
             -H "ContentType: application/json"
