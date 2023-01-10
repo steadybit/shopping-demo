@@ -18,4 +18,4 @@ jobs:
             -H "Accept: application/json"
             -H "ContentType: application/json" \
             --request POST \
-            https://platform.steadybit.com/api/experiments/RESTEST-9/execute?allowParallel=true
+            "https://platform.steadybit.com/api/experiments/RESTEST-9/execute?allowParallel=true"
