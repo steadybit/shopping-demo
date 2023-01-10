@@ -6,11 +6,10 @@ on:
   
 jobs:
   run_experiment:
-    name: Run Resilience Regression Test in Steadybit
-    runs-on: ubuntu-18.04
-    env:
-      API_ACCESS_TOKEN: ${{ secrets.API_ACCESS_TOKEN }}
+    runs-on: ubuntu-latest
     steps:
-      - name: Start Experiment via API
-        run: |
-          curl --request POST "https://platform.steadybit.com/api/experiments/RESTEST-9/execute?allowParallel=true" -H "Authorization: accessToken $API_ACCESS_TOKEN" -H "Accept: application/json" -H "ContentType: application/json"
+    - name: Run Resilience Regression Test in Steadybit
+      uses: steadybit/run-experiment@v1
+      with:
+        apiAccessToken: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
+        experimentKey: 'RESTEST-9'
