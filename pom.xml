@@ -15,6 +15,8 @@
         <module>bestseller-fashion</module>
         <module>bestseller-toys</module>
         <module>gateway</module>
+        <module>checkout</module>
+        <module>order</module>
         <module>shared</module>
         <module>shopping-ui</module>
         <module>inventory-service-mock</module>
@@ -30,6 +32,7 @@
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <!--plugins-->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
         <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
         <postgresql.version>42.5.1</postgresql.version>
@@ -48,11 +51,6 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>com.steadybit.demo.shopping</groupId>
-                <artifactId>gateway</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -68,31 +66,9 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -142,6 +118,22 @@
                         <target>${java.version}</target>
                         <showWarnings>true</showWarnings>
                         <parameters>true</parameters>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                        <includes>
+                            <include>**/*Tests.java</include>
+                            <include>**/*Test.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/Abstract*.java</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
                 <plugin>

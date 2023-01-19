@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { Product } from '../../../src-gen/ui-api';
 import { ImgCar, ImgDrone, ImgExcavator, ImgJeans, ImgShirt, ImgSocks, ImgSunglasses, ImgTeddy } from '../../images';
 import classname from '../../utils/classname';
@@ -7,43 +7,52 @@ import './Deal.scss';
 
 export type DealProps = {
     product?: Product;
+    onAddToCart: () => void;
 };
 
 const block = classname('deal');
 
-const Deal: React.FC<DealProps> = ({ product }) => {
-    return product ? (
-        <Card bg={product.availability ? product.availability.toLowerCase() : 'secondary'} text={'light'} className={block()}>
-            <DealImage imageId={product.imageId} />
-            <Card.Body className={block('body')}>
+const Deal: React.FC<DealProps> = ({ product, onAddToCart }) => {
+    if (!product) {
+        return null;
+    }
+    return <Card bg={product.availability ? product.availability.toLowerCase() : 'secondary'} text={'light'} className={block()}>
+        <Card.Img variant='top' src={getImageSrc(product.imageId)} />
+        <Card.Body>
+            <div className={block('body')}>
                 <Card.Title className={block('title')}>{product.name}</Card.Title>
                 <Card.Text className={block('price')}>{product.price} $</Card.Text>
-            </Card.Body>
-        </Card>
-    ) : null;
+            </div>
+            {
+                product.availability !== 'UNAVAILABLE'
+                    ? <Button variant='primary' onClick={() => onAddToCart()}>Add to Cart</Button>
+                    : <Button variant='primary' disabled>Out of Stock</Button>
+            }
+        </Card.Body>
+    </Card>;
 };
 
-const DealImage: React.FC<{ imageId: string }> = ({ imageId }) => {
+function getImageSrc(imageId: string) {
     switch (imageId) {
         case 'car':
-            return <Card.Img variant="top" src={ImgCar} />;
+            return ImgCar;
         case 'drone':
-            return <Card.Img variant="top" src={ImgDrone} />;
+            return ImgDrone;
         case 'excavator':
-            return <Card.Img variant="top" src={ImgExcavator} />;
+            return ImgExcavator;
         case 'jeans':
-            return <Card.Img variant="top" src={ImgJeans} />;
+            return ImgJeans;
         case 'shirt':
-            return <Card.Img variant="top" src={ImgShirt} />;
+            return ImgShirt;
         case 'socks':
-            return <Card.Img variant="top" src={ImgSocks} />;
+            return ImgSocks;
         case 'sunglasses':
-            return <Card.Img variant="top" src={ImgSunglasses} />;
+            return ImgSunglasses;
         case 'teddy':
-            return <Card.Img variant="top" src={ImgTeddy} />;
+            return ImgTeddy;
         default:
-            return null;
+            return 'about:blank';
     }
-};
+}
 
 export default Deal;
