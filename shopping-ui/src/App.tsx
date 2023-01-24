@@ -3,6 +3,8 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AiOutlineShop } from 'react-icons/ai';
 import Home from './pages/Home';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { Version } from './services/ProductService';
 
 const App: React.FC = () => {
     return (
@@ -12,7 +14,7 @@ const App: React.FC = () => {
                     <Navbar.Brand href='#home'>
                         <AiOutlineShop /> Bestsellers
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav className='mr-auto'>
                             <Nav.Link href='/#'>Home</Nav.Link>
@@ -20,9 +22,15 @@ const App: React.FC = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container>
-                <Home />
-            </Container>
+            <Router>
+                <Switch>
+                    <Route path={'/:version?'}>
+                        {({ match }) => (
+                            <Home version={match?.params.version as Version} />
+                        )}
+                    </Route>
+                </Switch>
+            </Router>
         </Container>
     );
 };

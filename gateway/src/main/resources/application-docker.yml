@@ -3,3 +3,4 @@ rest:
     fashion: "http://fashion:8082/products"
     toys: "http://toys:8081/products"
     hotdeals: "http://hot-deals:8083/products"
+    checkout: "http://checkout:8085/products"

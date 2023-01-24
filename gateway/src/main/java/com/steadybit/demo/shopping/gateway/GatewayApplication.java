@@ -18,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SpringBootApplication
 public class GatewayApplication implements WebFluxConfigurer {
 
-    public static final String URI_PRODUCTS = "/products";
+    public static final String PATH_PRODUCTS = "/products";
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
 
@@ -27,6 +27,8 @@ public class GatewayApplication implements WebFluxConfigurer {
 
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
+    @Value("${rest.endpoint.checkout}")
+    private String urlCheckout;
 
     @Value("${server.port}")
     private int serverPort;
@@ -40,30 +42,32 @@ public class GatewayApplication implements WebFluxConfigurer {
         return builder.routes().route("index", p -> p.path("/").uri("forward:/index.html"))//
                 // Legacy routes
                 .route("legacy-hotdeals", p -> p.path("/products/hotdeals**")//
-                        .filters(c -> c.setPath(URI_PRODUCTS))//
+                        .filters(c -> c.setPath(PATH_PRODUCTS))//
                         .uri(this.urlHotDeals))//
                 .route("legacy-fashion", p -> p.path("/products/fashion**")
-                        .filters(c -> c.setPath(URI_PRODUCTS))//
+                        .filters(c -> c.setPath(PATH_PRODUCTS))//
                         .uri(this.urlFashion))//
                 .route("legacy-toys", p -> p.path("/products/toys**")//
-                        .filters(c -> c.setPath(URI_PRODUCTS))//
+                        .filters(c -> c.setPath(PATH_PRODUCTS))//
                         .uri(this.urlToys))//
                 // Circuit-Breaker routes
                 .route("cb-hotdeals", p -> p.path("/products/hotdeals/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .circuitBreaker(c -> c.setName("hotdeals").setFallbackUri("forward:/products/fallback"))
-                                .setPath(URI_PRODUCTS))//
+                                .setPath(PATH_PRODUCTS))//
                         .uri(this.urlHotDeals))//
                 .route("cb-fashion", p -> p.path("/products/fashion/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .circuitBreaker(c -> c.setName("fashion").setFallbackUri("forward:/products/fallback"))
-                                .setPath(URI_PRODUCTS))//
+                                .setPath(PATH_PRODUCTS))//
                         .uri(this.urlFashion))
                 .route("cb-toys", p -> p.path("/products/toys/circuitbreaker**")//
                         .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
                                 .circuitBreaker(c -> c.setName("toys").setFallbackUri("forward:/products/fallback"))
-                                .setPath(URI_PRODUCTS))//
+                                .setPath(PATH_PRODUCTS))//
                         .uri(this.urlToys))
+                .route("checkout", p -> p.path("/checkout/**")
+                        .uri(this.urlCheckout))
                 .build();
     }
 

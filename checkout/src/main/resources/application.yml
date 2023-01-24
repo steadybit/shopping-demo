@@ -1,0 +1,31 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: checkout
+  datasource:
+    platform: hsqldb
+  jmx:
+    enabled: true
+  activemq:
+    broker-url: "tcp://localhost:61616"
+  jpa:
+    properties:
+      "hibernate.jdbc.log.warnings": "false"
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles: 0.95
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
+  endpoint:
+    health:
+      probes:
+        enabled: true

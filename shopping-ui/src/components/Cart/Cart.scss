@@ -1,0 +1,27 @@
+@import 'src/styles/colors';
+
+.cart {
+  background-color: #d0d0d0;
+  border-radius: 0.3rem;
+  overflow: hidden;
+
+  h3 {
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+
+  &__loading svg {
+    animation: rotation 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+  }
+
+}

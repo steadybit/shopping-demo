@@ -1,0 +1,25 @@
+
+
+spring:
+  application:
+    name: order
+  jmx:
+    enabled: true
+
+management:
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            percentiles: 0.95
+  endpoints:
+    web:
+      exposure:
+        include: metrics,prometheus,health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+server:
+  port: 8086

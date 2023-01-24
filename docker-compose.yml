@@ -2,23 +2,59 @@ version: '3.3'
 
 services:
   gateway:
-    image: steadybit/gateway:latest
+    image: steadybit/gateway:1.0.0-SNAPSHOT
     ports:
-    - "8080:8080"
+      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
   fashion:
-    image: steadybit/bestseller-fashion:latest
+    image: steadybit/bestseller-fashion:1.0.0-SNAPSHOT
     ports:
-    - "8082:8082"
+      - "8082:8082"
+    environment:
+      "rest.endpoint.inventory": "http://inventory:8084/inventory"
 
   toys:
-    image: steadybit/bestseller-toys:latest
+    image: steadybit/bestseller-toys:1.0.0-SNAPSHOT
     ports:
-    - "8081:8081"
+      - "8081:8081"
+    environment:
+      "rest.endpoint.inventory": "http://inventory:8084/inventory"
 
   hot-deals:
-    image: steadybit/hot-deals:latest
+    image: steadybit/hot-deals:1.0.0-SNAPSHOT
     ports:
-    - "8083:8083"
+      - "8083:8083"
+    environment:
+      "rest.endpoint.inventory": "http://inventory:8084/inventory"
+
+  inventory:
+    image: steadybit/inventory:1.0.0-SNAPSHOT
+    ports:
+      - "8084:8084"
+
+  checkout:
+    image: steadybit/checkout:1.0.0-SNAPSHOT
+    ports:
+      - "8085:8085"
+    environment:
+      "spring.activemq.broker-url": "tcp://activemq:61616"
+    depends_on:
+      - activemq
+
+  orders:
+    image: steadybit/orders:1.0.0-SNAPSHOT
+    environment:
+      "spring.activemq.broker-url": "tcp://activemq:61616"
+    depends_on:
+      - activemq
+
+  activemq:
+    image: symptoma/activemq:latest
+    container_name: 'activemq'
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    volumes:
+      - ${PWD}/activemq.xml:/opt/activemq/conf/activemq.xml

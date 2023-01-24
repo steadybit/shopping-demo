@@ -25,6 +25,11 @@
         display: flex;
     }
 
+    &__overlay {
+        display: flex;
+        justify-content: flex-end;
+    }
+
     &__price {
         white-space: nowrap;
         margin-left: auto;
