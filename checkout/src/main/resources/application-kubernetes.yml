@@ -1,0 +1,3 @@
+spring:
+  activemq:
+    broker-url: "http://activemq.steadybit-demo.svc.cluster.local:61616/inventory"
