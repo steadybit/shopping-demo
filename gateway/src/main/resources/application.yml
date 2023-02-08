@@ -38,17 +38,17 @@ resilience4j:
   circuitbreaker:
     instances:
       fashion:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
       toys:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
       hotdeals:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
 
 rest:
   endpoint:
