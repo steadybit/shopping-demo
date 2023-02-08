@@ -98,9 +98,9 @@ public class ProductsController {
 
     @GetMapping("/parallel")
     public Mono<Products> getProductsParallel() {
-        Mono<List<Product>> hotdeals = this.getProductReactive("/products/hotdeals");
-        Mono<List<Product>> fashion = this.getProductReactive("/products/fashion");
-        Mono<List<Product>> toys = this.getProductReactive("/products/toys");
+        Mono<List<Product>> hotdeals = this.getProductReactive(this.urlHotDeals);
+        Mono<List<Product>> fashion = this.getProductReactive(this.urlFashion);
+        Mono<List<Product>> toys = this.getProductReactive(this.urlToys);
 
         return Mono.zip(hotdeals, fashion, toys)
                 .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
