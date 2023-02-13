@@ -27,28 +27,28 @@ resilience4j:
   retry:
     instances:
       fashion:
-        maxRetryAttempts: 3
+        maxAttempts: 3
         waitDuration: 500ms
       toys:
-        maxRetryAttempts: 3
+        maxAttempts: 3
         waitDuration: 500ms
       hotdeals:
-        maxRetryAttempts: 3
+        maxAttempts: 3
         waitDuration: 500ms
   circuitbreaker:
     instances:
       fashion:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
       toys:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
       hotdeals:
-        failureRateThreshold: 50
         slidingWindowType: TIME_BASED
         slidingWindowSize: 10
+        waitDurationInOpenState: 10000
 
 rest:
   endpoint:

@@ -2,18 +2,18 @@
 
 ## 📝 Introduction
 
-In order to give you a quick and easy start, we provide you a small demo application. Our shopping demo is a small product catalog provided by 4 distributed
-services (three backend microservice and one frontend).
+We provide a small demo application to give you a quick and easy start into the world of Chaos Engineering.
+This demo application is a product catalog consisting of products from three different categories (toys, fashion and hot-deals).
 
+## High Level Architecture
 ![Architecture](./architecture.jpg)
 
-Each of the 3 backend services (`bestseller-fashion`, `bestseller-toys` and `hot-deals`) provides a list of products, which are aggregated by the `gateway`
-service and compiled in a list. This list of products is accessible from `/products` at the `gateway` component.
+The shopping demo consists of three backend services per each product category (`bestseller-fashion`, `bestseller-toys` and `hot-deals`).
+Each microservice provides a list of products.
+These products are aggregated by the `gateway`-microservice and exposed to the user via `shopping-ui`.
+In addition, each product microservice uses the `inventory-service` to determine stock availability.
 
-Fallbacks, timeouts and circuit breakers are configured within the `gateway` service. These resilience patterns have the task to mitigate failures or
-disturbances and let the `gateway` respond with defined fallbacks. See more about that in the section below, called "Implementation".
-
-## Stack
+## Technical Architecture
 
 All services are based on Spring Boot and use different Spring projects.
 
@@ -24,61 +24,16 @@ All services are based on Spring Boot and use different Spring projects.
 - [Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker)
 - [Spring Cloud Kubernetes](https://spring.io/projects/spring-cloud-kubernetes)
 
-## 🚀 Getting started
 
-Our demo can be run on different Docker based platforms using the deployment scripts provided. Following types of deployments on the corresponding platforms are
-prepared.
+As mentioned above the `gateway` is the entrypoint for the UI.
 
-### Docker
+### Products REST Endpoint
+The `gateway` provides available products via the `/products`-endpoint which collects all products from each microservices (`bestseller-fashion`, `bestseller-toys` and `hot-deals`).
+This endpoints is implemented in the [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java).
+Multiple implementation strategies exists using each different resilience patterns: fallbacks, timeouts and circuit breakers as described subsequently.
 
-```sh
-docker-compose up
-open http://localhost:8080
-```
-
-### Kubernetes (local)
-
-```sh
-minikube start
-minikube addons enable ingress
-kubectl apply -f k8s-manifest.yml
-kubectl apply -f k8s-manifest-minikube-ingress.yml
-open http://<minikube-ip>:8080
-```
-
-### Kubernetes (AWS EKS)
-
-Install `eksctl` CLI
-
-```sh
-brew tap weaveworks/tap
-brew install weaveworks/tap/eksctl
-```
-
-Create a new cluster in:
-
-```sh
-eksctl create cluster -f aws-eks-kubernetes/aws-eks-demo.yaml --alb-ingress-access
-```
-
-Deploy demo application:
-
-```sh
-kubectl apply -f k8s-manifest.yml
-kubectl apply -f k8s-manifest-eks-ingress.yml
-```
-
-## Implementation
-
-As mentioned above the `gateway` is the entrypoint for the UI. It is based on Spring Boot and Spring Cloud projects. We will cover its most important parts in
-this section
-
-### Products REST Endpoint - Basic Implementation
-
-The `gateway` provides basically one endpoint which collects products from different categories (hot-deals, fashion and toys) from the corresponding
-microservices (`bestseller-fashion`, `bestseller-toys` and `hot-deals`). This endpoint is implemented in
-the [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java). Below are the relevant parts for the
-basic implementation of this endpoint.
+#### Basic Implementation
+This is the most simplest implementation using neither fallbacks nor timeouts.
 
 ```java
 
@@ -93,8 +48,7 @@ public class ProductsController {
     @RequestMapping(value = { "/products" }, method = RequestMethod.GET)
     public Products getProducts() {
         Products products = new Products();
-        products.setFashion(getProduct(urlFashion));
-        products.setToys(getProduct(urlToys));
+        //...
         products.setHotDeals(getProduct(urlHotDeals));
         return products;
     }
@@ -104,15 +58,12 @@ public class ProductsController {
     }
 }
 ```
+#### Circuit Breaker with Fallback
 
-So, whenever the UI requests an update by calling `/products`-Endpoint the `gateway` microservices collects synchronously the products from each microservice.
-
-### Products REST Endpoint - Circuit Breaker with Fallback
-
-Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker. In order to reach that version of the endpoint, the `gateway`'
-s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
-Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative
-response. This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
+Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker.
+In order to reach that version of the endpoint, the `gateway`'s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
+Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative response.
+This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
 
 ```java
 
@@ -123,19 +74,14 @@ public class ProductsController {
     @GetMapping("/circuitbreaker")
     public Mono<Products> getProductsCircuitBreaker() {
         Mono<List<Product>> hotdeals = getProductCircuitBreaker("/products/hotdeals/circuitbreaker");
-        Mono<List<Product>> fashion = getProductCircuitBreaker("/products/fashion/circuitbreaker");
-        Mono<List<Product>> toys = getProductCircuitBreaker("/products/toys/circuitbreaker");
-
+        //...
         return Mono.zip(hotdeals, fashion, toys)
                 .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
     }
 
     @GetMapping("/fallback")
     public ResponseEntity<List<Product>> getProductsFallback() {
-        log.info("fallback enabled");
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("fallback", "true");
-        return ResponseEntity.ok().headers(headers).body(Collections.emptyList());
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(Collections.emptyList());
     }
 
     private Mono<List<Product>> getProductCircuitBreaker(String uri) {
@@ -149,18 +95,13 @@ public class ProductsController {
 }
 ```
 
-The routing of the Circuit Breaker is implemented in the Main Class of
-the `gateway`: [GatewayApplication](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/GatewayApplication.java).
+The routing of the Circuit Breaker is implemented in the `gateway`'s Main Class: [GatewayApplication](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/GatewayApplication.java).
 
 ````java
 
 @SpringBootApplication
 @EnableDiscoveryClient
 public class GatewayApplication implements WebFluxConfigurer {
-
-    @Value("${rest.endpoint.hotdeals}")
-    private String urlHotDeals;
-
     //...
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
@@ -179,8 +120,13 @@ public class GatewayApplication implements WebFluxConfigurer {
 
 ### Additional REST Endpoints
 
-There are some additional endpoints which are helpful for HTTP Health Schecks during experiments, such as:
+There are some additional endpoints which are helpful for HTTP Health checks during experiments, such as:
 
 - `/product/hotdeals` to reach `hot-deals` products-list and check it's availability
 - `/product/fashion` to reach `fashion` products-list and check it's availability
 - `/product/toys` to reach `toys` products-list and check it's availability
+
+## Deploying the Application
+
+Our demo can be run on different Docker based platforms using the deployment scripts provided.
+Checkout the [Steadybit Quickstart](https://docs.steadybit.com/quick-start/deploy-example-application) for more details.
