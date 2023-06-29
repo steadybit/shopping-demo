@@ -36,8 +36,7 @@ jobs:
           docker push steadybit/bestseller-toys
           cd bestseller-fashion
           ./ci/buildAndPushDockerImages.bash latest
-          cd -
-#          docker push steadybit/bestseller-fashion
+          cd ..
           docker push steadybit/hot-deals
           docker push steadybit/inventory
           docker push steadybit/orders
