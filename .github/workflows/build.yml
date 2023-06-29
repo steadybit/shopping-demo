@@ -32,15 +32,27 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
-          docker push steadybit/gateway
-          docker push steadybit/bestseller-toys
+          cd gateway
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
+          cd bestseller-toys
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
           cd bestseller-fashion
           ./ci/buildAndPushDockerImages.bash latest
           cd ..
-          docker push steadybit/hot-deals
-          docker push steadybit/inventory
-          docker push steadybit/orders
-          docker push steadybit/checkout
+          cd hot-deals
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
+          cd inventory-service-mock
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
+          cd order
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
+          cd checkout
+          ./ci/buildAndPushDockerImages.bash latest
+          cd ..
 
       - name: Notify Slack channel
         uses: 8398a7/action-slack@v3

@@ -8,6 +8,6 @@ docker buildx create --use
 docker buildx build \
   --platform "linux/arm64,linux/amd64" \
   --push \
-  -t "steadybit/bestseller-toys:$tag" \
+  -t "steadybit/orders:$tag" \
   --build-arg "JAR_FILE=target/*.jar" \
   .
