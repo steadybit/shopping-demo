@@ -1,5 +1,5 @@
 FROM openjdk:17
 ARG JAR_FILE=target/*.jar
 EXPOSE 8081
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY ${JAR_FILE} bestseller-toys.jar
+ENTRYPOINT ["java","-jar","/bestseller-toys.jar"]
