@@ -24,7 +24,7 @@ jobs:
             shopping-ui/package-lock.json
 
       - name: Build and Deploy with Maven
-        run: mvn -s .github/workflows/maven-settings.xml install -B -V
+        run: mvn -s .github/workflows/maven-settings.xml package -B -V
 
       - name: Login to Docker Hub and Publish the Docker Images
         env:
@@ -34,7 +34,10 @@ jobs:
           echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
           docker push steadybit/gateway
           docker push steadybit/bestseller-toys
-          docker push steadybit/bestseller-fashion
+          cd bestseller-fashion
+          ./ci/buildAndPushDockerImages.bash latest
+          cd -
+#          docker push steadybit/bestseller-fashion
           docker push steadybit/hot-deals
           docker push steadybit/inventory
           docker push steadybit/orders
