@@ -1,0 +1,29 @@
+name: Run Chaos Engineering experiments
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  run_experiments:
+    runs-on: ubuntu-latest
+    name: Run Experiments
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install Steadybit CLI
+        run: npm install -g steadybit
+        shell: bash
+
+      - name: Add Mask
+        run: echo "::add-mask::${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
+
+      - name: Add Steadybit Profile with a Team Token
+        run: steadybit config profile add --name "CI/CD" --token "${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
+        shell: bash
+
+      - name: Run experiment via Experiment Key
+        run: steadybit experiment run -k GITHUB-17 --recursive
+
+     - name: Run versioned experiments
+        run: steadybit experiment run -f experiments/ --recursive
