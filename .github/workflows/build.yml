@@ -68,9 +68,10 @@ jobs:
       - name: Dispatch event to trigger deployment to DEV
         if: github.ref == 'refs/heads/develop'
         run: |
-          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy_demo_to_dev"}'
+          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-dev-demo"}'
+          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-sandbox-demo"}'
 
       - name: Dispatch event to trigger deployment to PROD
         if: github.ref == 'refs/heads/main'
         run: |
-          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy_demo_to_prod"}'
+          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-dev-demo"}'
