@@ -23,7 +23,9 @@ jobs:
         shell: bash
 
       - name: Run experiment via Experiment Key
-        run: steadybit experiment run -k GITHUB-17 --recursive
+        run: steadybit experiment run -k GITHUB-16
+        if: "!cancelled()"
 
-     - name: Run versioned experiments
+      - name: Run versioned experiments
         run: steadybit experiment run -f experiments/ --recursive
+        if: "!cancelled()"
