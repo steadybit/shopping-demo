@@ -1,0 +1,62 @@
+name: Onlineshop survives outage of hot-deals
+team: GITHUB
+environment: Online Shop Stage
+lanes:
+  - steps:
+      - type: wait
+        ignoreFailure: false
+        parameters:
+          duration: 10s
+      - type: action
+        ignoreFailure: false
+        parameters:
+          duration: 30s
+          failOnHostNetwork: true
+        customLabel: 'WHEN: ActiveMQ broker is not available'
+        actionType: com.github.steadybit.extension_container.network_blackhole
+        radius:
+          targetType: container
+          predicate:
+            operator: AND
+            predicates:
+              - key: k8s.deployment
+                operator: EQUALS
+                values:
+                  - activemq
+          query: null
+          percentage: 100
+  - steps:
+      - type: action
+        ignoreFailure: false
+        parameters:
+          url: http://demo.steadybit.io/checkout/direct
+          body: >-
+            {"id":"f6509673-7d4a-4a3a-8874-a2982f20567e","items":[{"productId":"112ff807-b599-40fc-9097-96758600d14a","quantity":2,"price":299.99}]}
+          method: POST
+          headers:
+            - key: Content-Type
+              value: application/json
+          duration: 60s
+          statusCode: 200-299
+          readTimeout: 5s
+          successRate: 100
+          maxConcurrent: 5
+          connectTimeout: 5s
+          followRedirects: false
+          requestsPerSecond: 1
+        customLabel: 'THEN: Checkout products via Checkout Microservice should work'
+        actionType: com.github.steadybit.extension_http.check.periodically
+        radius:
+          list: []
+key: GITHUB-17
+created: '2021-09-01T12:11:21.076283Z'
+createdBy:
+  username: 8a01c788-09c8-4dbe-a943-d74240f251f5
+  name: Manuel
+  pictureUrl: https://avatars.githubusercontent.com/u/50632744?v=4
+edited: '2023-07-14T14:04:05.751888Z'
+editedBy:
+  username: auth0|61dc5ae748ccd80068f48e9f
+  name: manuel+githubactions
+  pictureUrl: >-
+    data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4Ij48cmVjdCBmaWxsPSIjRkRFRUI5IiB4PSIwIiB5PSIwIiB3aWR0aD0iNDgiIGhlaWdodD0iNDgiLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iSW50ZXIgVUksIHNhbnMtc2VyaWYiIHg9IjI0IiB5PSIzMiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzFEMkQzQSI+TTwvdGV4dD48L3N2Zz4=
