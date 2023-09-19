@@ -1,0 +1,29 @@
+# the first entry in a row should be the spdx identifier of the license (see: https://spdx.org/licenses/)
+# when a new spdx identifier is added make sure to add it to the adoc-template.ftl as well
+#
+# (entries are sorted alphabetically)
+#
+Apache Software Licenses|Apache Software License
+Apache-1.1|The Apache Software License, Version 1.1
+Apache-2.0|Apache 2.0|Apache 2|Apache License, Version 2.0|Apache Public License 2.0|The Apache Software License, Version 2.0|Apache License 2.0|Apache License, version 2.0|The Apache License, Version 2.0|Apache License Version 2.0|Apache License,Version 2.0
+BSD style|BSD Style License|BSD License|BSD style License
+BSD-2-Clause|BSD 2-Clause License
+BSD-3-Clause|BSD 3-clause New License|BSD 3-clause|3-Clause BSD License
+CC-BY-SA-3.0|Creative Commons 3.0 BY-SA
+CC0-1.0|CC0|Public Domain, per Creative Commons CC0
+CDDL-1.0|Common Development and Distribution License (CDDL), version 1.0| Common Development and Distribution License (CDDL) v1.0|COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL), Version 1.0
+CDDL-1.1|(CDDL) Version 1.1|CDDL 1.1
+CDDL-1.1+GPL-2.0-with-classpath-exception|CDDL + GPLv2 with classpath exception
+EDL-1.0|Eclipse Distribution License - v 1.0|Eclipse Distribution License v. 1.0|Eclipse Distribution License (EDL), Version 1.0
+EPL-1.0|EPL 1.0|Eclipse Public License 1.0|Eclipse Public License - v 1.0|Eclipse Public License (EPL), Version 1.0|Eclipse Public License, Version 1.0
+EPL-2.0|EPL 2.0|Eclipse Public License 2.0|Eclipse Public License v. 2.0|Eclipse Public License v2.0|Eclipse Public License - v 2.0
+GPL-2.0-with-classpath-exception|GPL2 w/ CPE|GNU General Public License, version 2 (GPL2), with the classpath exception|GNU General Public License, Version 2 with the Classpath Exception
+GPL-2.0|GPL 2.0|GNU General Public License, v2.0|GNU GENERAL PUBLIC LICENSE Version 2, June 1991|GNU General Public License, Version 2.0|GNU General Public License version 2 (GPLv2)|GNU General Public License Version 2
+GPL-2.1|GNU Lesser General Public License Version 2.1
+GPL-3.0|GNU Public License, Version 3.0
+LGPL-2.1+|GNU Library General Public License v2.1 or later
+LGPL-2.1|LGPL 2.1|GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1|GNU Lesser General Public License, version 2.1|GNU Lesser General Public License, Version 2.1|The GNU Lesser General Public License, Version 2.1|GNU Lesser General Public License version 2.1 (LGPLv2.1)
+LGPL-3.0-only|GNU Lessor/Library Public License, Version 3.0
+LGPL|GNU Lesser General Public License|GNU LESSER GENERAL PUBLIC LICENSE|GNU Lesser Public License|GNU Lesser General Public Licence
+MIT|MIT License|The MIT License (MIT)|The MIT License|MIT license|SPDX-License-Identifier: MIT|MIT-0
+MPL-1.1|Mozilla Public License version 1.1|MPL 1.1
