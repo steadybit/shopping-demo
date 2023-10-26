@@ -8,6 +8,9 @@ spring:
     enabled: true
 
 management:
+  health:
+    circuitbreakers:
+      enabled: true
   metrics:
     web:
       server:
@@ -22,6 +25,7 @@ management:
     health:
       probes:
         enabled: true
+      show-details: always
 
 resilience4j:
   retry:
@@ -38,16 +42,22 @@ resilience4j:
   circuitbreaker:
     instances:
       fashion:
-        slidingWindowType: TIME_BASED
-        slidingWindowSize: 10
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 100
+        minimumNumberOfCalls: 10
         waitDurationInOpenState: 10000
       toys:
-        slidingWindowType: TIME_BASED
-        slidingWindowSize: 10
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 100
+        minimumNumberOfCalls: 10
         waitDurationInOpenState: 10000
       hotdeals:
-        slidingWindowType: TIME_BASED
-        slidingWindowSize: 10
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 100
+        minimumNumberOfCalls: 10
         waitDurationInOpenState: 10000
 
 rest:
