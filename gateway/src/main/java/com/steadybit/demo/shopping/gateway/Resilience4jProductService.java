@@ -39,41 +39,46 @@ public class Resilience4jProductService {
         this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
     }
 
-    @Retry(name = "fashion", fallbackMethod = "getProductsFallback")
+    @Retry(name = "fashion", fallbackMethod = "getProductsFallbackRetry")
     public List<Product> getFashionWithRetry() {
         return this.restTemplate.exchange(this.urlFashion, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    @Retry(name = "toys", fallbackMethod = "getProductsFallback")
+    @Retry(name = "toys", fallbackMethod = "getProductsFallbackRetry")
     public List<Product> getToysWithRetry() {
         return this.restTemplate.exchange(this.urlToys, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    @Retry(name = "hotdeals", fallbackMethod = "getProductsFallback")
+    @Retry(name = "hotdeals", fallbackMethod = "getProductsFallbackRetry")
     public List<Product> getHotDealsWithRetry() {
         return this.restTemplate.exchange(this.urlHotDeals, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    @Retry(name = "fashion", fallbackMethod = "getProductsFallback")
-    @CircuitBreaker(name = "fashion", fallbackMethod = "getProductsFallback")
+    @Retry(name = "fashion", fallbackMethod = "getProductsFallbackRetry")
+    @CircuitBreaker(name = "fashion", fallbackMethod = "getProductsFallbackCircuitBreaker")
     public List<Product> getFashionWithRetryAndCircuitBreaker() {
         return this.restTemplate.exchange(this.urlFashion, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    @Retry(name = "toys", fallbackMethod = "getProductsFallback")
-    @CircuitBreaker(name = "toys", fallbackMethod = "getProductsFallback")
+    @Retry(name = "toys", fallbackMethod = "getProductsFallbackRetry")
+    @CircuitBreaker(name = "toys", fallbackMethod = "getProductsFallbackCircuitBreaker")
     public List<Product> getToysWithRetryAndCircuitBreaker() {
         return this.restTemplate.exchange(this.urlToys, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    @Retry(name = "hotdeals", fallbackMethod = "getProductsFallback")
-    @CircuitBreaker(name = "hotdeals", fallbackMethod = "getProductsFallback")
+    @Retry(name = "hotdeals", fallbackMethod = "getProductsFallbackRetry")
+    @CircuitBreaker(name = "hotdeals", fallbackMethod = "getProductsFallbackCircuitBreaker")
     public List<Product> getHotDealsWithRetryAndCircuitBreaker() {
         return this.restTemplate.exchange(this.urlHotDeals, HttpMethod.GET, null, this.productListTypeReference).getBody();
     }
 
-    private List<Product> getProductsFallback(RuntimeException exception) {
-        log.info("resilience4j fallback enabled - cause: " + exception.getMessage());
+    private List<Product> getProductsFallbackRetry(RuntimeException exception) {
+        log.info("resilience4j fallback enabled for Retry - cause: " + exception.getMessage());
+        return Collections.emptyList();
+    }
+
+    private List<Product> getProductsFallbackCircuitBreaker(RuntimeException exception) {
+        log.info("resilience4j fallback enabled for Circuit-Breaker - cause: " + exception.getMessage());
         return Collections.emptyList();
     }
 
