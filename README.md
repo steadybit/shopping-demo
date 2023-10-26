@@ -6,6 +6,7 @@ We provide a small demo application to give you a quick and easy start into the 
 This demo application is a product catalog consisting of products from three different categories (toys, fashion and hot-deals).
 
 ## High Level Architecture
+
 ![Architecture](./architecture.jpg)
 
 The shopping demo consists of three backend services per each product category (`bestseller-fashion`, `bestseller-toys` and `hot-deals`).
@@ -20,111 +21,26 @@ All services are based on Spring Boot and use different Spring projects.
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Cloud](https://spring.io/projects/spring-cloud)
 - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway)
-- [Spring Cloud Netflix](https://spring.io/projects/spring-cloud-netflix)
-- [Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker)
-- [Spring Cloud Kubernetes](https://spring.io/projects/spring-cloud-kubernetes)
-
 
 As mentioned above the `gateway` is the entrypoint for the UI.
 
 ### Products REST Endpoint
-The `gateway` provides available products via the `/products`-endpoint which collects all products from each microservices (`bestseller-fashion`, `bestseller-toys` and `hot-deals`).
+
+The `gateway` provides available products via the `/products`-endpoint which collects all products from each
+microservices (`bestseller-fashion`, `bestseller-toys` and `hot-deals`).
 This endpoints is implemented in the [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java).
 Multiple implementation strategies exists using each different resilience patterns: fallbacks, timeouts and circuit breakers as described subsequently.
 
-#### Basic Implementation
-This is the most simplest implementation using neither fallbacks nor timeouts.
+There are multiple endpoints available to demonstrate different implementations.
 
-```java
-
-@RestController
-public class ProductsController {
-    @Value("${rest.endpoint.hotdeals}")
-    private String urlHotDeals;
-
-    private RestTemplate restTemplate;
-    //...
-
-    @RequestMapping(value = { "/products" }, method = RequestMethod.GET)
-    public Products getProducts() {
-        Products products = new Products();
-        //...
-        products.setHotDeals(getProduct(urlHotDeals));
-        return products;
-    }
-
-    private List<Product> getProduct(String url) {
-        return restTemplate.exchange(url, HttpMethod.GET, null, productListTypeReference).getBody();
-    }
-}
-```
-#### Circuit Breaker with Fallback
-
-Besides the basic implementation described above, there is also a REST Endpoint using an implemented Circuit Breaker.
-In order to reach that version of the endpoint, the `gateway`'s [ProductsController](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/ProductsController.java) is called via `/products/circuitbreaker`.
-Whenever the corresponding product-microservice (e.g. `hot-deals`) is not reachable the `/products/fallback` will provide an empty list as an alternative response.
-This way, the UI is simply not showing products from this category but can still show results of the other microservices (e.g `fashion`, `toys`).
-
-```java
-
-@RestController
-@RequestMapping("/products")
-public class ProductsController {
-    // ...
-    @GetMapping("/circuitbreaker")
-    public Mono<Products> getProductsCircuitBreaker() {
-        Mono<List<Product>> hotdeals = getProductCircuitBreaker("/products/hotdeals/circuitbreaker");
-        //...
-        return Mono.zip(hotdeals, fashion, toys)
-                .flatMap(transformer -> Mono.just(new Products(transformer.getT1(), transformer.getT2(), transformer.getT3())));
-    }
-
-    @GetMapping("/fallback")
-    public ResponseEntity<List<Product>> getProductsFallback() {
-        return ResponseEntity.ok().headers(new HttpHeaders()).body(Collections.emptyList());
-    }
-
-    private Mono<List<Product>> getProductCircuitBreaker(String uri) {
-        return webClient.get().uri(uri)
-                .exchange()
-                .flatMap(response -> response.bodyToFlux(productTypeReference)
-                        .collectList()
-                        .flatMap(Mono::just))
-                .doOnError(throwable -> log.error("Error occured", throwable));
-    }
-}
-```
-
-The routing of the Circuit Breaker is implemented in the `gateway`'s Main Class: [GatewayApplication](blob/master/gateway/src/main/java/com/steadybit/demo/shopping/gateway/GatewayApplication.java).
-
-````java
-
-@SpringBootApplication
-@EnableDiscoveryClient
-public class GatewayApplication implements WebFluxConfigurer {
-    //...
-    @Bean
-    public RouteLocator routes(RouteLocatorBuilder builder) {
-        return builder.routes()
-                // ...
-                .route("cb-hotdeals", p -> p.path("/products/hotdeals/circuitbreaker**")//
-                        .filters(f -> f.retry(c -> c.setRetries(2).setSeries(HttpStatus.Series.SERVER_ERROR))//
-                                .hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/products/fallback"))
-                                .setPath("/products"))//
-                        .uri(urlHotDeals))//
-                .build();
-    }
-
-}
-````
-
-### Additional REST Endpoints
-
-There are some additional endpoints which are helpful for HTTP Health checks during experiments, such as:
-
-- `/product/hotdeals` to reach `hot-deals` products-list and check it's availability
-- `/product/fashion` to reach `fashion` products-list and check it's availability
-- `/product/toys` to reach `toys` products-list and check it's availability
+| url                        | timeout configured |                       fallback-value                       |  retry configured  |  circuit breaker   | fails                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------------|:------------------:|:----------------------------------------------------------:|:------------------:|:------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/products`                |        :x:         |                            :x:                             |        :x:         |        :x:         | - if a microservice is not reachable or returning an error: :red_circle: HTTP 500 <br>- if a microservice is not responding fast: :red_circle: the whole response will be delayed infinite                                                                                                                                                                                                                                        |
+| `/products/exception`      |        :x:         |         :white_check_mark:<br>via catch exception          |        :x:         |        :x:         | - if a microservice is not reachable or returning an error: :white_check_mark: products of the category are omitted<br>- if a microservice is not responding fast: :red_circle: the whole response will be delayed infinite                                                                                                                                                                                                       |
+| `/products/timeout`        | :white_check_mark: |         :white_check_mark:<br>via catch exception          |        :x:         |        :x:         | - if a microservice is not reachable or returning an error: :white_check_mark: products of the category are omitted<br>- if a microservice is not responding fast: :white_check_mark: products of the category are omitted                                                                                                                                                                                                        |
+| `/products/retry`          | :white_check_mark: | :white_check_mark:<br>via `fallbackMethod` in resilience4j | :white_check_mark: |        :x:         | like `/products/timeout`, but with max 3 retries each 500ms if a microservice-request isn't successfull.<br>Pro:<br>- :+1: potential recovery from short-term problems<br>Con:<br>- :-1: increasing load on microservices<br>- :-1: increasing response time<br><br>There is also an [blog post](https://steadybit.com/blog/retries-with-resilience4j-and-how-to-check-in-your-real-world-environment) about this implementation. |
+| `/products/circuitbreaker` | :white_check_mark: | :white_check_mark:<br>via `fallbackMethod` in resilience4j | :white_check_mark: | :white_check_mark: | like `/products/retry` but with a circuit breaker which is preventing a failing microservice from overload (also from retries) and allow it to recover                                                                                                                                                                                                                                                                            |
+| `/products/parallel`       |   default (30s)    |                            :x:                             |        :x:         |        :x:         | Alternative implementation to show a parallelized way of fetching the products. This saves time, but the implementation has the same problems like the basic implementation.                                                                                                                                                                                                                                                      |
 
 ## Deploying the Application
 
