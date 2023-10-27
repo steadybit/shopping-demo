@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: hotdeals
+    name: hot-deals
   datasource:
     platform: hsqldb
   jmx:

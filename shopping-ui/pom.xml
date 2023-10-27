@@ -131,4 +131,48 @@
             </resource>
         </resources>
     </build>
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <activation>
+                <property>
+                    <name>env.CI</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>npm-licenses</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>exec</argument>
+                                        <argument>--</argument>
+                                        <argument>license-report</argument>
+                                        <argument>--only=prod</argument>
+                                        <argument>--output=csv</argument>
+                                        <argument>--csvHeaders</argument>
+                                        <argument>--fields=name</argument>
+                                        <argument>--fields=installedVersion</argument>
+                                        <argument>--fields=link</argument>
+                                        <argument>--fields=licenseType</argument>
+                                    </arguments>
+                                    <outputFile>${project.build.directory}/licenses/THIRD-PARTY-UI.csv</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

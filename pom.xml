@@ -34,7 +34,7 @@
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
-        <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
+        <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
         <postgresql.version>42.5.1</postgresql.version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
@@ -144,6 +144,45 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <activation>
+                <property>
+                    <name>env.CI</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-third-party</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>add-third-party</goal>
+                                    <goal>download-licenses</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <licensesOutputDirectory>${project.build.directory}/licenses</licensesOutputDirectory>
+                            <licensesOutputFile>${project.build.directory}/licenses/licenses.xml</licensesOutputFile>
+                            <outputDirectory>${project.build.directory}/licenses</outputDirectory>
+                            <excludedScopes>test,provided</excludedScopes>
+                            <excludedGroups>com.steadybit</excludedGroups>
+                            <includeOptional>false</includeOptional>
+                            <licenseMergesUrl>license-merges.txt</licenseMergesUrl>
+                            <organizeLicensesByDependencies>true</organizeLicensesByDependencies>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>spring-snapshots</id>
