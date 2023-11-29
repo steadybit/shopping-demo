@@ -9,7 +9,7 @@ cp ../shopping-ui/target/licenses/THIRD-PARTY-UI.csv ./target/licenses/THIRD-PAR
 docker buildx create --use
 docker buildx build \
   --platform "linux/arm64,linux/amd64" \
-  --push=false \
+  --push \
   -t "steadybit/gateway:$tag" \
   --build-arg "JAR_FILE=target/*.jar" \
   .
