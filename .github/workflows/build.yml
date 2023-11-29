@@ -24,7 +24,7 @@ jobs:
             shopping-ui/package-lock.json
 
       - name: Build and Deploy with Maven
-        run: mvn -s .github/workflows/maven-settings.xml package -B -V
+        run: mvn -s .github/workflows/maven-settings.xml package -B -V -p ci
 
       - name: Login to Docker Hub and Publish the Docker Images
         env:
