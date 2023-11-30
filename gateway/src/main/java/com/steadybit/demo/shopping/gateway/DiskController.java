@@ -48,10 +48,10 @@ public class DiskController {
         Path tempFile = null;
         var deleted = true;
         try {
-            if(!Files.exists(Path.of("/tmp"))) {
+            if(!Files.exists(Path.of("/work"))) {
                 tempFile = Files.createTempFile("tempFile", ".tmp");
             }else {
-                tempFile = Files.createFile(Path.of("/tmp", "tempFile.tmp"));
+                tempFile = Files.createFile(Path.of("/work", "tempFile.tmp"));
             }
             log.info("Created temporary file {}", tempFile);
             FileOutputStream fo = new FileOutputStream(tempFile.toFile());
