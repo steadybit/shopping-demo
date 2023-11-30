@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -93,6 +95,41 @@ public class DiskController {
         // Writes a string to the above temporary file
         return new ResponseEntity("Filled disk with %d bytes and deleted afterwards".formatted(bytes), HttpStatus.OK);
     }
+    @GetMapping("/size")
+    public ResponseEntity getExpectedDiskSize(@RequestParam("expectedSize") String expectedSize, @RequestParam("path") String path) {
+        log.info("Checking disk size for {}", path);
+        var expectedBytes = toBytes(expectedSize);
+        if (expectedBytes < 0) {
+            throw new RuntimeException("Invalid size: " + expectedSize);
+        }
+        File file = new File(path);
+        var actualBytes = file.getFreeSpace();
+        log.info("Disk size is {} bytes", actualBytes);
+        if (actualBytes < expectedBytes) {
+            var errorMessage = "Expected disk size %d bytes but got %d bytes".formatted(expectedBytes, actualBytes);
+            log.error(errorMessage);
+            return new ResponseEntity(errorMessage, HttpStatus.INSUFFICIENT_STORAGE);
+        }
+        log.info("Disk size is ok");
+        return new ResponseEntity("Ok. "+toHumanReadableByNumOfLeadingZeros(actualBytes), HttpStatus.OK);
+    }
+
+    public static String toHumanReadableByNumOfLeadingZeros(long size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("Invalid file size: " + size);
+        }
+        if (size < 1024) return size + " Bytes";
+        int unitIdx = (63 - Long.numberOfLeadingZeros(size)) / 10;
+        return formatSize(size, 1L << (unitIdx * 10), " KMGTPE".charAt(unitIdx) + "iB");
+    }
+
+    private static String formatSize(long size, long divider, String unitName) {
+        return DEC_FORMAT.format((double) size / divider) + " " + unitName;
+    }
+
+    private static DecimalFormat DEC_FORMAT = new DecimalFormat("#.##");
+
+
 
     public static long toBytes(String filesize) {
         long returnValue = -1;
