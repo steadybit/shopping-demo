@@ -7,6 +7,8 @@ package com.steadybit.demo.shopping.gateway;
 import io.netty.buffer.ByteBufUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +34,8 @@ public class DiskController {
     }
 
     @GetMapping("/fill/{size}")
-    public String getFillDisk(@PathVariable("size") String size) {
-        log.debug("Filling disk with {}", size);
+    public ResponseEntity getFillDisk(@PathVariable("size") String size) {
+        log.info("Filling disk with {}", size);
 
         // Convert the size to bytes
         long bytes = toBytes(size);
@@ -57,9 +59,10 @@ public class DiskController {
             fo.write(new byte[(int) restByte]);
             fo.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to create temporary file", e);
+            return new ResponseEntity(HttpStatus.INSUFFICIENT_STORAGE);
         } finally {
-            log.debug("Deleting temporary file");
+            log.info("Deleting temporary file");
             if (tempFile != null) {
                 deleted = tempFile.toFile().delete();
             }
@@ -69,9 +72,9 @@ public class DiskController {
             log.warn("Failed to delete temporary file");
             throw new RuntimeException("Failed to delete temporary file");
         }
-        log.debug("Created temporary file");
+        log.info("Created temporary file");
         // Writes a string to the above temporary file
-        return "Filled disk with %d bytes and deleted afterwards".formatted(bytes);
+        return new ResponseEntity("Filled disk with %d bytes and deleted afterwards".formatted(bytes), HttpStatus.OK);
     }
 
     public static long toBytes(String filesize) {
