@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -54,16 +56,24 @@ public class DiskController {
                 tempFile = Files.createFile(Path.of("/work", "tempFile.tmp"));
             }
             log.info("Created temporary file {}", tempFile);
-            FileOutputStream fo = new FileOutputStream(tempFile.toFile());
-            // write bytes to the file
-            int byteArraySize = 256 * 1024 * 1024;
-            var writeCount = bytes / byteArraySize;
-            for (long i = 0; i < writeCount; i++) {
-                log.info("Writing {} bytes to temporary file. Iteration {} of {}", byteArraySize, i + 1, writeCount);
-                fo.write(new byte[byteArraySize]);
+            BufferedOutputStream fo = new BufferedOutputStream(new FileOutputStream(tempFile.toFile()));
+
+            // 4MB Byte Array
+            var defaultByteArrayLength = 4 * 1024 * 1024;
+            byte[] byteArray = new byte[defaultByteArrayLength];
+            long bytesWritten = 0;
+            while (bytesWritten < bytes) {
+                log.info("Writing {} bytes to temporary file", byteArray.length);
+                if (bytesWritten + byteArray.length > bytes) {
+                    var lastBytesToWrite = bytes - bytesWritten;
+                    fo.write(byteArray, 0, (int) lastBytesToWrite);
+                    bytesWritten += lastBytesToWrite;
+                } else {
+                    fo.write(byteArray);
+                    bytesWritten += byteArray.length;
+                }
             }
-            var restByte = bytes % byteArraySize;
-            fo.write(new byte[(int) restByte]);
+            fo.flush();
             fo.close();
         } catch (IOException e) {
             log.error("Failed to create temporary file", e);
