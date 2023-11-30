@@ -116,8 +116,8 @@ public class DiskController {
         if (!dfError) {
             String stderr = IOUtils.toString(p.getErrorStream(), Charset.defaultCharset());
             String stdout = IOUtils.toString(p.getInputStream(), Charset.defaultCharset());
-            log.info("df -k stdout: {}", stdout);
-            log.info("df -k stderr: {}", stderr);
+            log.trace("df -k stdout: {}", stdout);
+            log.trace("df -k stderr: {}", stderr);
 
             //split the stdout into lines
             var lines = stdout.split("\n");
