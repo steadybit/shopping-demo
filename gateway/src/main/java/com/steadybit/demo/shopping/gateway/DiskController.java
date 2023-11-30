@@ -7,6 +7,7 @@ package com.steadybit.demo.shopping.gateway;
 import io.netty.buffer.ByteBufUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.info.OsInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,12 @@ public class DiskController {
         Path tempFile = null;
         var deleted = true;
         try {
-            tempFile = Files.createTempFile("diskFill", ".tmp");
+            if(!Files.exists(Path.of("/tmp"))) {
+                tempFile = Files.createTempFile("tempFile", ".tmp");
+            }else {
+                tempFile = Files.createFile(Path.of("/tmp", "tempFile.tmp"));
+            }
+            log.info("Created temporary file {}", tempFile);
             FileOutputStream fo = new FileOutputStream(tempFile.toFile());
             // write bytes to the file
             int byteArraySize = 256 * 1024 * 1024;
