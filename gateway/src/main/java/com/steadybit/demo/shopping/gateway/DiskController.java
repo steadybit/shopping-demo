@@ -53,6 +53,7 @@ public class DiskController {
             int byteArraySize = 256 * 1024 * 1024;
             var writeCount = bytes / byteArraySize;
             for (long i = 0; i < writeCount; i++) {
+                log.info("Writing {} bytes to temporary file. Iteration {} of {}", byteArraySize, i + 1, writeCount);
                 fo.write(new byte[byteArraySize]);
             }
             var restByte = bytes % byteArraySize;
