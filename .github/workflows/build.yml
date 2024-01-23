@@ -33,25 +33,25 @@ jobs:
         run: |
           echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
           cd gateway
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd bestseller-toys
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd bestseller-fashion
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd hot-deals
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd inventory-service-mock
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd order
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
           cd checkout
-          ./ci/buildAndPushDockerImages.bash latest
+          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
 
       - name: Notify Slack channel
