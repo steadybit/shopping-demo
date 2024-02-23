@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:21
 ARG JAR_FILE=target/*.jar
 EXPOSE 8080
 COPY ${JAR_FILE} gateway.jar
