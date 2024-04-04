@@ -2,15 +2,15 @@
  * Copyright 2019 steadybit GmbH. All rights reserved.
  */
 
-import { ReactComponent as Logo } from './logo.svg';
 import { ReactComponent as Brand } from './brand.svg';
-import ImgCar from './car.jpg';
-import ImgDrone from './drone.jpg';
-import ImgExcavator from './excavator.jpg';
-import ImgJeans from './jeans.jpg';
-import ImgShirt from './shirt.jpg';
+import ImgBeer from './beer.jpg';
+import ImgCover from './cover.jpg';
+import ImgHoodie from './hoodie.jpg';
+import ImgKeychain from './keychain.jpg';
+import ImgPillow from './pillow.jpg';
 import ImgSocks from './socks.jpg';
+import ImgSticker from './sticker.jpg';
 import ImgSunglasses from './sunglasses.jpg';
-import ImgTeddy from './teddy.jpg';
+import { ReactComponent as Logo } from './logo.svg';
 
-export { Logo, Brand, ImgCar, ImgDrone, ImgExcavator, ImgJeans, ImgShirt, ImgSocks, ImgSunglasses, ImgTeddy };
+export { Logo, Brand, ImgBeer, ImgCover, ImgHoodie, ImgKeychain, ImgPillow, ImgSocks, ImgSticker, ImgSunglasses };
