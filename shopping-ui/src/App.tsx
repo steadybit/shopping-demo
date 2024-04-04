@@ -1,9 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Navbar } from 'react-bootstrap';
 import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 
-import { AiOutlineShop } from 'react-icons/ai';
 import Home from './pages/Home';
 import { Logo } from './images';
 import React from 'react';
