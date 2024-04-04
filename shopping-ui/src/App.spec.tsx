@@ -1,16 +1,18 @@
 import * as React from 'react';
+
 import { render, screen } from '@testing-library/react';
+
 import App from './App';
 
 jest.mock('react-icons/ai', () => {
     const icons = {
-        __esModule: true
+        __esModule: true,
     };
 
     const handler = {
-        get: function(_: any, prop: any) {
+        get: function (_: any, prop: any) {
             return () => <div className={`mock_${prop}Icon`} />;
-        }
+        },
     };
 
     return new Proxy(icons, handler);
@@ -18,7 +20,6 @@ jest.mock('react-icons/ai', () => {
 
 test('render', () => {
     render(<App />);
-    const el = screen.getByText(/Bestsellers/i);
+    const el = screen.getByText(/Swag Shop/i);
     expect(el).toBeInTheDocument();
 });
-

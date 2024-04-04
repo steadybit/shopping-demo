@@ -1,6 +1,6 @@
-FROM openjdk:17
+FROM openjdk:21
 ARG JAR_FILE=target/*.jar
 EXPOSE 8085
 COPY ${JAR_FILE} checkout.jar
 COPY target/licenses licenses
-ENTRYPOINT ["java","-jar","/checkout.jar"]
+ENTRYPOINT ["java","-XX:+EnableDynamicAgentLoading","-jar","/checkout.jar"]

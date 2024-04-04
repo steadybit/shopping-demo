@@ -1,9 +1,11 @@
-import React from 'react';
-import { Button, Card } from 'react-bootstrap';
-import { Product } from '../../../src-gen/ui-api';
-import { ImgCar, ImgDrone, ImgExcavator, ImgJeans, ImgShirt, ImgSocks, ImgSunglasses, ImgTeddy } from '../../images';
-import classname from '../../utils/classname';
 import './Deal.scss';
+
+import { Button, Card } from 'react-bootstrap';
+import { ImgBeer, ImgCover, ImgHoodie, ImgKeychain, ImgPillow, ImgSocks, ImgSticker, ImgSunglasses } from '../../images';
+
+import { Product } from '../../../src-gen/ui-api';
+import React from 'react';
+import classname from '../../utils/classname';
 
 export type DealProps = {
     product?: Product;
@@ -16,40 +18,46 @@ const Deal: React.FC<DealProps> = ({ product, onAddToCart }) => {
     if (!product) {
         return null;
     }
-    return <Card bg={product.availability ? product.availability.toLowerCase() : 'secondary'} text={'light'} className={block()}>
-        <Card.Img variant='top' src={getImageSrc(product.imageId)} />
-        <Card.Body>
-            <div className={block('body')}>
-                <Card.Title className={block('title')}>{product.name}</Card.Title>
-                <Card.Text className={block('price')}>{product.price} $</Card.Text>
-            </div>
-            {
-                product.availability !== 'UNAVAILABLE'
-                    ? <Button variant='primary' onClick={() => onAddToCart()}>Add to Cart</Button>
-                    : <Button variant='primary' disabled>Out of Stock</Button>
-            }
-        </Card.Body>
-    </Card>;
+    return (
+        <Card bg={product.availability ? product.availability.toLowerCase() : 'secondary'} text={'light'} className={block()}>
+            <Card.Img variant="top" height={190} src={getImageSrc(product.imageId)} />
+            <Card.Body>
+                <div className={block('body')}>
+                    <Card.Title className={block('title')}>{product.name}</Card.Title>
+                    <Card.Text className={block('price')}>{product.price} $</Card.Text>
+                </div>
+                {product.availability !== 'UNAVAILABLE' ? (
+                    <Button variant="primary" onClick={() => onAddToCart()}>
+                        Add to Cart
+                    </Button>
+                ) : (
+                    <Button variant="primary" disabled>
+                        Out of Stock
+                    </Button>
+                )}
+            </Card.Body>
+        </Card>
+    );
 };
 
 function getImageSrc(imageId: string) {
     switch (imageId) {
-        case 'car':
-            return ImgCar;
-        case 'drone':
-            return ImgDrone;
-        case 'excavator':
-            return ImgExcavator;
-        case 'jeans':
-            return ImgJeans;
-        case 'shirt':
-            return ImgShirt;
+        case 'beer':
+            return ImgBeer;
+        case 'cover':
+            return ImgCover;
+        case 'hoodie':
+            return ImgHoodie;
+        case 'keychain':
+            return ImgKeychain;
+        case 'pillow':
+            return ImgPillow;
         case 'socks':
             return ImgSocks;
+        case 'sticker':
+            return ImgSticker;
         case 'sunglasses':
             return ImgSunglasses;
-        case 'teddy':
-            return ImgTeddy;
         default:
             return 'about:blank';
     }

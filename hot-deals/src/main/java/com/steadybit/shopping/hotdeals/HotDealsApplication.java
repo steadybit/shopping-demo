@@ -42,8 +42,8 @@ public class HotDealsApplication implements CommandLineRunner {
         this.jdbcTemplate.execute(
                 "CREATE TABLE products_hotdeals(" + "id VARCHAR(255), name VARCHAR(255), category VARCHAR(255), imageId VARCHAR(255), price DECIMAL(5,2))");
         List<Object[]> products = Stream.of(
-                new Object[] { randomUUID(), "Socks Colourful Edition", ProductCategory.FASHION.toString(), "socks", new BigDecimal("19.99") },
-                new Object[] { randomUUID(), "Quadcopter Drone", ProductCategory.TOYS.toString(), "drone", new BigDecimal("299.99") })
+                new Object[] { randomUUID(), "Steadybit Cover", ProductCategory.FASHION.toString(), "cover", new BigDecimal("9.99") },
+                new Object[] { randomUUID(), "Steadybit Beer", ProductCategory.TOYS.toString(), "beer", new BigDecimal("1.99") })
                 .collect(Collectors.toList());
         this.jdbcTemplate.batchUpdate("INSERT INTO products_hotdeals(id, name, category, imageId, price) VALUES (?,?,?,?,?)", products);
         log.info("Data inserted");
