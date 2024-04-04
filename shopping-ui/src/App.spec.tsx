@@ -20,6 +20,6 @@ jest.mock('react-icons/ai', () => {
 
 test('render', () => {
     render(<App />);
-    const el = screen.getByText(/Steadybit Swag Shop/i);
+    const el = screen.getByText(/Swag Shop/i);
     expect(el).toBeInTheDocument();
 });
