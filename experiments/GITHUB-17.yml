@@ -1,6 +1,6 @@
 name: Onlineshop survives outage of hot-deals
 team: GITHUB
-environment: Online Shop Stage
+environment: GitHubAction / Onlineshop
 lanes:
   - steps:
       - type: wait
@@ -13,9 +13,9 @@ lanes:
           duration: 30s
           failOnHostNetwork: true
         customLabel: 'WHEN: ActiveMQ broker is not available'
-        actionType: com.github.steadybit.extension_container.network_blackhole
+        actionType: com.steadybit.extension_container.network_blackhole
         radius:
-          targetType: container
+          targetType: com.steadybit.extension_container.container
           predicate:
             operator: AND
             predicates:
@@ -45,7 +45,7 @@ lanes:
           followRedirects: false
           requestsPerSecond: 1
         customLabel: 'THEN: Checkout products via Checkout Microservice should work'
-        actionType: com.github.steadybit.extension_http.check.periodically
+        actionType: com.steadybit.extension_http.check.periodically
         radius:
           list: []
 key: GITHUB-17
