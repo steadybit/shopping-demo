@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: checkout
+    service-tier: "1"
+    domain: "shop-checkout"
+    tags.datadoghq.com/service: shop-checkout
+    tags.datadoghq.com/version: 1.0.0
+  name: checkout
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      run: checkout
+  template:
+    metadata:
+      labels:
+        run: checkout
+        service-tier: "1"
+        domain: "shop-checkout"
+        tags.datadoghq.com/service: shop-checkout
+        tags.datadoghq.com/version: 1.0.0
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/checkout:develop
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+              ephemeral-storage: "1Gi"
+          imagePullPolicy: Always
+          name: checkout
+          ports:
+            - containerPort: 8085
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8085
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8085
+            initialDelaySeconds: 40
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: run
+                    operator: In
+                    values:
+                      - checkout
+              topologyKey: "topology.kubernetes.io/zone"
+      imagePullSecrets:
+        - name: regcredinternal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: checkout
+  name: checkout
+spec:
+  ports:
+    - port: 8085
+      protocol: TCP
+      targetPort: 8085
+  selector:
+    run: checkout
+  type: ClusterIP

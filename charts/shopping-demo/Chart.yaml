@@ -1,0 +1,22 @@
+apiVersion: v2
+name: shopping-demo
+description: Steadybit shopping-demo application Helm chart for Kubernetes.
+version: 0.1.0
+appVersion: latest
+type: application
+home: https://www.steadybit.com/
+icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+maintainers:
+  - email: ansgar.schulte@steadybit.com
+    name: ansgarschulte
+sources:
+  - https://github.com/steadybit/shopping-demo
+annotations:
+  artifacthub.io/images: |
+    - name: logo
+      image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+  artifacthub.io/links: |-
+    - name: Steadybit website
+      url: https://www.steadybit.com
+    - name: Steadybit reliability hub
+      url: https://hub.steadybit.com

@@ -1,0 +1,91 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: fashion-bestseller
+    service-tier: "2"
+    domain: "shop-products"
+    tags.datadoghq.com/service: shop-products
+    tags.datadoghq.com/version: 1.0.0
+  name: fashion-bestseller
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      run: fashion-bestseller-exposed
+  template:
+    metadata:
+      labels:
+        run: fashion-bestseller-exposed
+        service-tier: "2"
+        domain: "shop-products"
+        tags.datadoghq.com/service: shop-products
+        tags.datadoghq.com/version: 1.0.0
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/bestseller-fashion:develop
+          name: fashion-bestseller
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+              ephemeral-storage: "1Gi"
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            initialDelaySeconds: 40
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: fashion-bestseller
+  name: fashion-bestseller
+spec:
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    run: fashion-bestseller-exposed
+  type: ClusterIP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fashion-bestseller-pdb
+  namespace: steadybit-demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      run: fashion-bestseller-exposed

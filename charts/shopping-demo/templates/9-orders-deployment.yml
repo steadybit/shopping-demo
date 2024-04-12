@@ -1,0 +1,87 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: orders
+    service-tier: "1"
+    domain: "shop-orders"
+    tags.datadoghq.com/service: shop-orders
+    tags.datadoghq.com/version: 1.0.0
+  name: orders
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      run: orders
+  template:
+    metadata:
+      labels:
+        run: orders
+        service-tier: "1"
+        domain: "shop-orders"
+        tags.datadoghq.com/service: shop-orders
+        tags.datadoghq.com/version: 1.0.0
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/orders:develop
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+              ephemeral-storage: "1Gi"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8086
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8086
+            initialDelaySeconds: 40
+          imagePullPolicy: Always
+          name: orders
+          ports:
+            - containerPort: 8086
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+      imagePullSecrets:
+        - name: regcredinternal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: orders
+  name: orders
+spec:
+  ports:
+    - port: 8086
+      protocol: TCP
+      targetPort: 8086
+  selector:
+    run: orders
+  type: ClusterIP

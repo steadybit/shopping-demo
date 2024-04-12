@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: inventory
+    service-tier: "2"
+    domain: "shop-inventory"
+    tags.datadoghq.com/service: shop-inventory
+    tags.datadoghq.com/version: 1.0.0
+  name: inventory
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      run: inventory
+  template:
+    metadata:
+      labels:
+        run: inventory
+        service-tier: "2"
+        domain: "shop-inventory"
+        tags.datadoghq.com/service: shop-inventory
+        tags.datadoghq.com/version: 1.0.0
+    spec:
+      serviceAccountName: steadybit-demo
+      containers:
+        - image: steadybit/inventory:develop
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+              ephemeral-storage: "1Gi"
+          imagePullPolicy: Always
+          name: inventory
+          ports:
+            - containerPort: 8084
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8084
+            initialDelaySeconds: 40
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8084
+            initialDelaySeconds: 40
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: run
+                    operator: In
+                    values:
+                      - inventory
+              topologyKey: "topology.kubernetes.io/zone"
+      imagePullSecrets:
+        - name: regcredinternal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: steadybit-demo
+  labels:
+    run: inventory
+  name: inventory
+spec:
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084
+  selector:
+    run: inventory
+  type: ClusterIP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: inventory-pdb
+  namespace: steadybit-demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      run: inventory
