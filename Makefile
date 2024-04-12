@@ -13,7 +13,7 @@ help:
 .PHONY: charttesting
 charttesting:
 	@set -e; \
-	for dir in charts/shopping-demo; do \
+	for dir in charts/steadybit-shopping-demo; do \
 		echo "Unit Testing $$dir"; \
 		helm unittest $$dir; \
 	done
@@ -27,7 +27,7 @@ chartlint:
 .PHONY: chart-bump-version
 chart-bump-version:
 	@set -e; \
-	for dir in charts/steadybit-extension-*; do \
+	for dir in charts/steadybit-shopping-demo; do \
 		if [ ! -z "$(APP_VERSION)" ]; then \
 					yq -i ".appVersion = strenv(APP_VERSION)" $$dir/Chart.yaml; \
 		fi; \
