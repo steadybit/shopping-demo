@@ -1,0 +1,19 @@
+templates:
+  - 6-gateway-ingress-alb.yml
+chart:
+  appVersion: v0.0.0
+tests:
+  - it: manifest should match snapshot
+    set:
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot using all options
+    set:
+      gateway:
+        replicaCount: 2
+        ingress:
+          host: demo.dev.steadybit.io
+          annotations:
+            alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-central-1:12345678:regional/webacl/common-rule-set/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    asserts:
+      - matchSnapshot: { }

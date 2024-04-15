@@ -1,0 +1,360 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-checkout
+        run: activemq
+        service-tier: "1"
+        tags.datadoghq.com/service: shop-checkout
+        tags.datadoghq.com/version: 1.0.0
+      name: activemq
+      namespace: steadybit-demo
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: activemq
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-checkout
+            run: activemq
+            service-tier: "1"
+            tags.datadoghq.com/service: shop-checkout
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: run
+                        operator: In
+                        values:
+                          - activemq
+                  topologyKey: topology.kubernetes.io/zone
+          containers:
+            - env:
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: symptoma/activemq:5.18.3
+              imagePullPolicy: Always
+              livenessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - curl -u admin:admin -H origin:localhost 'http://localhost:8161/api/jolokia/read/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/CurrentStatus' | grep Good
+                initialDelaySeconds: 20
+                periodSeconds: 5
+              name: activemq
+              ports:
+                - containerPort: 61616
+                  protocol: TCP
+              readinessProbe:
+                initialDelaySeconds: 15
+                periodSeconds: 10
+                tcpSocket:
+                  port: 61616
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+              volumeMounts:
+                - mountPath: /opt/activemq/conf/activemq.xml
+                  name: activemq-config
+                  subPath: activemq.xml
+          imagePullSecrets:
+            - name: regcredinternal
+          serviceAccountName: steadybit-demo
+          volumes:
+            - configMap:
+                name: activemq-config
+              name: activemq-config
+  2: |
+    apiVersion: v1
+    data:
+      activemq.xml: |
+        <beans
+                xmlns="http://www.springframework.org/schema/beans"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+            <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+                <property name="locations">
+                    <value>file:${activemq.conf}/credentials.properties</value>
+                </property>
+            </bean>
+            <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}">
+                <destinationPolicy>
+                    <policyMap>
+                        <policyEntries>
+                            <policyEntry topic=">" >
+                                <pendingMessageLimitStrategy>
+                                    <constantPendingMessageLimitStrategy limit="1000"/>
+                                </pendingMessageLimitStrategy>
+                            </policyEntry>
+                        </policyEntries>
+                    </policyMap>
+                </destinationPolicy>
+                <managementContext>
+                    <managementContext createConnector="false"/>
+                </managementContext>
+                <persistenceAdapter>
+                    <kahaDB directory="${activemq.data}/kahadb"/>
+                </persistenceAdapter>
+                <systemUsage>
+                    <systemUsage>
+                        <memoryUsage>
+                            <memoryUsage percentOfJvmHeap="70" />
+                        </memoryUsage>
+                        <storeUsage>
+                            <storeUsage limit="64 mb"/>
+                        </storeUsage>
+                        <tempUsage>
+                            <tempUsage limit="64 mb"/>
+                        </tempUsage>
+                    </systemUsage>
+                </systemUsage>
+                <transportConnectors>
+                    <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                </transportConnectors>
+                <shutdownHooks>
+                    <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
+                </shutdownHooks>
+            </broker>
+            <import resource="jetty.xml"/>
+        </beans>
+    kind: ConfigMap
+    metadata:
+      name: activemq-config
+      namespace: steadybit-demo
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: activemq
+      name: activemq
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 61616
+          protocol: TCP
+          targetPort: 61616
+      selector:
+        run: activemq
+      type: ClusterIP
+  4: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: activemq-pdb
+      namespace: steadybit-demo
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          run: activemq
+manifest should match snapshot replica count:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-checkout
+        run: activemq
+        service-tier: "1"
+        tags.datadoghq.com/service: shop-checkout
+        tags.datadoghq.com/version: 1.0.0
+      name: activemq
+      namespace: steadybit-demo
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: activemq
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-checkout
+            run: activemq
+            service-tier: "1"
+            tags.datadoghq.com/service: shop-checkout
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: run
+                        operator: In
+                        values:
+                          - activemq
+                  topologyKey: topology.kubernetes.io/zone
+          containers:
+            - env:
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: symptoma/activemq:5.18.3
+              imagePullPolicy: Always
+              livenessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - curl -u admin:admin -H origin:localhost 'http://localhost:8161/api/jolokia/read/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/CurrentStatus' | grep Good
+                initialDelaySeconds: 20
+                periodSeconds: 5
+              name: activemq
+              ports:
+                - containerPort: 61616
+                  protocol: TCP
+              readinessProbe:
+                initialDelaySeconds: 15
+                periodSeconds: 10
+                tcpSocket:
+                  port: 61616
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+              volumeMounts:
+                - mountPath: /opt/activemq/conf/activemq.xml
+                  name: activemq-config
+                  subPath: activemq.xml
+          imagePullSecrets:
+            - name: regcredinternal
+          serviceAccountName: steadybit-demo
+          volumes:
+            - configMap:
+                name: activemq-config
+              name: activemq-config
+  2: |
+    apiVersion: v1
+    data:
+      activemq.xml: |
+        <beans
+                xmlns="http://www.springframework.org/schema/beans"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+            <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+                <property name="locations">
+                    <value>file:${activemq.conf}/credentials.properties</value>
+                </property>
+            </bean>
+            <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}">
+                <destinationPolicy>
+                    <policyMap>
+                        <policyEntries>
+                            <policyEntry topic=">" >
+                                <pendingMessageLimitStrategy>
+                                    <constantPendingMessageLimitStrategy limit="1000"/>
+                                </pendingMessageLimitStrategy>
+                            </policyEntry>
+                        </policyEntries>
+                    </policyMap>
+                </destinationPolicy>
+                <managementContext>
+                    <managementContext createConnector="false"/>
+                </managementContext>
+                <persistenceAdapter>
+                    <kahaDB directory="${activemq.data}/kahadb"/>
+                </persistenceAdapter>
+                <systemUsage>
+                    <systemUsage>
+                        <memoryUsage>
+                            <memoryUsage percentOfJvmHeap="70" />
+                        </memoryUsage>
+                        <storeUsage>
+                            <storeUsage limit="64 mb"/>
+                        </storeUsage>
+                        <tempUsage>
+                            <tempUsage limit="64 mb"/>
+                        </tempUsage>
+                    </systemUsage>
+                </systemUsage>
+                <transportConnectors>
+                    <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                    <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+                </transportConnectors>
+                <shutdownHooks>
+                    <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
+                </shutdownHooks>
+            </broker>
+            <import resource="jetty.xml"/>
+        </beans>
+    kind: ConfigMap
+    metadata:
+      name: activemq-config
+      namespace: steadybit-demo
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: activemq
+      name: activemq
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 61616
+          protocol: TCP
+          targetPort: 61616
+      selector:
+        run: activemq
+      type: ClusterIP
+  4: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: activemq-pdb
+      namespace: steadybit-demo
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          run: activemq

@@ -1,0 +1,504 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: v1
+    data:
+      nginx.conf: |-
+        user  nginx;
+        worker_processes  1;
+
+        error_log  /var/log/nginx/error.log warn;
+        pid        /var/run/nginx.pid;
+
+        events {
+            worker_connections  1024;
+        }
+
+        http {
+            include       /etc/nginx/mime.types;
+            default_type  application/octet-stream;
+
+            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                              '$status $body_bytes_sent "$http_referer" '
+                              '"$http_user_agent" "$http_x_forwarded_for"';
+
+            access_log  /var/log/nginx/access.log  main;
+
+            sendfile        on;
+            keepalive_timeout  65;
+
+            upstream hot-deals {
+                server 127.0.0.1:8099;
+            }
+
+            server {
+                listen 8083;
+
+                location / {
+                    proxy_pass         http://hot-deals;
+                    proxy_redirect     off;
+                }
+            }
+        }
+    kind: ConfigMap
+    metadata:
+      name: hotdeals-nginx-conf
+      namespace: steadybit-demo
+  2: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-products
+        run: hot-deals
+        service-tier: "2"
+        tags.datadoghq.com/service: shop-products
+        tags.datadoghq.com/version: 1.0.0
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: hot-deals-exposed
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-products
+            run: hot-deals-exposed
+            service-tier: "2"
+            tags.datadoghq.com/service: shop-products
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: kubernetes
+                - name: SERVER_PORT
+                  value: "8099"
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: steadybit/hot-deals:develop
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8099
+                initialDelaySeconds: 40
+              name: hot-deals
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8099
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+            - image: nginx:alpine
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8083
+                initialDelaySeconds: 40
+              name: hot-deals-nginx
+              ports:
+                - containerPort: 8083
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8083
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+              volumeMounts:
+                - mountPath: /etc/nginx/nginx.conf
+                  name: nginx-proxy-config
+                  subPath: nginx.conf
+          serviceAccountName: steadybit-demo
+          volumes:
+            - configMap:
+                name: hotdeals-nginx-conf
+              name: nginx-proxy-config
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: hot-deals
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 8083
+          protocol: TCP
+          targetPort: 8083
+      selector:
+        run: hot-deals-exposed
+      type: NodePort
+manifest should match snapshot replica count:
+  1: |
+    apiVersion: v1
+    data:
+      nginx.conf: |-
+        user  nginx;
+        worker_processes  1;
+
+        error_log  /var/log/nginx/error.log warn;
+        pid        /var/run/nginx.pid;
+
+        events {
+            worker_connections  1024;
+        }
+
+        http {
+            include       /etc/nginx/mime.types;
+            default_type  application/octet-stream;
+
+            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                              '$status $body_bytes_sent "$http_referer" '
+                              '"$http_user_agent" "$http_x_forwarded_for"';
+
+            access_log  /var/log/nginx/access.log  main;
+
+            sendfile        on;
+            keepalive_timeout  65;
+
+            upstream hot-deals {
+                server 127.0.0.1:8099;
+            }
+
+            server {
+                listen 8083;
+
+                location / {
+                    proxy_pass         http://hot-deals;
+                    proxy_redirect     off;
+                }
+            }
+        }
+    kind: ConfigMap
+    metadata:
+      name: hotdeals-nginx-conf
+      namespace: steadybit-demo
+  2: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-products
+        run: hot-deals
+        service-tier: "2"
+        tags.datadoghq.com/service: shop-products
+        tags.datadoghq.com/version: 1.0.0
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: hot-deals-exposed
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-products
+            run: hot-deals-exposed
+            service-tier: "2"
+            tags.datadoghq.com/service: shop-products
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: kubernetes
+                - name: SERVER_PORT
+                  value: "8099"
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: steadybit/hot-deals:develop
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8099
+                initialDelaySeconds: 40
+              name: hot-deals
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8099
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+            - image: nginx:alpine
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8083
+                initialDelaySeconds: 40
+              name: hot-deals-nginx
+              ports:
+                - containerPort: 8083
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8083
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+              volumeMounts:
+                - mountPath: /etc/nginx/nginx.conf
+                  name: nginx-proxy-config
+                  subPath: nginx.conf
+          serviceAccountName: steadybit-demo
+          volumes:
+            - configMap:
+                name: hotdeals-nginx-conf
+              name: nginx-proxy-config
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: hot-deals
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 8083
+          protocol: TCP
+          targetPort: 8083
+      selector:
+        run: hot-deals-exposed
+      type: NodePort
+manifest should match snapshot with podAffinity and service type and podDisruptionBudget:
+  1: |
+    apiVersion: v1
+    data:
+      nginx.conf: |-
+        user  nginx;
+        worker_processes  1;
+
+        error_log  /var/log/nginx/error.log warn;
+        pid        /var/run/nginx.pid;
+
+        events {
+            worker_connections  1024;
+        }
+
+        http {
+            include       /etc/nginx/mime.types;
+            default_type  application/octet-stream;
+
+            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                              '$status $body_bytes_sent "$http_referer" '
+                              '"$http_user_agent" "$http_x_forwarded_for"';
+
+            access_log  /var/log/nginx/access.log  main;
+
+            sendfile        on;
+            keepalive_timeout  65;
+
+            upstream hot-deals {
+                server 127.0.0.1:8099;
+            }
+
+            server {
+                listen 8083;
+
+                location / {
+                    proxy_pass         http://hot-deals;
+                    proxy_redirect     off;
+                }
+            }
+        }
+    kind: ConfigMap
+    metadata:
+      name: hotdeals-nginx-conf
+      namespace: steadybit-demo
+  2: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-products
+        run: hot-deals
+        service-tier: "2"
+        tags.datadoghq.com/service: shop-products
+        tags.datadoghq.com/version: 1.0.0
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: hot-deals-exposed
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-products
+            run: hot-deals-exposed
+            service-tier: "2"
+            tags.datadoghq.com/service: shop-products
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: run
+                        operator: In
+                        values:
+                          - hot-deals-exposed
+                  topologyKey: topology.kubernetes.io/zone
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: kubernetes
+                - name: SERVER_PORT
+                  value: "8099"
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: steadybit/hot-deals:develop
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8099
+                initialDelaySeconds: 40
+              name: hot-deals
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8099
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+            - image: nginx:alpine
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8083
+                initialDelaySeconds: 40
+              name: hot-deals-nginx
+              ports:
+                - containerPort: 8083
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8083
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+              volumeMounts:
+                - mountPath: /etc/nginx/nginx.conf
+                  name: nginx-proxy-config
+                  subPath: nginx.conf
+          serviceAccountName: steadybit-demo
+          volumes:
+            - configMap:
+                name: hotdeals-nginx-conf
+              name: nginx-proxy-config
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: hot-deals
+      name: hot-deals
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 8083
+          protocol: TCP
+          targetPort: 8083
+      selector:
+        run: hot-deals-exposed
+      type: ClusterIP
+  4: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: hot-deals-pdb
+      namespace: steadybit-demo
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          run: hot-deals-exposed

@@ -1,0 +1,8 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      labels:
+        app: steadybit-demo
+      name: steadybit-demo

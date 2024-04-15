@@ -1,0 +1,23 @@
+templates:
+  - 8-checkout-deployment.yml
+chart:
+  appVersion: v0.0.0
+tests:
+  - it: manifest should match snapshot
+    set:
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot replica count
+    set:
+      checkout:
+        replicaCount: 2
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBudget
+    set:
+      checkout:
+        replicaCount: 2
+        horizontalPodAutoscaler: true
+        podDisruptionBudget: true
+    asserts:
+      - matchSnapshot: { }

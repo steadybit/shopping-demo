@@ -3,29 +3,47 @@
 # Declare variables to be passed into your templates.
 
 gateway:
+  # Number of gateway replicas
   replicaCount: 1
+  # Ingress configuration
   ingress:
+    # Hostname for the ingress
     host: null
+    # Annotations for the ingress
     annotations:
 bestsellerFashion:
+  # Number of bestsellerFashion replicas
   replicaCount: 1
 bestsellerToys:
+  # Number of bestsellerToys replicas
   replicaCount: 1
 hotDeals:
+  # Number of hotDeals replicas
   replicaCount: 1
+  # Enable podAffinity
   podAffinity: false
+  # Service type
   service:
     type: NodePort
+  # Enable podDisruptionBudget
   podDisruptionBudget: false
 inventory:
+  # Number of inventory replicas
   replicaCount: 1
 activemq:
+  # Number of activemq replicas
   replicaCount: 1
 checkout:
+  # Number of checkout replicas
   replicaCount: 1
+  # Enable horizontalPodAutoscaler
   horizontalPodAutoscaler: false
+  # Enable podDisruptionBudget
   podDisruptionBudget: false
 orders:
+  # Number of orders replicas
   replicaCount: 1
+  # Enable podAffinity
   podAffinity: false
+  # Enable podDisruptionBudget
   podDisruptionBudget: false

@@ -1,0 +1,15 @@
+templates:
+  - 3-bestseller-fashion-deployment.yml
+chart:
+  appVersion: v0.0.0
+tests:
+  - it: manifest should match snapshot
+    set:
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot replica count
+    set:
+      bestsellerFashion:
+        replicaCount: 2
+    asserts:
+      - matchSnapshot: { }

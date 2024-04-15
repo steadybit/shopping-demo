@@ -1,0 +1,218 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-inventory
+        run: inventory
+        service-tier: "2"
+        tags.datadoghq.com/service: shop-inventory
+        tags.datadoghq.com/version: 1.0.0
+      name: inventory
+      namespace: steadybit-demo
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: inventory
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-inventory
+            run: inventory
+            service-tier: "2"
+            tags.datadoghq.com/service: shop-inventory
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: run
+                        operator: In
+                        values:
+                          - inventory
+                  topologyKey: topology.kubernetes.io/zone
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: kubernetes
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: steadybit/inventory:develop
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8084
+                initialDelaySeconds: 40
+              name: inventory
+              ports:
+                - containerPort: 8084
+                  protocol: TCP
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8084
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+          imagePullSecrets:
+            - name: regcredinternal
+          serviceAccountName: steadybit-demo
+  2: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: inventory
+      name: inventory
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 8084
+          protocol: TCP
+          targetPort: 8084
+      selector:
+        run: inventory
+      type: ClusterIP
+  3: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: inventory-pdb
+      namespace: steadybit-demo
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          run: inventory
+manifest should match snapshot replica count:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        domain: shop-inventory
+        run: inventory
+        service-tier: "2"
+        tags.datadoghq.com/service: shop-inventory
+        tags.datadoghq.com/version: 1.0.0
+      name: inventory
+      namespace: steadybit-demo
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          run: inventory
+      strategy:
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            domain: shop-inventory
+            run: inventory
+            service-tier: "2"
+            tags.datadoghq.com/service: shop-inventory
+            tags.datadoghq.com/version: 1.0.0
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: run
+                        operator: In
+                        values:
+                          - inventory
+                  topologyKey: topology.kubernetes.io/zone
+          containers:
+            - env:
+                - name: SPRING_PROFILES_ACTIVE
+                  value: kubernetes
+                - name: DD_SERVICE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/service']
+                - name: DD_VERSION
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['tags.datadoghq.com/version']
+              image: steadybit/inventory:develop
+              imagePullPolicy: Always
+              livenessProbe:
+                httpGet:
+                  path: /actuator/health/liveness
+                  port: 8084
+                initialDelaySeconds: 40
+              name: inventory
+              ports:
+                - containerPort: 8084
+                  protocol: TCP
+              readinessProbe:
+                httpGet:
+                  path: /actuator/health/readiness
+                  port: 8084
+                initialDelaySeconds: 40
+              resources:
+                limits:
+                  cpu: 1000m
+                  ephemeral-storage: 1Gi
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  ephemeral-storage: 500Mi
+                  memory: 128Mi
+          imagePullSecrets:
+            - name: regcredinternal
+          serviceAccountName: steadybit-demo
+  2: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        run: inventory
+      name: inventory
+      namespace: steadybit-demo
+    spec:
+      ports:
+        - port: 8084
+          protocol: TCP
+          targetPort: 8084
+      selector:
+        run: inventory
+      type: ClusterIP
+  3: |
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    metadata:
+      name: inventory-pdb
+      namespace: steadybit-demo
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          run: inventory

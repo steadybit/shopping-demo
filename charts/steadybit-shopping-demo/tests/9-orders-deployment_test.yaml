@@ -1,0 +1,23 @@
+templates:
+  - 9-orders-deployment.yml
+chart:
+  appVersion: v0.0.0
+tests:
+  - it: manifest should match snapshot
+    set:
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot replica count
+    set:
+      orders:
+        replicaCount: 2
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBudget
+    set:
+      orders:
+        replicaCount: 2
+        podAffinity: true
+        podDisruptionBudget: true
+    asserts:
+      - matchSnapshot: { }

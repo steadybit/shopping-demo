@@ -1,0 +1,25 @@
+templates:
+  - 5-hot-deals-deployment.yml
+chart:
+  appVersion: v0.0.0
+tests:
+  - it: manifest should match snapshot
+    set:
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot replica count
+    set:
+      hotDeals:
+        replicaCount: 2
+    asserts:
+      - matchSnapshot: { }
+  - it: manifest should match snapshot with podAffinity and service type and podDisruptionBudget
+    set:
+      hotDeals:
+        replicaCount: 2
+        podAffinity: true
+        service:
+          type: ClusterIP
+        podDisruptionBudget: true
+    asserts:
+      - matchSnapshot: { }

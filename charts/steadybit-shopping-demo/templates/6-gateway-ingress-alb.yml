@@ -9,7 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\": 80}, {\"HTTPS\":443}]"
     {{- with .Values.gateway.ingress.annotations }}
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 4 }}
     {{- end }}
   labels:
     app: gateway-ingress
@@ -24,4 +24,6 @@ spec:
                 name: gateway
                 port:
                   number: 80
+      {{ if .Values.gateway.ingress.host }}
       host: {{ .Values.gateway.ingress.host }}
+      {{ end }}

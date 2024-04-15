@@ -1,0 +1,52 @@
+manifest should match snapshot:
+  1: |
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      annotations:
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        kubernetes.io/ingress.class: alb
+      labels:
+        app: gateway-ingress
+      name: gateway-ingress
+      namespace: steadybit-demo
+    spec:
+      rules:
+        - http:
+            paths:
+              - backend:
+                  service:
+                    name: gateway
+                    port:
+                      number: 80
+                path: /
+                pathType: Prefix
+manifest should match snapshot using all options:
+  1: |
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      annotations:
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-central-1:12345678:regional/webacl/common-rule-set/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        kubernetes.io/ingress.class: alb
+      labels:
+        app: gateway-ingress
+      name: gateway-ingress
+      namespace: steadybit-demo
+    spec:
+      rules:
+        - host: demo.dev.steadybit.io
+          http:
+            paths:
+              - backend:
+                  service:
+                    name: gateway
+                    port:
+                      number: 80
+                path: /
+                pathType: Prefix
