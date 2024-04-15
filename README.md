@@ -46,3 +46,17 @@ There are multiple endpoints available to demonstrate different implementations.
 
 Our demo can be run on different Docker based platforms using the deployment scripts provided.
 Checkout the [Steadybit Quickstart](https://docs.steadybit.com/quick-start/deploy-example-application) for more details.
+
+### Installation via helm
+
+#### Using Helm in Kubernetes
+
+```sh
+helm repo add steadybit-shopping-demo https://steadybit.github.io/shopping-demo
+helm repo update
+helm upgrade steadybit-shopping-demo \
+    --install \
+    --wait \
+    --timeout 5m0s \
+    steadybit-shopping-demo/steadybit-shopping-demo
+```

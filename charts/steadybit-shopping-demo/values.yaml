@@ -2,5 +2,30 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-gatewayIngressHost: null
+gateway:
+  replicaCount: 1
+  ingress:
+    host: null
+    annotations:
+bestsellerFashion:
+  replicaCount: 1
+bestsellerToys:
+  replicaCount: 1
+hotDeals:
+  replicaCount: 1
+  podAffinity: false
+  service:
+    type: NodePort
+  podDisruptionBudget: false
+inventory:
+  replicaCount: 1
+activemq:
+  replicaCount: 1
+checkout:
+  replicaCount: 1
+  horizontalPodAutoscaler: false
+  podDisruptionBudget: false
+orders:
+  replicaCount: 1
+  podAffinity: false
+  podDisruptionBudget: false

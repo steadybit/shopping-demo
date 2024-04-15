@@ -11,7 +11,7 @@ metadata:
     tags.datadoghq.com/version: 1.0.0
   name: checkout
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.checkout.replicaCount }}
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -95,3 +95,32 @@ spec:
   selector:
     run: checkout
   type: ClusterIP
+{{ if eq .Values.checkout.horizontalPodAutoscaler true }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: checkout-hpa
+  namespace: steadybit-demo
+spec:
+  maxReplicas: 3
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: checkout
+  targetCPUUtilizationPercentage: 200 # targets request (not limit)
+{{ end }}
+{{ if eq .Values.checkout.podDisruptionBudget true }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: checkout-pdb
+  namespace: steadybit-demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      run: checkout
+{{ end }}

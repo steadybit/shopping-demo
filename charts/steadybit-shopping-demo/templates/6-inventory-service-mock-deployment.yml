@@ -11,7 +11,7 @@ metadata:
     tags.datadoghq.com/version: 1.0.0
   name: inventory
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.inventory.replicaCount }}
   strategy:
     rollingUpdate:
       maxSurge: 0

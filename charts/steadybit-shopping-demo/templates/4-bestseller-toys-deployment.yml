@@ -11,7 +11,7 @@ metadata:
     tags.datadoghq.com/version: 1.0.0
   name: toys-bestseller
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.bestsellerToys.replicaCount }}
   strategy:
     rollingUpdate:
       maxSurge: 0

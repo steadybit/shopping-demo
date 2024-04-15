@@ -11,7 +11,7 @@ metadata:
     tags.datadoghq.com/version: 1.0.0
   name: fashion-bestseller
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.bestsellerFashion.replicaCount }}
   selector:
     matchLabels:
       run: fashion-bestseller-exposed

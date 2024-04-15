@@ -11,7 +11,7 @@ metadata:
     tags.datadoghq.com/version: 1.0.0
   name: orders
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.orders.replicaCount }}
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -30,6 +30,18 @@ spec:
         tags.datadoghq.com/version: 1.0.0
     spec:
       serviceAccountName: steadybit-demo
+      {{ if eq .Values.orders.podAffinity true }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: run
+                    operator: In
+                    values:
+                      - orders
+              topologyKey: "topology.kubernetes.io/zone"
+      {{ end }}
       containers:
         - image: steadybit/orders:develop
           resources:
@@ -85,3 +97,16 @@ spec:
   selector:
     run: orders
   type: ClusterIP
+{{ if eq .Values.orders.podDisruptionBudget true }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: orders-pdb
+  namespace: steadybit-demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      run: orders
+{{ end }}
