@@ -31,7 +31,7 @@ spec:
     spec:
       serviceAccountName: steadybit-demo
       containers:
-        - image: steadybit/inventory:develop
+        - image: {{ .Values.inventory.image.name}}:{{ .Values.inventory.image.tag }}
           resources:
             requests:
               memory: "128Mi"

@@ -41,7 +41,7 @@ spec:
                       - activemq
               topologyKey: "topology.kubernetes.io/zone"
       containers:
-        - image: symptoma/activemq:5.18.3
+        - image: {{ .Values.activemq.image.name}}:{{ .Values.activemq.image.tag }}
           resources:
             requests:
               memory: "128Mi"

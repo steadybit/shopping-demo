@@ -31,7 +31,7 @@ spec:
     spec:
       serviceAccountName: steadybit-demo
       containers:
-        - image: steadybit/gateway:develop
+        - image: {{ .Values.gateway.image.name}}:{{ .Values.gateway.image.tag }}
           imagePullPolicy: Always
           name: gateway
           resources:

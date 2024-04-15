@@ -3,6 +3,12 @@
 # Declare variables to be passed into your templates.
 
 gateway:
+  # Container image
+  image:
+    # Container image name
+    name: steadybit/gateway
+    # Container image tag
+    tag: develop
   # Number of gateway replicas
   replicaCount: 1
   # Ingress configuration
@@ -12,12 +18,27 @@ gateway:
     # Annotations for the ingress
     annotations:
 bestsellerFashion:
+  image:
+    # Container image name
+    name: steadybit/bestseller-fashion
+    # Container image tag
+    tag: develop
   # Number of bestsellerFashion replicas
   replicaCount: 1
 bestsellerToys:
+  image:
+    # Container image name
+    name: steadybit/bestseller-toys
+    # Container image tag
+    tag: develop
   # Number of bestsellerToys replicas
   replicaCount: 1
 hotDeals:
+  image:
+    # Container image name
+    name: steadybit/hot-deals
+    # Container image tag
+    tag: develop
   # Number of hotDeals replicas
   replicaCount: 1
   # Enable podAffinity
@@ -28,12 +49,27 @@ hotDeals:
   # Enable podDisruptionBudget
   podDisruptionBudget: false
 inventory:
+  image:
+    # Container image name
+    name: steadybit/inventory
+    # Container image tag
+    tag: develop
   # Number of inventory replicas
   replicaCount: 1
 activemq:
+  image:
+    # Container image name
+    name: symptoma/activemq
+    # Container image tag
+    tag: 5.18.3
   # Number of activemq replicas
   replicaCount: 1
 checkout:
+  image:
+    # Container image name
+    name: steadybit/checkout
+    # Container image tag
+    tag: develop
   # Number of checkout replicas
   replicaCount: 1
   # Enable horizontalPodAutoscaler
@@ -41,6 +77,11 @@ checkout:
   # Enable podDisruptionBudget
   podDisruptionBudget: false
 orders:
+  image:
+    # Container image name
+    name: steadybit/orders
+    # Container image tag
+    tag: develop
   # Number of orders replicas
   replicaCount: 1
   # Enable podAffinity

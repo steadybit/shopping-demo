@@ -87,7 +87,7 @@ spec:
               topologyKey: "topology.kubernetes.io/zone"
       {{ end }}
       containers:
-        - image: steadybit/hot-deals:develop
+        - image: {{ .Values.hotDeals.image.name}}:{{ .Values.hotDeals.image.tag }}
           imagePullPolicy: Always
           name: hot-deals
           env:
