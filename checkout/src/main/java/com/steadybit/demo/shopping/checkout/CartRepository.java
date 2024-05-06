@@ -8,13 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
 import java.util.Collection;
-import java.util.List;
 
 public interface CartRepository extends JpaRepository<Cart, String> {
     @Modifying
-    @Query("Update Cart set order_published = :now where id in (:id)")
+    @Query("Update Cart set orderPublished = :now where id in (:id)")
     void markAsPublished(Collection<String> id, Instant now);
 
-    @Query("Select c from Cart c where order_published is null")
+    @Query("Select c from Cart c where c.orderPublished is null")
     Page<Cart> findPublishPending(Pageable page);
 }
