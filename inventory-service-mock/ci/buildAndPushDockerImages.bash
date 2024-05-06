@@ -17,3 +17,8 @@ docker buildx build \
   -t "steadybit/inventory:$branch" \
   --build-arg "JAR_FILE=target/*.jar" \
   .
+
+if [ $branch = "main" ]; then
+  echo "Snyk container monitor steadybit/inventory:$branch"
+  snyk container monitor "steadybit/inventory:$branch"
+fi

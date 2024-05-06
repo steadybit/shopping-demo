@@ -17,3 +17,8 @@ docker buildx build \
   -t "steadybit/hot-deals:$branch" \
   --build-arg "JAR_FILE=target/*.jar" \
   .
+
+if [ $branch = "main" ]; then
+  echo "Snyk container monitor steadybit/hot-deals:$branch"
+  snyk container monitor "steadybit/hot-deals:$branch"
+fi

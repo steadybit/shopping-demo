@@ -19,3 +19,8 @@ docker buildx build \
   -t "steadybit/gateway:$branch" \
   --build-arg "JAR_FILE=target/*.jar" \
   .
+
+if [ $branch = "main" ]; then
+  echo "Snyk container monitor steadybit/gateway:$branch"
+  snyk container monitor "steadybit/gateway:$branch"
+fi
