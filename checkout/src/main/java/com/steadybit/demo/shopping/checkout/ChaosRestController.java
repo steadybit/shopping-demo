@@ -4,6 +4,7 @@
 
 package com.steadybit.demo.shopping.checkout;
 
+import jakarta.annotation.PreDestroy;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PreDestroy;
 import java.io.InterruptedIOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

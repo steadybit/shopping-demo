@@ -28,15 +28,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <spring-boot-dependencies.version>2.7.7</spring-boot-dependencies.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-boot-dependencies.version>3.1.11</spring-boot-dependencies.version>
+        <spring-cloud.version>2022.0.5</spring-cloud.version>
+        <snakeyaml.version>2.0</snakeyaml.version> <!-- remove when updating to spring-boot version including this -->
         <!--plugins-->
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
         <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
         <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
         <postgresql.version>42.5.1</postgresql.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -69,23 +69,6 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.30</version>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-registry-prometheus</artifactId>
-                <version>1.10.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
