@@ -23,6 +23,9 @@ jobs:
           cache-dependency-path: |
             shopping-ui/package-lock.json
 
+      - name: "Set up Snyk CLI"
+        uses: snyk/actions/setup@master
+
       - name: Build and Deploy with Maven
         run: mvn -s .github/workflows/maven-settings.xml package -B -V
 
