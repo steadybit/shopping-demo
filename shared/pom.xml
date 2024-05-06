@@ -15,6 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <name>steadybit Shopping Demo - Shared</name>
     <artifactId>shared</artifactId>
+    <version>${revision}</version>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

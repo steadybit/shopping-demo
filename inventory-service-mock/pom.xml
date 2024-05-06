@@ -15,6 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>inventory-service-mock</artifactId>
     <name>steadybit Shopping Demo - Inventory Service Mock</name>
+    <version>${revision}</version>
     <profiles>
         <profile>
             <id>arm64</id>

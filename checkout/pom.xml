@@ -15,6 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>checkout</artifactId>
     <name>steadybit Shopping Demo - checkout</name>
+    <version>${revision}</version>
     <dependencies>
         <dependency>
             <groupId>com.steadybit.demo.shopping</groupId>
