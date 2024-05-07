@@ -41,7 +41,7 @@ spec:
                       - toys-bestseller-exposed
               topologyKey: "topology.kubernetes.io/zone"
       containers:
-        - image: steadybit/bestseller-toys:develop
+        - image: {{ .Values.bestsellerToys.image.name}}:{{ .Values.bestsellerToys.image.tag }}
           imagePullPolicy: Always
           name: toys-bestseller
           resources:

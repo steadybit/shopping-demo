@@ -26,7 +26,7 @@ spec:
     spec:
       serviceAccountName: steadybit-demo
       containers:
-        - image: steadybit/bestseller-fashion:develop
+        - image: {{ .Values.bestsellerFashion.image.name}}:{{ .Values.bestsellerFashion.image.tag }}
           name: fashion-bestseller
           imagePullPolicy: Always
           resources:

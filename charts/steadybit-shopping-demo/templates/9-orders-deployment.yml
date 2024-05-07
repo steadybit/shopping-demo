@@ -43,7 +43,7 @@ spec:
               topologyKey: "topology.kubernetes.io/zone"
       {{ end }}
       containers:
-        - image: steadybit/orders:develop
+        - image: {{ .Values.orders.image.name}}:{{ .Values.orders.image.tag }}
           resources:
             requests:
               memory: "128Mi"
