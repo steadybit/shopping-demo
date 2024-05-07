@@ -58,17 +58,6 @@ jobs:
           ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
 
-      - name: Notify Slack channel
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,ref,message,author,workflow,action
-          author_name: github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always()
-
       - name: Dispatch event to trigger deployment to DEV
         if: github.ref == 'refs/heads/develop'
         run: |
