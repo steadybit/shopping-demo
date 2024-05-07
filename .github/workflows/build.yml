@@ -30,6 +30,7 @@ jobs:
         run: mvn -s .github/workflows/maven-settings.xml package -B -V
 
       - name: Login to Docker Hub and Publish the Docker Images
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -57,17 +58,6 @@ jobs:
           cd checkout
           ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
           cd ..
-
-      - name: Notify Slack channel
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,ref,message,author,workflow,action
-          author_name: github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always()
 
       - name: Dispatch event to trigger deployment to DEV
         if: github.ref == 'refs/heads/develop'

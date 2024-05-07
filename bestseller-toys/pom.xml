@@ -15,6 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bestseller-toys</artifactId>
     <name>steadybit Shopping Demo - Toys</name>
+    <version>${revision}</version>
     <profiles>
         <profile>
             <id>arm64</id>

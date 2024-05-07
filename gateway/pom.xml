@@ -15,6 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gateway</artifactId>
     <name>steadybit Shopping Demo - Gateway</name>
+    <version>${revision}</version>
     <profiles>
         <profile>
             <id>arm64</id>
