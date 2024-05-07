@@ -30,6 +30,7 @@ jobs:
         run: mvn -s .github/workflows/maven-settings.xml package -B -V
 
       - name: Login to Docker Hub and Publish the Docker Images
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
