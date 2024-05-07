@@ -4,8 +4,6 @@ on:
   # Run experiment recurrently to always have some example logs in demos
   schedule:
     - cron: "0 1 * * 0"
-  pull_request:
-    types: [opened, reopened]
 
 jobs:
   run_experiments:
