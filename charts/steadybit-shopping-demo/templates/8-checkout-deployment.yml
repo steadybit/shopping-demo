@@ -61,12 +61,12 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8085
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8085
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

@@ -58,7 +58,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               name: checkout
               ports:
                 - containerPort: 8085
@@ -67,7 +67,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               resources:
                 limits:
                   cpu: 1000m
@@ -156,7 +156,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               name: checkout
               ports:
                 - containerPort: 8085
@@ -165,7 +165,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               resources:
                 limits:
                   cpu: 1000m
@@ -254,7 +254,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               name: checkout
               ports:
                 - containerPort: 8085
@@ -263,7 +263,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
               resources:
                 limits:
                   cpu: 1000m
