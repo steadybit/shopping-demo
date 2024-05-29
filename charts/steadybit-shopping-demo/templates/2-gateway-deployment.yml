@@ -76,6 +76,10 @@ spec:
         - name: work-dir
           emptyDir:
             sizeLimit: 256Mi
+      {{- with .Values.gateway.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

@@ -77,6 +77,10 @@ spec:
               path: /actuator/health/readiness
               port: 8081
             initialDelaySeconds: 40
+      {{- with .Values.bestsellerToys.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       imagePullSecrets:
         - name: regcredinternal
 ---
