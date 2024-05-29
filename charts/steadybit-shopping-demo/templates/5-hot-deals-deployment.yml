@@ -154,6 +154,10 @@ spec:
         - name: nginx-proxy-config
           configMap:
             name: hotdeals-nginx-conf
+      {{- with .Values.hotDeals.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
 ---
 apiVersion: v1
 kind: Service

@@ -61,12 +61,12 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8085
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8085
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -77,6 +77,10 @@ spec:
                     values:
                       - checkout
               topologyKey: "topology.kubernetes.io/zone"
+      {{- with .Values.checkout.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       imagePullSecrets:
         - name: regcredinternal
 ---

@@ -63,12 +63,12 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 40
+            initialDelaySeconds: 60
           volumeMounts:
             - name: work-dir
               mountPath: /work
@@ -76,6 +76,10 @@ spec:
         - name: work-dir
           emptyDir:
             sizeLimit: 256Mi
+      {{- with .Values.gateway.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

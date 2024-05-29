@@ -77,6 +77,10 @@ spec:
                     values:
                       - inventory
               topologyKey: "topology.kubernetes.io/zone"
+      {{- with .Values.inventory.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       imagePullSecrets:
         - name: regcredinternal
 ---

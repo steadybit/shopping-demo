@@ -79,6 +79,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+      {{- with .Values.orders.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       imagePullSecrets:
         - name: regcredinternal
 ---

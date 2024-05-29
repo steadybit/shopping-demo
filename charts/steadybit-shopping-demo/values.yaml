@@ -17,6 +17,8 @@ gateway:
     host: null
     # Annotations for the ingress
     annotations:
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 bestsellerFashion:
   image:
     # Container image name
@@ -25,6 +27,8 @@ bestsellerFashion:
     tag: develop
   # Number of bestsellerFashion replicas
   replicaCount: 1
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 bestsellerToys:
   image:
     # Container image name
@@ -33,6 +37,8 @@ bestsellerToys:
     tag: develop
   # Number of bestsellerToys replicas
   replicaCount: 1
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 hotDeals:
   image:
     # Container image name
@@ -48,6 +54,8 @@ hotDeals:
     type: NodePort
   # Enable podDisruptionBudget
   podDisruptionBudget: false
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 inventory:
   image:
     # Container image name
@@ -56,6 +64,8 @@ inventory:
     tag: develop
   # Number of inventory replicas
   replicaCount: 1
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 activemq:
   image:
     # Container image name
@@ -64,6 +74,8 @@ activemq:
     tag: 5.18.3
   # Number of activemq replicas
   replicaCount: 1
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 checkout:
   image:
     # Container image name
@@ -76,6 +88,8 @@ checkout:
   horizontalPodAutoscaler: false
   # Enable podDisruptionBudget
   podDisruptionBudget: false
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
 orders:
   image:
     # Container image name
@@ -88,3 +102,5 @@ orders:
   podAffinity: false
   # Enable podDisruptionBudget
   podDisruptionBudget: false
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
