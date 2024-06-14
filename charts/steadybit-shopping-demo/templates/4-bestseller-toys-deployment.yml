@@ -44,15 +44,7 @@ spec:
         - image: {{ .Values.bestsellerToys.image.name}}:{{ .Values.bestsellerToys.image.tag }}
           imagePullPolicy: Always
           name: toys-bestseller
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.bestsellerToys.resources | nindent 14 }}
           ports:
             - containerPort: 8081
               protocol: TCP

@@ -113,15 +113,7 @@ spec:
               path: /actuator/health/readiness
               port: 8099
             initialDelaySeconds: 40
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.hotDeals.resources | nindent 14 }}
         - name: hot-deals-nginx
           image: nginx:alpine
           imagePullPolicy: Always
@@ -137,15 +129,7 @@ spec:
               path: /actuator/health/readiness
               port: 8083
             initialDelaySeconds: 40
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.hotDeals.nginx.resources | nindent 14 }}
           volumeMounts:
             - name: nginx-proxy-config
               mountPath: /etc/nginx/nginx.conf

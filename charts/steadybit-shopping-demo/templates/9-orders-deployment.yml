@@ -44,15 +44,7 @@ spec:
       {{ end }}
       containers:
         - image: {{ .Values.orders.image.name}}:{{ .Values.orders.image.tag }}
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.orders.resources | nindent 14 }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

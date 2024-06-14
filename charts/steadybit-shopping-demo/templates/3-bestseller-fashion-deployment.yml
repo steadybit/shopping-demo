@@ -29,15 +29,7 @@ spec:
         - image: {{ .Values.bestsellerFashion.image.name}}:{{ .Values.bestsellerFashion.image.tag }}
           name: fashion-bestseller
           imagePullPolicy: Always
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.bestsellerFashion.resources | nindent 14 }}
           ports:
             - containerPort: 8082
               protocol: TCP

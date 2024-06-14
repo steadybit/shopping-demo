@@ -32,15 +32,7 @@ spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: {{ .Values.checkout.image.name}}:{{ .Values.checkout.image.tag }}
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.checkout.resources | nindent 14 }}
           imagePullPolicy: Always
           name: checkout
           ports:
