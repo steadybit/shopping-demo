@@ -28,6 +28,10 @@ spec:
         domain: "shop-gateway"
         tags.datadoghq.com/service: shop-gateway
         tags.datadoghq.com/version: 1.0.0
+      {{- with .Values.global.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       serviceAccountName: steadybit-demo
       containers:

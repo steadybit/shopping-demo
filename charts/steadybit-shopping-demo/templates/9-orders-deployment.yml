@@ -28,6 +28,10 @@ spec:
         domain: "shop-orders"
         tags.datadoghq.com/service: shop-orders
         tags.datadoghq.com/version: 1.0.0
+      {{- with .Values.global.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       serviceAccountName: steadybit-demo
       {{ if eq .Values.orders.podAffinity true }}

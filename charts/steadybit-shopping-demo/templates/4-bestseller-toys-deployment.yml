@@ -28,6 +28,10 @@ spec:
         domain: "shop-products"
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
+      {{- with .Values.global.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       serviceAccountName: steadybit-demo
       affinity:

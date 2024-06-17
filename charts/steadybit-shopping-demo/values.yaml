@@ -1,7 +1,8 @@
 # Default values for shopping-demo.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
+global:
+  podAnnotations: {}
 gateway:
   # Container image
   image:
