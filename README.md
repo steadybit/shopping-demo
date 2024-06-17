@@ -67,4 +67,4 @@ You can continue reading about the [GitOps approach in our blog post](https://st
 We also recommend using our [badge](https://docs.steadybit.com/integrate-with-steadybit/badges) to integrate your latest run status in various places via HTML, Markdown, or image.
 Like this one:
 
-![GITHUB-17](https://platform.steadybit.com/api/experiments/GITHUB-17/badge.svg?tenantKey=demo&scale=1)
+[![GITHUB-17](https://platform.steadybit.com/api/experiments/GITHUB-17/badge.svg?tenantKey=demo&scale=1})](https://platform.steadybit.com/experiments/GITHUB/edit/GITHUB-17?tenant=demo)
