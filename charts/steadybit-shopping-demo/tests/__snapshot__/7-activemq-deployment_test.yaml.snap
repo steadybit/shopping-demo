@@ -71,12 +71,12 @@ manifest should match snapshot:
                   port: 61616
               resources:
                 limits:
-                  cpu: 1000m
-                  ephemeral-storage: 1Gi
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
+                  cpu: 500m
                   ephemeral-storage: 500Mi
+                  memory: 1024Mi
+                requests:
+                  cpu: 50m
+                  ephemeral-storage: 100Mi
                   memory: 128Mi
               volumeMounts:
                 - mountPath: /opt/activemq/conf/activemq.xml
@@ -251,12 +251,12 @@ manifest should match snapshot replica count:
                   port: 61616
               resources:
                 limits:
-                  cpu: 1000m
-                  ephemeral-storage: 1Gi
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
+                  cpu: 500m
                   ephemeral-storage: 500Mi
+                  memory: 1024Mi
+                requests:
+                  cpu: 50m
+                  ephemeral-storage: 100Mi
                   memory: 128Mi
               volumeMounts:
                 - mountPath: /opt/activemq/conf/activemq.xml

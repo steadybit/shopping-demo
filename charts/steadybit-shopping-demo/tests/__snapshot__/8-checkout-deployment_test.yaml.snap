@@ -70,12 +70,12 @@ manifest should match snapshot:
                 initialDelaySeconds: 60
               resources:
                 limits:
-                  cpu: 1000m
-                  ephemeral-storage: 1Gi
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
+                  cpu: 250m
                   ephemeral-storage: 500Mi
+                  memory: 1024Mi
+                requests:
+                  cpu: 50m
+                  ephemeral-storage: 250Mi
                   memory: 128Mi
           imagePullSecrets:
             - name: regcredinternal
@@ -168,12 +168,12 @@ manifest should match snapshot replica count:
                 initialDelaySeconds: 60
               resources:
                 limits:
-                  cpu: 1000m
-                  ephemeral-storage: 1Gi
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
+                  cpu: 250m
                   ephemeral-storage: 500Mi
+                  memory: 1024Mi
+                requests:
+                  cpu: 50m
+                  ephemeral-storage: 250Mi
                   memory: 128Mi
           imagePullSecrets:
             - name: regcredinternal
@@ -266,12 +266,12 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 initialDelaySeconds: 60
               resources:
                 limits:
-                  cpu: 1000m
-                  ephemeral-storage: 1Gi
-                  memory: 512Mi
-                requests:
-                  cpu: 100m
+                  cpu: 250m
                   ephemeral-storage: 500Mi
+                  memory: 1024Mi
+                requests:
+                  cpu: 50m
+                  ephemeral-storage: 250Mi
                   memory: 128Mi
           imagePullSecrets:
             - name: regcredinternal

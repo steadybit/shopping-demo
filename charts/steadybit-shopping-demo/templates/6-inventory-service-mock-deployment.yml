@@ -28,19 +28,15 @@ spec:
         domain: "shop-inventory"
         tags.datadoghq.com/service: shop-inventory
         tags.datadoghq.com/version: 1.0.0
+      {{- with .Values.global.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       serviceAccountName: steadybit-demo
       containers:
         - image: {{ .Values.inventory.image.name}}:{{ .Values.inventory.image.tag }}
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.inventory.resources | nindent 14 }}
           imagePullPolicy: Always
           name: inventory
           ports:

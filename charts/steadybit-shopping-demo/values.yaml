@@ -1,7 +1,8 @@
 # Default values for shopping-demo.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
+global:
+  podAnnotations: {}
 gateway:
   # Container image
   image:
@@ -9,6 +10,16 @@ gateway:
     name: steadybit/gateway
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of gateway replicas
   replicaCount: 1
   # Ingress configuration
@@ -25,6 +36,16 @@ bestsellerFashion:
     name: steadybit/bestseller-fashion
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of bestsellerFashion replicas
   replicaCount: 1
   # nodeSelector -- Node labels for pod assignment
@@ -35,6 +56,16 @@ bestsellerToys:
     name: steadybit/bestseller-toys
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of bestsellerToys replicas
   replicaCount: 1
   # nodeSelector -- Node labels for pod assignment
@@ -45,6 +76,27 @@ hotDeals:
     name: steadybit/hot-deals
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
+  # Container nginx resources
+  nginx:
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+        ephemeral-storage: "100Mi"
+      limits:
+        memory: "1024Mi"
+        cpu: "500m"
+        ephemeral-storage: "500Mi"
   # Number of hotDeals replicas
   replicaCount: 1
   # Enable podAffinity
@@ -62,6 +114,16 @@ inventory:
     name: steadybit/inventory
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of inventory replicas
   replicaCount: 1
   # nodeSelector -- Node labels for pod assignment
@@ -72,6 +134,16 @@ activemq:
     name: symptoma/activemq
     # Container image tag
     tag: 5.18.3
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of activemq replicas
   replicaCount: 1
   # nodeSelector -- Node labels for pod assignment
@@ -82,6 +154,16 @@ checkout:
     name: steadybit/checkout
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+      ephemeral-storage: "250Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "250m"
+      ephemeral-storage: "500Mi"
   # Number of checkout replicas
   replicaCount: 1
   # Enable horizontalPodAutoscaler
@@ -96,6 +178,16 @@ orders:
     name: steadybit/orders
     # Container image tag
     tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+      ephemeral-storage: "250Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "500m"
+      ephemeral-storage: "500Mi"
   # Number of orders replicas
   replicaCount: 1
   # Enable podAffinity

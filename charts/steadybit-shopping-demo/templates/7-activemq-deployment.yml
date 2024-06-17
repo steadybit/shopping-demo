@@ -28,6 +28,10 @@ spec:
         domain: "shop-checkout"
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
+      {{- with .Values.global.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       serviceAccountName: steadybit-demo
       affinity:
@@ -42,15 +46,7 @@ spec:
               topologyKey: "topology.kubernetes.io/zone"
       containers:
         - image: {{ .Values.activemq.image.name}}:{{ .Values.activemq.image.tag }}
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-              ephemeral-storage: "500Mi"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
-              ephemeral-storage: "1Gi"
+          resources: {{ toYaml .Values.activemq.resources | nindent 14 }}
           imagePullPolicy: Always
           name: activemq
           ports:

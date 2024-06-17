@@ -60,3 +60,11 @@ helm upgrade steadybit-shopping-demo \
     --timeout 5m0s \
     steadybit-shopping-demo/steadybit-shopping-demo
 ```
+
+## CI/CD for Experiments
+This GitHub repository also demonstrates how to integrate Steadybit experiments into your CI/CD pipeline to run them regularly or even follow a GitOps approach, including versioning experiments and running them on pull requests.
+You can continue reading about the [GitOps approach in our blog post](https://steadybit.com/blog/boost-your-gitops-practices-by-integrating-chaos-engineering-with-steadybit) or jump immediately into the [definition](https://github.com/steadybit/shopping-demo/blob/develop/.github/workflows/run-experiments.yml) or [latest run](https://github.com/steadybit/shopping-demo/actions/workflows/run-experiments.yml) of our GitHub Action CI/CD example.
+We also recommend using our [badge](https://docs.steadybit.com/integrate-with-steadybit/badges) to integrate your latest run status in various places via HTML, Markdown, or image.
+Like this one:
+
+[![GITHUB-17](https://platform.steadybit.com/api/experiments/GITHUB-17/badge.svg?tenantKey=demo&scale=1)](https://platform.steadybit.com/experiments/GITHUB/edit/GITHUB-17?tenant=demo)
