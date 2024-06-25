@@ -128,7 +128,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: snyk/actions/docker@master
         with:
-          image: "${{ matrix.image.imageName }}:${{ github.ref_name }}"
+          image: "${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }}"
           args: --file=platform-server/Dockerfile --target-reference=${{ github.ref_name }} --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }}
           command: monitor
         env:
