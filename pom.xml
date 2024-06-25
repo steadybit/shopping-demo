@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.11</version>
+        <version>3.2.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -34,24 +34,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.5</spring-cloud.version>
-        <snakeyaml.version>2.0</snakeyaml.version> <!-- remove when updating to spring-boot version including this -->
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <!--plugins-->
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
-        <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
         <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
         <postgresql.version>42.7.2</postgresql.version>
     </properties>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <!-- remove if included in spring-security-rsa / CVE-2024-30172 -->
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcpkix-jdk18on</artifactId>
-                <version>1.78</version>
-            </dependency>
             <dependency>
                 <groupId>com.steadybit.demo.shopping</groupId>
                 <artifactId>shared</artifactId>
@@ -96,20 +86,10 @@
                         <execution>
                             <goals>
                                 <goal>repackage</goal>
+                                <goal>build-info</goal>
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <showWarnings>true</showWarnings>
-                        <parameters>true</parameters>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -126,11 +106,6 @@
                             <exclude>**/Abstract*.java</exclude>
                         </excludes>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.google.cloud.tools</groupId>
-                    <artifactId>jib-maven-plugin</artifactId>
-                    <version>${jib-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
