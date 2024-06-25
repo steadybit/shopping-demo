@@ -61,7 +61,7 @@ jobs:
           retention-days: 3
 
   docker-image:
-    name: Docker Image
+    name: Docker Image steadybit/${{ matrix.image.name || matrix.image.folder }}
     timeout-minutes: 20
     runs-on: ubuntu-latest
     needs: [ build ]
@@ -70,14 +70,14 @@ jobs:
       packages: write
     strategy:
       matrix:
-        subfolder:
-          - bestseller-fashion
-          - bestseller-toys
-          - checkout
-          - gateway
-          - hot-deals
-          - inventory-service-mock
-          - order
+        image:
+          - {folder: bestseller-fashion}
+          - {folder: bestseller-toys}
+          - {folder: checkout}
+          - {folder: gateway}
+          - {folder: hot-deals}
+          - {folder: inventory-service-mock, name: inventory}
+          - {folder: order, name: orders}
     steps:
       - uses: actions/checkout@v4
 
@@ -102,7 +102,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            name=steadybit/${{ matrix.subfolder }}
+            name=steadybit/${{ matrix.image.name || matrix.image.folder }}
           flavor: |
             latest=auto
             prefix=
@@ -116,8 +116,8 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ matrix.subfolder }}
-          file: ${{ matrix.subfolder }}/Dockerfile
+          context: ${{ matrix.image.folder }}
+          file: ${{ matrix.image.folder }}/Dockerfile
           push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
           load: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}
           tags: ${{ steps.meta.outputs.tags }}
