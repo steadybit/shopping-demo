@@ -3,6 +3,7 @@ import './Home.scss';
 import { Card, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
 import { CartView, useCart } from '../components/Cart/Cart';
 import { Version, useProducts } from '../services/ProductService';
+import { useParams } from 'react-router-dom';
 
 import { AiOutlineLoading } from 'react-icons/ai';
 import Deal from '../components/Deal/Deal';
@@ -11,7 +12,9 @@ import React from 'react';
 import classname from '../utils/classname';
 
 const block = classname('home');
-export const Home: React.FC<{ version?: Version }> = ({ version = 'simple' }) => {
+export const Home: React.FC = () => {
+    const params = useParams();
+    const version = params.version as Version || 'simple'
     const products = useProducts(version);
     const [cart, addToCart, checkout] = useCart();
 
