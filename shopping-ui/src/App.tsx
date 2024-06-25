@@ -1,12 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Container, Navbar } from 'react-bootstrap';
-import { Route, HashRouter as Router, Switch } from 'react-router-dom';
+import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 
 import Home from './pages/Home';
 import { Logo } from './images';
 import React from 'react';
-import { Version } from './services/ProductService';
 
 const App: React.FC = () => {
     return (
@@ -19,9 +18,9 @@ const App: React.FC = () => {
                 </Container>
             </Navbar>
             <Router>
-                <Switch>
-                    <Route path={'/:version?'}>{({ match }) => <Home version={match?.params.version as Version} />}</Route>
-                </Switch>
+                <Routes>
+                    <Route path={'/:version?'} element={<Home/>}/>
+                </Routes>
             </Router>
         </Container>
     );

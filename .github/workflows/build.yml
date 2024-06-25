@@ -23,42 +23,123 @@ jobs:
           cache-dependency-path: |
             shopping-ui/package-lock.json
 
-      - name: "Set up Snyk CLI"
+      - name: "[main] Set up Snyk CLI"
+        if: github.ref == 'refs/heads/main'
         uses: snyk/actions/setup@master
 
-      - name: Build and Deploy with Maven
-        run: mvn -s .github/workflows/maven-settings.xml package -B -V
-
-      - name: Login to Docker Hub and Publish the Docker Images
-        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+      - name: "[main] Synk monitor: maven"
+        if: github.ref == 'refs/heads/main'
+        run: snyk monitor --all-projects --prune-repeated-subdependencies --target-reference=${{ github.ref_name }} -- -s .github/workflows/maven-settings.xml
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: |
-          echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
-          cd gateway
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd bestseller-toys
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd bestseller-fashion
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd hot-deals
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd inventory-service-mock
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd order
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
-          cd checkout
-          ./ci/buildAndPushDockerImages.bash latest ${{ github.ref_name }}
-          cd ..
+          PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
+      - name: Build
+        run: mvn -s .github/workflows/maven-settings.xml verify -B -V -U
+
+      - name: Upload JARs
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-jars
+          path: |
+            bestseller-fashion/target/*.jar
+            bestseller-fashion/target/licenses/
+            bestseller-toys/target/*.jar
+            bestseller-toys/target/licenses/
+            checkout/target/*.jar
+            checkout/target/licenses/
+            gateway/target/*.jar
+            gateway/target/licenses/
+            hot-deals/target/*.jar
+            hot-deals/target/licenses/
+            inventory-service-mock/target/*.jar
+            inventory-service-mock/target/licenses/
+            order/target/*.jar
+            order/target/licenses/
+          if-no-files-found: error
+          retention-days: 3
+
+  docker-image:
+    name: Docker Image steadybit/${{ matrix.image.name || matrix.image.folder }}
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        image:
+          - {folder: bestseller-fashion}
+          - {folder: bestseller-toys}
+          - {folder: checkout}
+          - {folder: gateway}
+          - {folder: hot-deals}
+          - {folder: inventory-service-mock, name: inventory}
+          - {folder: order, name: orders}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download JARs
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-jars
+          path: .
+
+      - name: Log in to the Docker container registry
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            name=steadybit/${{ matrix.image.name || matrix.image.folder }}
+          flavor: |
+            latest=auto
+            prefix=
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=sha,format=long,prefix=
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.image.folder }}
+          file: ${{ matrix.image.folder }}/Dockerfile
+          push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
+          load: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main') && ',linux/arm64' || '' }} #for branches we just do a load, and this supports no multi-arch
+
+      - name: "[main] Snyk monitor docker image"
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: snyk/actions/docker@master
+        with:
+          image: "${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }}"
+          args: --file=${{ matrix.image.folder }}/Dockerfile --target-reference=${{ github.ref_name }} --username=${{ github.actor }} --password=${{ secrets.GITHUB_TOKEN }}
+          command: monitor
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  trigger-deployment:
+    name: Trigger Deployment
+    needs: [docker-image]
+    runs-on: ubuntu-latest
+    concurrency: deploy-to-demo
+    steps:
       - name: Dispatch event to trigger deployment to DEV
         if: github.ref == 'refs/heads/develop'
         run: |

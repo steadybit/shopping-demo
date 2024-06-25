@@ -1,11 +1,19 @@
-FROM azul/zulu-openjdk-debian:21
+FROM azul/zulu-openjdk-debian:21 as builder
 
-RUN apt-get -qq update && \
-    apt-get -qq -y upgrade && \
-    apt-get -qq -y autoremove && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR application
 ARG JAR_FILE=target/*.jar
-EXPOSE 8081
-COPY ${JAR_FILE} bestseller-toys.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
+FROM azul/zulu-openjdk-debian:21
+WORKDIR application
+
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/application/ ./
 COPY target/licenses licenses
-ENTRYPOINT ["java","-XX:+EnableDynamicAgentLoading","-jar","/bestseller-toys.jar"]
+
+EXPOSE 8081
+
+ENTRYPOINT ["java", "-XX:+EnableDynamicAgentLoading", "-XX:MaxRAMPercentage=75.0", "org.springframework.boot.loader.launch.JarLauncher"]

@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.11</version>
+        <version>3.2.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -33,25 +33,17 @@
         <docker.image.prefix>steadybit</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
-        <spring-cloud.version>2022.0.5</spring-cloud.version>
-        <snakeyaml.version>2.0</snakeyaml.version> <!-- remove when updating to spring-boot version including this -->
+        <java.version>21</java.version>
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
         <!--plugins-->
+        <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
+        <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
-        <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
-        <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
+        <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
         <postgresql.version>42.7.2</postgresql.version>
     </properties>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <!-- remove if included in spring-security-rsa / CVE-2024-30172 -->
-                <groupId>org.bouncycastle</groupId>
-                <artifactId>bcpkix-jdk18on</artifactId>
-                <version>1.78</version>
-            </dependency>
             <dependency>
                 <groupId>com.steadybit.demo.shopping</groupId>
                 <artifactId>shared</artifactId>
@@ -80,6 +72,16 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>cz.habarta.typescript-generator</groupId>
+                    <artifactId>typescript-generator-maven-plugin</artifactId>
+                    <version>${typescript-generator-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>${flatten-maven-plugin.version}</version>
@@ -96,20 +98,10 @@
                         <execution>
                             <goals>
                                 <goal>repackage</goal>
+                                <goal>build-info</goal>
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <showWarnings>true</showWarnings>
-                        <parameters>true</parameters>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -126,11 +118,6 @@
                             <exclude>**/Abstract*.java</exclude>
                         </excludes>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.google.cloud.tools</groupId>
-                    <artifactId>jib-maven-plugin</artifactId>
-                    <version>${jib-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -186,6 +173,12 @@
                         <configuration>
                             <licensesOutputDirectory>${project.build.directory}/licenses</licensesOutputDirectory>
                             <licensesOutputFile>${project.build.directory}/licenses/licenses.xml</licensesOutputFile>
+                            <licenseUrlFileNameSanitizers>
+                                <licenseUrlFileNameSanitizer>
+                                    <regexp>[\s:]+</regexp>
+                                    <replacement>_</replacement>
+                                </licenseUrlFileNameSanitizer>
+                            </licenseUrlFileNameSanitizers>
                             <outputDirectory>${project.build.directory}/licenses</outputDirectory>
                             <excludedScopes>test,provided</excludedScopes>
                             <excludedGroups>com.steadybit</excludedGroups>
@@ -198,36 +191,4 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/libs-snapshot-local</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone-local</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
