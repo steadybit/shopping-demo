@@ -183,7 +183,7 @@
                             <excludedScopes>test,provided</excludedScopes>
                             <excludedGroups>com.steadybit</excludedGroups>
                             <includeOptional>false</includeOptional>
-                            <licenseMergesUrl>${project.baseUri}/license-merges.txt</licenseMergesUrl>
+                            <licenseMergesUrl>license-merges.txt</licenseMergesUrl>
                             <organizeLicensesByDependencies>true</organizeLicensesByDependencies>
                         </configuration>
                     </plugin>
