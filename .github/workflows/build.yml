@@ -116,7 +116,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ matrix.subfolder }}
           file: ${{ matrix.subfolder }}/Dockerfile
           push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
           load: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}

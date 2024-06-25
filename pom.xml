@@ -33,11 +33,13 @@
         <docker.image.prefix>steadybit</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
         <!--plugins-->
+        <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
+        <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <license-maven-plugin.version>2.2.0</license-maven-plugin.version>
+        <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
         <postgresql.version>42.7.2</postgresql.version>
     </properties>
     <dependencyManagement>
@@ -69,6 +71,16 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>cz.habarta.typescript-generator</groupId>
+                    <artifactId>typescript-generator-maven-plugin</artifactId>
+                    <version>${typescript-generator-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
@@ -161,11 +173,17 @@
                         <configuration>
                             <licensesOutputDirectory>${project.build.directory}/licenses</licensesOutputDirectory>
                             <licensesOutputFile>${project.build.directory}/licenses/licenses.xml</licensesOutputFile>
+                            <licenseUrlFileNameSanitizers>
+                                <licenseUrlFileNameSanitizer>
+                                    <regexp>[\s:]+</regexp>
+                                    <replacement>_</replacement>
+                                </licenseUrlFileNameSanitizer>
+                            </licenseUrlFileNameSanitizers>
                             <outputDirectory>${project.build.directory}/licenses</outputDirectory>
                             <excludedScopes>test,provided</excludedScopes>
                             <excludedGroups>com.steadybit</excludedGroups>
                             <includeOptional>false</includeOptional>
-                            <licenseMergesUrl>license-merges.txt</licenseMergesUrl>
+                            <licenseMergesUrl>${project.baseUri}/license-merges.txt</licenseMergesUrl>
                             <organizeLicensesByDependencies>true</organizeLicensesByDependencies>
                         </configuration>
                     </plugin>
@@ -173,36 +191,4 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/libs-snapshot-local</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone-local</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
