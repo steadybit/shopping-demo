@@ -60,6 +60,8 @@ manifest should match snapshot:
                   value: http://hot-deals:8083/products
                 - name: rest.endpoint.checkout
                   value: http://checkout:8085/products
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -182,6 +184,8 @@ manifest should match snapshot replica count:
                   value: http://hot-deals:8083/products
                 - name: rest.endpoint.checkout
                   value: http://checkout:8085/products
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
