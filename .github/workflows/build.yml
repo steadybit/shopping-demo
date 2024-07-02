@@ -188,7 +188,7 @@ jobs:
           path: dist/fashion-bestseller.zip
           if-no-files-found: error
           retention-days: 3
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials (eu-central-1)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'eu-central-1'
@@ -196,12 +196,26 @@ jobs:
           role-to-assume: 'arn:aws:iam::292929100161:role/allow-auto-deploy-from-other-accounts'
           role-duration-seconds: 1200
           role-session-name: S3DeployLicense
-      - name: Push zips to S3
+      - name: Push zips to S3 (eu-central-1)
         working-directory: dist
         run: |
           aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas/fashion-bestseller.zip
           VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
-          echo "::notice::fashion_bestseller_lambda_version = \"$VERSION_ID\""
+          echo "::notice:: eu-central-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
+      - name: Configure AWS credentials (eu-west-1)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: 'eu-west-1'
+          # Deploy to shared account
+          role-to-assume: 'arn:aws:iam::292929100161:role/allow-auto-deploy-from-other-accounts'
+          role-duration-seconds: 1200
+          role-session-name: S3DeployLicense
+      - name: Push zips to S3 (eu-west-1)
+        working-directory: dist
+        run: |
+          aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas-region-eu-west-1/fashion-bestseller.zip
+          VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
+          echo "::notice:: eu-west-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
 
   test-helm-charts:
     name: "Test Helm Charts"
