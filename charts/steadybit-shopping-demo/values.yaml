@@ -61,7 +61,6 @@ bestsellerFashion:
   nodeSelector: {}
 bestsellerToys:
   enabled: true
-  externalName: null
   image:
     # Container image name
     name: steadybit/bestseller-toys
