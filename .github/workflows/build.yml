@@ -151,6 +151,71 @@ jobs:
         run: |
           curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-prod-demo"}'
 
+  build-fashion-lambda:
+    name: "Build and Upload fashion-bestseller Lambda"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: v18
+          cache: 'npm'
+          cache-dependency-path: |
+            bestseller-fashion-lambda/package-lock.json
+      - run: npm install
+        working-directory: bestseller-fashion-lambda
+      - name: "[main] setup snyk"
+        if: github.ref == 'refs/heads/main'
+        uses: snyk/actions/setup@master
+      - name: "[main] snyk monitor"
+        if: github.ref == 'refs/heads/main'
+        working-directory: bestseller-fashion-lambda
+        run: snyk monitor --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Install zip
+        uses: montudor/action-zip@v1
+      - name: Zip lambda
+        run: mkdir -p ../dist && zip -r --exclude="*test*" ../dist/fashion-bestseller.zip .
+        working-directory: bestseller-fashion-lambda
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fashion-bestseller.zip
+          path: dist/fashion-bestseller.zip
+          if-no-files-found: error
+          retention-days: 3
+      - name: Configure AWS credentials (eu-central-1)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: 'eu-central-1'
+          # Deploy to shared account
+          role-to-assume: 'arn:aws:iam::292929100161:role/allow-auto-deploy-from-other-accounts'
+          role-duration-seconds: 1200
+          role-session-name: S3DeployLicense
+      - name: Push zips to S3 (eu-central-1)
+        working-directory: dist
+        run: |
+          aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas/fashion-bestseller.zip
+          VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
+          echo "::notice:: eu-central-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
+      - name: Configure AWS credentials (eu-west-1)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: 'eu-west-1'
+          # Deploy to shared account
+          role-to-assume: 'arn:aws:iam::292929100161:role/allow-auto-deploy-from-other-accounts'
+          role-duration-seconds: 1200
+          role-session-name: S3DeployLicense
+      - name: Push zips to S3 (eu-west-1)
+        working-directory: dist
+        run: |
+          aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas-region-eu-west-1/fashion-bestseller.zip
+          VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas-region-eu-west-1 --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
+          echo "::notice:: eu-west-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
 
   test-helm-charts:
     name: "Test Helm Charts"

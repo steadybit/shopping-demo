@@ -3,4 +3,5 @@ rest:
     fashion: "http://fashion-bestseller.steadybit-demo.svc.cluster.local:8082/products"
     toys: "http://toys-bestseller.steadybit-demo.svc.cluster.local:8081/products"
     hotdeals: "http://hot-deals.steadybit-demo.svc.cluster.local:8083/products"
-    checkout: "http://checkout.steadybit-demo.svc.cluster.local:8085/products"
+    checkout: "http://checkout.steadybit-demo.svc.cluster.local:8085/"
+    inventory: "http://inventory.steadybit-demo.svc.cluster.local:8084/"
