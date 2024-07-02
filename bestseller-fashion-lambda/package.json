@@ -4,7 +4,6 @@
   "scripts": {},
   "author": "Daniel Reuter",
   "dependencies": {
-    "aws-sdk": "^2.1652.0",
     "failure-lambda": "^0.4.4"
   }
 }

@@ -214,7 +214,7 @@ jobs:
         working-directory: dist
         run: |
           aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas-region-eu-west-1/fashion-bestseller.zip
-          VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
+          VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas-region-eu-west-1 --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
           echo "::notice:: eu-west-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
 
   test-helm-charts:
