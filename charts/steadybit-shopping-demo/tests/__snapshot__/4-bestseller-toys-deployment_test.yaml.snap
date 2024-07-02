@@ -42,8 +42,8 @@ manifest should match snapshot:
                   topologyKey: topology.kubernetes.io/zone
           containers:
             - env:
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -151,8 +151,8 @@ manifest should match snapshot replica count:
                   topologyKey: topology.kubernetes.io/zone
           containers:
             - env:
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:

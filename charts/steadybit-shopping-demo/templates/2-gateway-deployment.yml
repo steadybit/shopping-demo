@@ -1,3 +1,4 @@
+{{- if .Values.gateway.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,8 +46,6 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: "-Dsun.net.inetaddr.ttl=0"
-            - name: SPRING_PROFILES_ACTIVE
-              value: "kubernetes"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -55,6 +54,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: rest.endpoint.fashion
+              value: {{ .Values.global.endpoints.bestsellerFashion }}
+            - name: rest.endpoint.toys
+              value: {{ .Values.global.endpoints.bestsellerToys }}
+            - name: rest.endpoint.hotdeals
+              value: {{ .Values.global.endpoints.hotDeals }}
+            - name: rest.endpoint.checkout
+              value: {{ .Values.global.endpoints.checkout }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
@@ -113,3 +120,4 @@ spec:
   selector:
     matchLabels:
       run: gateway-exposed
+{{- end -}}

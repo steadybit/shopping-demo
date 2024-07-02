@@ -1,3 +1,4 @@
+{{- if .Values.checkout.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -124,3 +125,4 @@ spec:
     matchLabels:
       run: checkout
 {{ end }}
+{{- end -}}

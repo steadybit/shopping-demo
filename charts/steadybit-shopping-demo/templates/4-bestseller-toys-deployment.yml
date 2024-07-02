@@ -1,3 +1,4 @@
+{{- if .Values.bestsellerToys.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -53,8 +54,8 @@ spec:
             - containerPort: 8081
               protocol: TCP
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "kubernetes"
+            - name: rest.endpoint.inventory
+              value: {{ .Values.global.endpoints.inventory }}
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -106,3 +107,4 @@ spec:
   selector:
     matchLabels:
       run: toys-bestseller-exposed
+{{- end -}}
