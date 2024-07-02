@@ -3,4 +3,5 @@ rest:
     fashion: "http://fashion-bestseller.steadybit.local:8082/products"
     toys: "http://toys-bestseller.steadybit.local:8081/products"
     hotdeals: "http://hot-deals.steadybit.local:8083/products"
-    checkout: "http://checkout.steadybit.local:8084/products"
+    checkout: "http://checkout.steadybit.local:8085/"
+    inventory: "http://inventory.steadybit.local:8084/"

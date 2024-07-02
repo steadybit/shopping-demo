@@ -20,6 +20,9 @@ public class GatewayApplication implements WebFluxConfigurer {
     @Value("${rest.endpoint.checkout}")
     private String urlCheckout;
 
+    @Value("${rest.endpoint.inventory}")
+    private String urlInventory;
+
     @Value("${server.port}")
     private int serverPort;
 
@@ -32,6 +35,7 @@ public class GatewayApplication implements WebFluxConfigurer {
         return builder.routes()
                 .route("index", p -> p.path("/").uri("forward:/index.html"))//
                 .route("checkout", p -> p.path("/checkout/**").uri(this.urlCheckout))//
+                .route("inventory", p -> p.path("/inventory/**").uri(this.urlInventory))//
                 .build();
     }
 
