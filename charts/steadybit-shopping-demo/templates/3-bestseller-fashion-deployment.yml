@@ -1,3 +1,4 @@
+{{- if .Values.bestsellerFashion.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,8 +39,6 @@ spec:
             - containerPort: 8082
               protocol: TCP
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "kubernetes"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -48,6 +47,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: rest.endpoint.inventory
+              value: {{ .Values.global.endpoints.inventory }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
@@ -89,3 +90,4 @@ spec:
   selector:
     matchLabels:
       run: fashion-bestseller-exposed
+{{- end -}}

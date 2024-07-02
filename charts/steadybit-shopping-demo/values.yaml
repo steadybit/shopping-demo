@@ -3,7 +3,15 @@
 # Declare variables to be passed into your templates.
 global:
   podAnnotations: {}
+  # Endpoints for services to use
+  endpoints:
+    bestsellerFashion: "http://fashion-bestseller:8082/products"
+    bestsellerToys: "http://toys-bestseller:8081/products"
+    hotDeals: "http://hot-deals:8083/products"
+    checkout: "http://checkout:8085/products"
+    inventory: "http://inventory:8084/inventory"
 gateway:
+  enabled: true
   # Container image
   image:
     # Container image name
@@ -31,6 +39,7 @@ gateway:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:
+  enabled: true
   image:
     # Container image name
     name: steadybit/bestseller-fashion
@@ -51,6 +60,7 @@ bestsellerFashion:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerToys:
+  enabled: true
   image:
     # Container image name
     name: steadybit/bestseller-toys
@@ -71,6 +81,7 @@ bestsellerToys:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 hotDeals:
+  enabled: true
   image:
     # Container image name
     name: steadybit/hot-deals
@@ -109,6 +120,7 @@ hotDeals:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 inventory:
+  enabled: true
   image:
     # Container image name
     name: steadybit/inventory
@@ -129,6 +141,7 @@ inventory:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 activemq:
+  enabled: true
   image:
     # Container image name
     name: symptoma/activemq
@@ -149,6 +162,7 @@ activemq:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 checkout:
+  enabled: true
   image:
     # Container image name
     name: steadybit/checkout
@@ -173,6 +187,7 @@ checkout:
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 orders:
+  enabled: true
   image:
     # Container image name
     name: steadybit/orders

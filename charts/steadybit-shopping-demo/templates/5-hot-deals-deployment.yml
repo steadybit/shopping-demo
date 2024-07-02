@@ -1,3 +1,4 @@
+{{- if .Values.hotDeals.enabled -}}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -78,7 +79,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: steadybit-demo
-      {{ if eq .Values.hotDeals.podAffinity true }}
+      {{ if .Values.hotDeals.podAffinity }}
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -95,8 +96,6 @@ spec:
           imagePullPolicy: Always
           name: hot-deals
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: "kubernetes"
             - name: SERVER_PORT
               value: "8099"
             - name: DD_SERVICE
@@ -107,6 +106,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: rest.endpoint.inventory
+              value: {{ .Values.global.endpoints.inventory }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
@@ -175,3 +176,4 @@ spec:
     matchLabels:
       run: hot-deals-exposed
 {{ end }}
+{{- end -}}

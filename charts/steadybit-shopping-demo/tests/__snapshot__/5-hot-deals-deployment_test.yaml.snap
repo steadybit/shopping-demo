@@ -76,8 +76,6 @@ manifest should match snapshot:
         spec:
           containers:
             - env:
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
                 - name: SERVER_PORT
                   value: "8099"
                 - name: DD_SERVICE
@@ -88,6 +86,8 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
               image: steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -237,8 +237,6 @@ manifest should match snapshot replica count:
         spec:
           containers:
             - env:
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
                 - name: SERVER_PORT
                   value: "8099"
                 - name: DD_SERVICE
@@ -249,6 +247,8 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
               image: steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -408,8 +408,6 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                   topologyKey: topology.kubernetes.io/zone
           containers:
             - env:
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
                 - name: SERVER_PORT
                   value: "8099"
                 - name: DD_SERVICE
@@ -420,6 +418,8 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
+                - name: rest.endpoint.inventory
+                  value: http://inventory:8084/inventory
               image: steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:

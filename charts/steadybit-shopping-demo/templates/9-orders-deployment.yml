@@ -1,3 +1,4 @@
+{{- if .Values.orders.enabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -34,7 +35,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: steadybit-demo
-      {{ if eq .Values.orders.podAffinity true }}
+      {{ if .Values.orders.podAffinity }}
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -110,3 +111,4 @@ spec:
     matchLabels:
       run: orders
 {{ end }}
+{{- end -}}

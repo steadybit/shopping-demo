@@ -44,8 +44,6 @@ manifest should match snapshot:
             - env:
                 - name: JAVA_TOOL_OPTIONS
                   value: -Dsun.net.inetaddr.ttl=0
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -54,6 +52,14 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
+                - name: rest.endpoint.fashion
+                  value: http://fashion-bestseller:8082/products
+                - name: rest.endpoint.toys
+                  value: http://toys-bestseller:8081/products
+                - name: rest.endpoint.hotdeals
+                  value: http://hot-deals:8083/products
+                - name: rest.endpoint.checkout
+                  value: http://checkout:8085/products
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -160,8 +166,6 @@ manifest should match snapshot replica count:
             - env:
                 - name: JAVA_TOOL_OPTIONS
                   value: -Dsun.net.inetaddr.ttl=0
-                - name: SPRING_PROFILES_ACTIVE
-                  value: kubernetes
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -170,6 +174,14 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
+                - name: rest.endpoint.fashion
+                  value: http://fashion-bestseller:8082/products
+                - name: rest.endpoint.toys
+                  value: http://toys-bestseller:8081/products
+                - name: rest.endpoint.hotdeals
+                  value: http://hot-deals:8083/products
+                - name: rest.endpoint.checkout
+                  value: http://checkout:8085/products
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
