@@ -168,6 +168,15 @@ jobs:
             bestseller-fashion-lambda/package-lock.json
       - run: npm install
         working-directory: bestseller-fashion-lambda
+      - name: "[main] setup snyk"
+        if: github.ref == 'refs/heads/main'
+        uses: snyk/actions/setup@master
+      - name: "[main] snyk monitor"
+        if: github.ref == 'refs/heads/main'
+        working-directory: bestseller-fashion-lambda
+        run: snyk monitor --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Install zip
         uses: montudor/action-zip@v1
       - name: Zip lambda
