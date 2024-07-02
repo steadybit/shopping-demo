@@ -1,0 +1,9 @@
+{
+  "name": "fashion-bestseller",
+  "version": "0.0.1",
+  "scripts": {},
+  "author": "Daniel Reuter",
+  "dependencies": {
+    "failure-lambda": "^0.4.4"
+  }
+}
