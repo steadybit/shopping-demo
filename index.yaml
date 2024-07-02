@@ -39,6 +39,32 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
+    created: "2024-07-02T20:12:07.250014639Z"
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: 03c8d72b71e26577d0c5c6b96afa872ee2f26995c25207637e7aa79daa63d023
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-1.0.7/steadybit-shopping-demo-1.0.7.tgz
+    version: 1.0.7
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
     created: "2024-07-02T10:35:54.012497962Z"
     description: Steadybit shopping-demo application Helm chart for Kubernetes.
     digest: 6c9a82546e476562687f038af9bbcc08e7ea5e4370f22b522b4395fe5d856137
@@ -210,4 +236,4 @@ entries:
     urls:
     - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-0.1.0/steadybit-shopping-demo-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-02T10:35:54.012528739Z"
+generated: "2024-07-02T20:12:07.250050597Z"
