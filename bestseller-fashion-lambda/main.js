@@ -8,7 +8,7 @@ exports.handler = failureLambda(async function (event, context) {
   let responseData = null;
   switch (event.httpMethod) {
     case "GET":
-      if (event.resource === "/remote-call") {
+      if (event.path === "/remote-call") {
         const instance = axios.create({
           timeout: 3000,
         });
