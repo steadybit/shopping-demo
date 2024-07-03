@@ -18,7 +18,10 @@ exports.handler = failureLambda(async function (event, context) {
         );
         console.log(response.data);
         console.log(response.status);
-        responseData = responseBuilder(response.status, response.data);
+        responseData = responseBuilder(
+          response.status,
+          JSON.stringify(response.data)
+        );
       } else {
         responseData = successResponseBuilder(
           JSON.stringify([
