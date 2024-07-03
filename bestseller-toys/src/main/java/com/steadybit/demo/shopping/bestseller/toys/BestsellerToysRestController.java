@@ -32,6 +32,9 @@ public class BestsellerToysRestController {
     @Value("${rest.endpoint.inventory}")
     private String urlInventory;
 
+    @Value("${rest.endpoint.inventory.disable:false}")
+    private boolean disableInventory;
+
     public BestsellerToysRestController(JdbcTemplate jdbcTemplate, RestTemplate restTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.restTemplate = restTemplate;
@@ -42,7 +45,12 @@ public class BestsellerToysRestController {
         List<Product> products = jdbcTemplate.query("SELECT id, name, category, imageId, price FROM products_toys",
                 (rs, rowNum) -> new Product(rs.getString("id"), rs.getString("name"), ProductCategory.valueOf(rs.getString("category")), rs.getString("imageId"), rs.getBigDecimal("price")));
         log.debug("Retrieving availability data for fashion bestsellers.");
-        products.forEach(product -> {
+        for (Product product : products) {
+            if (disableInventory) {
+                product.setAvailability(Availability.AVAILABLE);
+                continue;
+            }
+
             try {
                 String urlTemplate = UriComponentsBuilder.fromHttpUrl(urlInventory)
                         .queryParam("id", product.getId()).encode().toUriString();
@@ -56,7 +64,7 @@ public class BestsellerToysRestController {
                 product.setAvailability(Availability.UNKNOWN);
                 log.warn("Unable to retrieve availability for product '" + product.getId() + "'.");
             }
-        });
+        }
         return products;
     }
 
