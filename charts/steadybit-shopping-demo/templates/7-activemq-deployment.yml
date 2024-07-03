@@ -70,11 +70,13 @@ spec:
                 - curl -u admin:admin -H origin:localhost 'http://localhost:8161/api/jolokia/read/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/CurrentStatus' | grep Good
             initialDelaySeconds: 20
             periodSeconds: 5
+            timeoutSeconds: 3
           readinessProbe:
             tcpSocket:
               port: 61616
             initialDelaySeconds: 15
             periodSeconds: 10
+            timeoutSeconds: 5
           volumeMounts:
             - name: "activemq-config"
               mountPath: "/opt/activemq/conf/activemq.xml"

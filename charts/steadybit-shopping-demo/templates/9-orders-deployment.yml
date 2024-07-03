@@ -54,12 +54,16 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8086
-            initialDelaySeconds: 40
+            initialDelaySeconds: 30
+            timeoutSeconds: 3
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8086
-            initialDelaySeconds: 40
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
           imagePullPolicy: Always
           name: orders
           ports:
