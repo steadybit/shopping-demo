@@ -48,7 +48,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -57,7 +59,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -136,7 +140,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -145,7 +151,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -234,7 +242,9 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -243,7 +253,9 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m

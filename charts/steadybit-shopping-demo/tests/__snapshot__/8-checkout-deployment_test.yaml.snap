@@ -59,6 +59,8 @@ manifest should match snapshot:
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -68,6 +70,8 @@ manifest should match snapshot:
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m
@@ -157,6 +161,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -166,6 +172,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m
@@ -255,6 +263,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -264,6 +274,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m

@@ -69,6 +69,8 @@ manifest should match snapshot:
                   path: /actuator/health/liveness
                   port: 8080
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: gateway
               ports:
                 - containerPort: 8080
@@ -78,6 +80,8 @@ manifest should match snapshot:
                   path: /actuator/health/readiness
                   port: 8080
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -193,6 +197,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/liveness
                   port: 8080
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: gateway
               ports:
                 - containerPort: 8080
@@ -202,6 +208,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/readiness
                   port: 8080
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m

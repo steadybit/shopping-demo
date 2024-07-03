@@ -94,13 +94,17 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals
               readinessProbe:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               resources:
                 limits:
                   cpu: 500m
@@ -116,7 +120,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals-nginx
               ports:
                 - containerPort: 8083
@@ -124,7 +130,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -255,13 +263,17 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals
               readinessProbe:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               resources:
                 limits:
                   cpu: 500m
@@ -277,7 +289,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals-nginx
               ports:
                 - containerPort: 8083
@@ -285,7 +299,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -426,13 +442,17 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals
               readinessProbe:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8099
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               resources:
                 limits:
                   cpu: 500m
@@ -448,7 +468,9 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: hot-deals-nginx
               ports:
                 - containerPort: 8083
@@ -456,7 +478,9 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8083
-                initialDelaySeconds: 40
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
