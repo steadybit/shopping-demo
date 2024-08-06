@@ -57,7 +57,7 @@ manifest should match snapshot:
               livenessProbe:
                 httpGet:
                   path: /actuator/health/liveness
-                  port: 8082
+                  port: 8081
                 initialDelaySeconds: 60
                 periodSeconds: 10
                 timeoutSeconds: 3
@@ -68,7 +68,7 @@ manifest should match snapshot:
               readinessProbe:
                 httpGet:
                   path: /actuator/health/readiness
-                  port: 8082
+                  port: 8081
                 initialDelaySeconds: 60
                 periodSeconds: 10
                 timeoutSeconds: 5
@@ -170,7 +170,7 @@ manifest should match snapshot replica count:
               livenessProbe:
                 httpGet:
                   path: /actuator/health/liveness
-                  port: 8082
+                  port: 8081
                 initialDelaySeconds: 60
                 periodSeconds: 10
                 timeoutSeconds: 3
@@ -181,7 +181,7 @@ manifest should match snapshot replica count:
               readinessProbe:
                 httpGet:
                   path: /actuator/health/readiness
-                  port: 8082
+                  port: 8081
                 initialDelaySeconds: 60
                 periodSeconds: 10
                 timeoutSeconds: 5
