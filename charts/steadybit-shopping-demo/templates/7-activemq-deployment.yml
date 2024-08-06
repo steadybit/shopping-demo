@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: activemq
     service-tier: "1"
@@ -95,7 +95,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   name: activemq-config
 data:
   activemq.xml: |
@@ -157,7 +157,7 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: activemq
   name: activemq
@@ -174,7 +174,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: activemq-pdb
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: 1
   selector:

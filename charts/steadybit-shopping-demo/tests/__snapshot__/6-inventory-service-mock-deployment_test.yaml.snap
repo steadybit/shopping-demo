@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-inventory
         tags.datadoghq.com/version: 1.0.0
       name: inventory
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -58,7 +58,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8084
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: inventory
               ports:
                 - containerPort: 8084
@@ -67,7 +69,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8084
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -87,7 +91,7 @@ manifest should match snapshot:
       labels:
         run: inventory
       name: inventory
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8084
@@ -101,7 +105,7 @@ manifest should match snapshot:
     kind: PodDisruptionBudget
     metadata:
       name: inventory-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:
@@ -119,7 +123,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-inventory
         tags.datadoghq.com/version: 1.0.0
       name: inventory
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -167,7 +171,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8084
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: inventory
               ports:
                 - containerPort: 8084
@@ -176,7 +182,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8084
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -196,7 +204,7 @@ manifest should match snapshot replica count:
       labels:
         run: inventory
       name: inventory
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8084
@@ -210,7 +218,7 @@ manifest should match snapshot replica count:
     kind: PodDisruptionBudget
     metadata:
       name: inventory-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:

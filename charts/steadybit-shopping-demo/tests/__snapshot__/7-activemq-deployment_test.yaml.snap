@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       name: activemq
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -60,6 +60,7 @@ manifest should match snapshot:
                     - curl -u admin:admin -H origin:localhost 'http://localhost:8161/api/jolokia/read/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/CurrentStatus' | grep Good
                 initialDelaySeconds: 20
                 periodSeconds: 5
+                timeoutSeconds: 3
               name: activemq
               ports:
                 - containerPort: 61616
@@ -69,6 +70,7 @@ manifest should match snapshot:
                 periodSeconds: 10
                 tcpSocket:
                   port: 61616
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -150,7 +152,7 @@ manifest should match snapshot:
     kind: ConfigMap
     metadata:
       name: activemq-config
-      namespace: steadybit-demo
+      namespace: NAMESPACE
   3: |
     apiVersion: v1
     kind: Service
@@ -158,7 +160,7 @@ manifest should match snapshot:
       labels:
         run: activemq
       name: activemq
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 61616
@@ -172,7 +174,7 @@ manifest should match snapshot:
     kind: PodDisruptionBudget
     metadata:
       name: activemq-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:
@@ -190,7 +192,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       name: activemq
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -240,6 +242,7 @@ manifest should match snapshot replica count:
                     - curl -u admin:admin -H origin:localhost 'http://localhost:8161/api/jolokia/read/org.apache.activemq:type=Broker,brokerName=localhost,service=Health/CurrentStatus' | grep Good
                 initialDelaySeconds: 20
                 periodSeconds: 5
+                timeoutSeconds: 3
               name: activemq
               ports:
                 - containerPort: 61616
@@ -249,6 +252,7 @@ manifest should match snapshot replica count:
                 periodSeconds: 10
                 tcpSocket:
                   port: 61616
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -330,7 +334,7 @@ manifest should match snapshot replica count:
     kind: ConfigMap
     metadata:
       name: activemq-config
-      namespace: steadybit-demo
+      namespace: NAMESPACE
   3: |
     apiVersion: v1
     kind: Service
@@ -338,7 +342,7 @@ manifest should match snapshot replica count:
       labels:
         run: activemq
       name: activemq
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 61616
@@ -352,7 +356,7 @@ manifest should match snapshot replica count:
     kind: PodDisruptionBudget
     metadata:
       name: activemq-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:

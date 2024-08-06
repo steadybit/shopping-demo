@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   name: hotdeals-nginx-conf
 data:
   nginx.conf: |-
@@ -47,7 +47,7 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: hot-deals
     service-tier: "2"
@@ -159,7 +159,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: hot-deals
   name: hot-deals
@@ -177,7 +177,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: hot-deals-pdb
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: 1
   selector:

@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-orders
         tags.datadoghq.com/version: 1.0.0
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -48,7 +48,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -57,7 +59,9 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -77,7 +81,7 @@ manifest should match snapshot:
       labels:
         run: orders
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8086
@@ -98,7 +102,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-orders
         tags.datadoghq.com/version: 1.0.0
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -136,7 +140,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -145,7 +151,9 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -165,7 +173,7 @@ manifest should match snapshot replica count:
       labels:
         run: orders
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8086
@@ -186,7 +194,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
         tags.datadoghq.com/service: shop-orders
         tags.datadoghq.com/version: 1.0.0
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -234,7 +242,9 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: orders
               ports:
                 - containerPort: 8086
@@ -243,7 +253,9 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 40
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 500m
@@ -263,7 +275,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
       labels:
         run: orders
       name: orders
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8086
@@ -277,7 +289,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
     kind: PodDisruptionBudget
     metadata:
       name: orders-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:

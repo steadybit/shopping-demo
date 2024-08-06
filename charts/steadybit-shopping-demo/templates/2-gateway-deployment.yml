@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: gateway
     service-tier: "1"
@@ -103,7 +103,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: gateway
   name: gateway
@@ -120,7 +120,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: gateway-pdb
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: 1
   selector:

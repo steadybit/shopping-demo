@@ -11,7 +11,7 @@ manifest should match snapshot:
       labels:
         app: gateway-ingress
       name: gateway-ingress
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       rules:
         - http:
@@ -37,7 +37,7 @@ manifest should match snapshot using all options:
       labels:
         app: gateway-ingress
       name: gateway-ingress
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       rules:
         - host: demo.dev.steadybit.io

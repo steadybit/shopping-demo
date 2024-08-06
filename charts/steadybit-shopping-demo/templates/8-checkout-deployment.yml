@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: checkout
     service-tier: "1"
@@ -88,7 +88,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: checkout
   name: checkout
@@ -106,7 +106,7 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: checkout-hpa
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   maxReplicas: 3
   minReplicas: 2
@@ -122,7 +122,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: checkout-pdb
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: 1
   selector:

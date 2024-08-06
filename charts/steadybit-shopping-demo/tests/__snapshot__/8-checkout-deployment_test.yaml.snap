@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -59,6 +59,8 @@ manifest should match snapshot:
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -68,6 +70,8 @@ manifest should match snapshot:
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m
@@ -87,7 +91,7 @@ manifest should match snapshot:
       labels:
         run: checkout
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8085
@@ -108,7 +112,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -157,6 +161,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -166,6 +172,8 @@ manifest should match snapshot replica count:
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m
@@ -185,7 +193,7 @@ manifest should match snapshot replica count:
       labels:
         run: checkout
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8085
@@ -206,7 +214,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -255,6 +263,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   path: /actuator/health/liveness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 3
               name: checkout
               ports:
                 - containerPort: 8085
@@ -264,6 +274,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   path: /actuator/health/readiness
                   port: 8085
                 initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 5
               resources:
                 limits:
                   cpu: 250m
@@ -283,7 +295,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
       labels:
         run: checkout
       name: checkout
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8085
@@ -297,7 +309,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
     kind: HorizontalPodAutoscaler
     metadata:
       name: checkout-hpa
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       maxReplicas: 3
       minReplicas: 2
@@ -311,7 +323,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
     kind: PodDisruptionBudget
     metadata:
       name: checkout-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:

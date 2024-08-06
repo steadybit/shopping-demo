@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: fashion-bestseller
     service-tier: "2"
@@ -71,7 +71,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
   labels:
     run: fashion-bestseller
   name: fashion-bestseller
@@ -88,7 +88,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: fashion-bestseller-pdb
-  namespace: steadybit-demo
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: 1
   selector:
