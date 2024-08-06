@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-gateway
         tags.datadoghq.com/version: 1.0.0
       name: gateway
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -106,7 +106,7 @@ manifest should match snapshot:
       labels:
         run: gateway
       name: gateway
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 80
@@ -120,7 +120,7 @@ manifest should match snapshot:
     kind: PodDisruptionBudget
     metadata:
       name: gateway-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:
@@ -138,7 +138,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-gateway
         tags.datadoghq.com/version: 1.0.0
       name: gateway
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -234,7 +234,7 @@ manifest should match snapshot replica count:
       labels:
         run: gateway
       name: gateway
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 80
@@ -248,7 +248,7 @@ manifest should match snapshot replica count:
     kind: PodDisruptionBudget
     metadata:
       name: gateway-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:

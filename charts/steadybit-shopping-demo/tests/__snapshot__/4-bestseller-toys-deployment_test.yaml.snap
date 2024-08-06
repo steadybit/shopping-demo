@@ -10,7 +10,7 @@ manifest should match snapshot:
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
       name: toys-bestseller
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 1
       selector:
@@ -91,7 +91,7 @@ manifest should match snapshot:
       labels:
         run: toys-bestseller
       name: toys-bestseller
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8081
@@ -105,7 +105,7 @@ manifest should match snapshot:
     kind: PodDisruptionBudget
     metadata:
       name: toys-bestseller-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:
@@ -123,7 +123,7 @@ manifest should match snapshot replica count:
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
       name: toys-bestseller
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       replicas: 2
       selector:
@@ -204,7 +204,7 @@ manifest should match snapshot replica count:
       labels:
         run: toys-bestseller
       name: toys-bestseller
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       ports:
         - port: 8081
@@ -218,7 +218,7 @@ manifest should match snapshot replica count:
     kind: PodDisruptionBudget
     metadata:
       name: toys-bestseller-pdb
-      namespace: steadybit-demo
+      namespace: NAMESPACE
     spec:
       minAvailable: 1
       selector:
