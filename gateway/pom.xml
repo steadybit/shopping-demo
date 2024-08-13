@@ -37,7 +37,7 @@
                         </executions>
                         <configuration>
                             <from>
-                                <image>gcr.io/distroless/java17-debian11:debug</image>
+                                <image>gcr.io/distroless/java21-debian12:debug</image>
                                 <platforms>
                                     <platform>
                                         <architecture>arm64</architecture>
