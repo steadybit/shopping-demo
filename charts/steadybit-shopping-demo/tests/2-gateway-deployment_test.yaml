@@ -12,3 +12,11 @@ tests:
         replicaCount: 2
     asserts:
       - matchSnapshot: { }
+  - it: manifest should match snapshot with service type clusterIp
+    set:
+      gateway:
+        service:
+          type: ClusterIP
+    asserts:
+      - matchSnapshot: { }
+

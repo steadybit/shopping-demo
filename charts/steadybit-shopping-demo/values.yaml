@@ -30,6 +30,8 @@ gateway:
       ephemeral-storage: "500Mi"
   # Number of gateway replicas
   replicaCount: 1
+  service:
+    type: LoadBalancer
   # Ingress configuration
   ingress:
     # Hostname for the ingress

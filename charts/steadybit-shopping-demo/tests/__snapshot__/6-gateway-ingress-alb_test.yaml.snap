@@ -7,12 +7,12 @@ manifest should match snapshot:
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/ssl-redirect: "443"
-        kubernetes.io/ingress.class: alb
       labels:
         app: gateway-ingress
       name: gateway-ingress
       namespace: NAMESPACE
     spec:
+      ingressClassName: alb
       rules:
         - http:
             paths:
@@ -33,12 +33,12 @@ manifest should match snapshot using all options:
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/ssl-redirect: "443"
         alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-central-1:12345678:regional/webacl/common-rule-set/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        kubernetes.io/ingress.class: alb
       labels:
         app: gateway-ingress
       name: gateway-ingress
       namespace: NAMESPACE
     spec:
+      ingressClassName: alb
       rules:
         - host: demo.dev.steadybit.io
           http:

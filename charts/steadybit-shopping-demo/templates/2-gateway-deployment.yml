@@ -114,7 +114,7 @@ spec:
       targetPort: 8080
   selector:
     run: gateway-exposed
-  type: LoadBalancer
+  type: {{ .Values.gateway.service.type }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget

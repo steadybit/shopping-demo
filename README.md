@@ -58,6 +58,7 @@ helm upgrade steadybit-shopping-demo \
     --install \
     --wait \
     --timeout 5m0s \
+    --set gateway.service.type=ClusterIP \
     steadybit-shopping-demo/steadybit-shopping-demo
 ```
 
