@@ -2,7 +2,7 @@
  * Copyright 2021 steadybit GmbH. All rights reserved.
  */
 
-const failureLambda = require("failure-lambda");
+const failureLambda = require("@steadybit/failure-lambda");
 const axios = require("axios");
 
 exports.handler = failureLambda(async function (event, context) {

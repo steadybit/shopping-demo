@@ -162,7 +162,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: v18
+          node-version: v20
           cache: 'npm'
           cache-dependency-path: |
             bestseller-fashion-lambda/package-lock.json
