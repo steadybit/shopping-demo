@@ -4,8 +4,7 @@
   "scripts": {},
   "author": "Daniel Reuter",
   "dependencies": {
-    "axios": "^1.7.4",
-    "mitm": "^1.7.2",
-    "node-fetch": "^2.6.7"
+    "@steadybit/failure-lambda": "^0.5.1",
+    "axios": "^1.7.4"
   }
 }

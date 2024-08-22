@@ -17,11 +17,7 @@ manifest should match snapshot:
             include       /etc/nginx/mime.types;
             default_type  application/octet-stream;
 
-            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                              '$status $body_bytes_sent "$http_referer" '
-                              '"$http_user_agent" "$http_x_forwarded_for"';
-
-            access_log  /var/log/nginx/access.log  main;
+            access_log off;
 
             sendfile        on;
             keepalive_timeout  65;
@@ -186,11 +182,7 @@ manifest should match snapshot replica count:
             include       /etc/nginx/mime.types;
             default_type  application/octet-stream;
 
-            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                              '$status $body_bytes_sent "$http_referer" '
-                              '"$http_user_agent" "$http_x_forwarded_for"';
-
-            access_log  /var/log/nginx/access.log  main;
+            access_log off;
 
             sendfile        on;
             keepalive_timeout  65;
@@ -355,11 +347,7 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
             include       /etc/nginx/mime.types;
             default_type  application/octet-stream;
 
-            log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                              '$status $body_bytes_sent "$http_referer" '
-                              '"$http_user_agent" "$http_x_forwarded_for"';
-
-            access_log  /var/log/nginx/access.log  main;
+            access_log off;
 
             sendfile        on;
             keepalive_timeout  65;
