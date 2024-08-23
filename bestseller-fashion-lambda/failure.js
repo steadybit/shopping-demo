@@ -1,5 +1,5 @@
 "use strict";
-const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
+const { SSMClient, GetParametersCommand } = require("@aws-sdk/client-ssm");
 const fetch = require("node-fetch");
 const childProcess = require("child_process");
 const Mitm = require("./mitm/index");
@@ -43,10 +43,16 @@ async function getConfig() {
   } else if (process.env.FAILURE_INJECTION_PARAM) {
     try {
       const params = {
-        Name: process.env.FAILURE_INJECTION_PARAM,
+        Names: [process.env.FAILURE_INJECTION_PARAM],
       };
-      const response = await ssm.send(new GetParameterCommand(params));
-      return JSON.parse(response.Parameter.Value);
+      const response = await ssm.send(new GetParametersCommand(params));
+      if (
+        response.InvalidParameters != null &&
+        response.InvalidParameters.length > 0
+      ) {
+        return defaults;
+      }
+      return JSON.parse(response.Parameters[0].Value);
     } catch (err) {
       console.error(err);
       return defaults;
@@ -90,38 +96,40 @@ const injectFailure = function (fn) {
         } else if (config.failureMode === "denylist") {
           console.log(
             "Injecting dependency failure through a network block for denylisted sites: " +
-              config.denylist
+            config.denylist
           );
-
-          // if the global mitm doesn't yet exist, create it now
-          if (mitm == null) {
-            mitm = Mitm();
-          }
-          mitm.enable();
 
           // attach a handler to filter the configured deny patterns
           const blRegexs = [];
           config.denylist.forEach(function (regexStr) {
             blRegexs.push(new RegExp(regexStr));
           });
-          mitm.on("connect", function (socket, opts) {
-            let block = false;
-            blRegexs.forEach(function (blRegex) {
-              if (blRegex.test(opts.host)) {
-                console.log("Intercepted network connection to " + opts.host);
-                block = true;
+
+          if (blRegexs.length !== 0) {
+            // if the global mitm doesn't yet exist, create it now
+            if (mitm == null) {
+              mitm = Mitm();
+            }
+            mitm.enable();
+            mitm.on("connect", function (socket, opts) {
+              let block = false;
+              blRegexs.forEach(function (blRegex) {
+                if (blRegex.test(opts.host)) {
+                  console.log("Intercepted network connection to " + opts.host);
+                  block = true;
+                }
+              });
+              if (block) {
+                socket.end();
+              } else {
+                socket.bypass();
               }
             });
-            if (block) {
-              socket.end();
-            } else {
-              socket.bypass();
-            }
-          });
 
-          // remove any previously attached handlers, leaving only the most recently added
-          while (typeof mitm._events.connect !== "function") {
-            mitm.removeListener("connect", mitm._events.connect[0]);
+            // remove any previously attached handlers, leaving only the most recently added
+            while (typeof mitm._events.connect !== "function") {
+              mitm.removeListener("connect", mitm._events.connect[0]);
+            }
           }
         }
       }
