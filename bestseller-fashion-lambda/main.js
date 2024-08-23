@@ -2,10 +2,10 @@
  * Copyright 2021 steadybit GmbH. All rights reserved.
  */
 
-const failureLambda = require("@steadybit/failure-lambda");
+const injectFailure = require("./failure");
 const axios = require("axios");
 
-exports.handler = failureLambda(async function (event, context) {
+exports.handler = injectFailure(async function (event, context) {
   let responseData = null;
   switch (event.httpMethod) {
     case "GET":
