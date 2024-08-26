@@ -99,44 +99,50 @@ const injectFailure = function (fn) {
               config.denylist
           );
 
-          // attach a handler to filter the configured deny patterns
-          const blRegexs = [];
-          config.denylist.forEach(function (regexStr) {
-            blRegexs.push(new RegExp(regexStr));
-          });
-
-          if (blRegexs.length !== 0) {
-            // if the global mitm doesn't yet exist, create it now
-            if (mitm == null) {
-              mitm = Mitm();
-            }
-            mitm.enable();
-            mitm.on("connect", function (socket, opts) {
-              let block = false;
-              blRegexs.forEach(function (blRegex) {
-                if (blRegex.test(opts.host)) {
-                  console.log("Intercepted network connection to " + opts.host);
-                  block = true;
-                }
-              });
-              if (block) {
-                socket.end();
-              } else {
-                socket.bypass();
-              }
+          try {
+            // attach a handler to filter the configured deny patterns
+            const blRegexs = [];
+            config.denylist.forEach(function (regexStr) {
+              blRegexs.push(new RegExp(regexStr));
             });
 
-            // remove any previously attached handlers, leaving only the most recently added
-            while (typeof mitm._events.connect !== "function") {
-              mitm.removeListener("connect", mitm._events.connect[0]);
+            if (blRegexs.length !== 0) {
+              // if the global mitm doesn't yet exist, create it now
+              if (mitm == null) {
+                mitm = Mitm();
+              }
+              mitm.enable();
+              mitm.on("connect", function (socket, opts) {
+                let block = false;
+                blRegexs.forEach(function (blRegex) {
+                  if (blRegex.test(opts.host)) {
+                    console.log(
+                      "Intercepted network connection to " + opts.host
+                    );
+                    block = true;
+                  }
+                });
+                if (block) {
+                  socket.end();
+                } else {
+                  socket.bypass();
+                }
+              });
+
+              // remove any previously attached handlers, leaving only the most recently added
+              while (typeof mitm._events.connect !== "function") {
+                mitm.removeListener("connect", mitm._events.connect[0]);
+              }
             }
+          } catch (ex) {
+            console.log("Error while handling network block failure.", ex);
+            clearMitm();
           }
         }
       }
       return fn.apply(this, arguments);
     } catch (ex) {
       console.log(ex);
-      clearMitm();
       throw ex;
     }
   };
