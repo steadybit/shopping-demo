@@ -2,7 +2,7 @@
  * Copyright 2021 steadybit GmbH. All rights reserved.
  */
 
-const injectFailure = require("./failure");
+const injectFailure = require("@steadybit/failure-lambda");
 const axios = require("axios");
 
 exports.handler = injectFailure(async function (event, context) {
@@ -14,13 +14,13 @@ exports.handler = injectFailure(async function (event, context) {
           timeout: 3000,
         });
         const response = await instance.get(
-          "https://raw.githubusercontent.com/steadybit/reliability-hub-db/main/index.json"
+          "https://raw.githubusercontent.com/steadybit/reliability-hub-db/main/index.json",
         );
         console.log(response.data);
         console.log(response.status);
         responseData = responseBuilder(
           response.status,
-          JSON.stringify(response.data)
+          JSON.stringify(response.data),
         );
       } else {
         responseData = successResponseBuilder(
@@ -49,7 +49,7 @@ exports.handler = injectFailure(async function (event, context) {
               price: 9.99,
               availability: "AVAILABLE",
             },
-          ])
+          ]),
         );
       }
       break;
