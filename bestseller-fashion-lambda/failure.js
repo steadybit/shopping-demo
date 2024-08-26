@@ -2,7 +2,7 @@
 const { SSMClient, GetParametersCommand } = require("@aws-sdk/client-ssm");
 const fetch = require("node-fetch");
 const childProcess = require("child_process");
-const Mitm = require("./mitm/index");
+const Mitm = require("mitm");
 
 const ssm = new SSMClient();
 
@@ -96,7 +96,7 @@ const injectFailure = function (fn) {
         } else if (config.failureMode === "denylist") {
           console.log(
             "Injecting dependency failure through a network block for denylisted sites: " +
-            config.denylist
+              config.denylist
           );
 
           // attach a handler to filter the configured deny patterns
