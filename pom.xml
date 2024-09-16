@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.7</version>
+        <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -34,16 +34,22 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.2</spring-cloud.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
         <!--plugins-->
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
-        <postgresql.version>42.7.2</postgresql.version>
+        <spring-webmvc.version>6.1.13</spring-webmvc.version> <!-- TODO Remove this and the depedency when included in next spring boot release -->
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-webmvc.version}</version>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>com.steadybit.demo.shopping</groupId>
                 <artifactId>shared</artifactId>
@@ -60,11 +66,6 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>${postgresql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
