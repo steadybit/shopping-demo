@@ -1,4 +1,4 @@
-name: Experiments Nightly (DEV)
+name: Advice Nightly
 on:
   schedule:
     - cron: '0 18 * * 1-5'
