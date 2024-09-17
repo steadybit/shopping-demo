@@ -63,20 +63,20 @@ helm upgrade steadybit-shopping-demo \
 ```
 
 ## CI/CD Integration
-This GitHub repository also demonstrates how to integrate Steadybit into your CI/CD pipeline to follow a GitOps approach.
+You can integrate Steadybit into your CI/CD pipeline to validate your resilience continuously and support you in following a GitOps approach.
 
 ### Experiments
-This section covers running experiments regularly in your CI/CD pipeline.
-It also fits perfectly into your workflows in case you are follow the GitOps approach by supporting versioning of experiments and running them on pull requests.
+This section covers how to run experiments continuously to validate your resilience.
+If you are following a GitOps approach, we recommend you version your experiments and run them on pull requests.
 You can continue reading about the [GitOps approach in our blog post](https://steadybit.com/blog/boost-your-gitops-practices-by-integrating-chaos-engineering-with-steadybit) or jump immediately into the [definition](https://github.com/steadybit/shopping-demo/blob/develop/.github/workflows/run-experiments.yml) or [latest run](https://github.com/steadybit/shopping-demo/actions/workflows/run-experiments.yml) of our GitHub Action CI/CD example.
 
-We also recommend using our [badge](https://docs.steadybit.com/integrate-with-steadybit/badges) to integrate your latest run status in various places via HTML, Markdown, or image.
+We also recommend using our [badges](https://docs.steadybit.com/integrate-with-steadybit/badges) to integrate your latest run status in various places via HTML, Markdown, or image.
 Like this one:
 
 [![GITHUB-17](https://platform.steadybit.com/api/experiments/GITHUB-17/badge.svg?tenantKey=demo&scale=1)](https://platform.steadybit.com/experiments/GITHUB/edit/GITHUB-17?tenant=demo)
 
 ### Advice
-In case you want to validate the status of Advice for given targets from your CI/CD pipeline, you can do so easily by using our CLI.
+In case you want to validate the status of advice for given targets from your CI/CD pipeline, you can do so easily by using our CLI.
 Checkout the [definition](https://github.com/steadybit/shopping-demo/blob/develop/.github/workflows/advice.yml) or [latest run](https://github.com/steadybit/shopping-demo/actions/workflows/advice.yml) of our GitHub Action CI/CD example.
 
-The example validates that all advice are implemented for Kubernetes deployment in a certain service-tier (identified via discovered Kubernetes label of the deployment).
+The example validates that all Kubernetes deployments in a particular service tier (identified via the discovered Kubernetes label of the deployment) are following all defined advice.
