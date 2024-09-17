@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  run_experiments:
+  validate_advice:
     runs-on: ubuntu-latest
-    name: Run Experiments
+    name: Validate advice
     steps:
       - uses: actions/checkout@v4
 
