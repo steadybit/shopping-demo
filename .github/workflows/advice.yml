@@ -1,0 +1,27 @@
+name: Experiments Nightly (DEV)
+on:
+  schedule:
+    - cron: '0 18 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  run_experiments:
+    runs-on: ubuntu-latest
+    name: Run Experiments
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Steadybit CLI
+        run: npm install -g steadybit
+        shell: bash
+
+      - name: Add Mask
+        run: echo "::add-mask::${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
+
+      - name: Add Steadybit Profile with a Team Token
+        run: steadybit config profile add --name "CI/CD" --token "${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
+        shell: bash
+
+      - name: Validate advice for Service Tier 1
+        run: steadybit advice validate-status -e "Online Shop [Stage]" -q k8s.deployment.label.service-tier="1"
+        if: "!cancelled()"
