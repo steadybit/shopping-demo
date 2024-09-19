@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   # Run experiment recurrently to always have some example logs in demos
   schedule:
-    - cron: "0 1 * * 0"
+    - cron: "15 1 1,15 * *"
 
 jobs:
   run_experiments:
