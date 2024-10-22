@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -40,8 +40,7 @@
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
-        <spring-webmvc.version>6.1.13</spring-webmvc.version> <!-- TODO Remove this and the depedency when included in next spring boot release -->
-        <spring-webflux.version>6.1.13</spring-webflux.version> <!-- TODO Remove this and the dependency when included in next spring boot release -->
+        <spring-framework.version>6.1.14</spring-framework.version> <!-- TODO Remove this and the dependency when included in next spring boot release -->
     </properties>
     <dependencyManagement>
         <dependencies>
