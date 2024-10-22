@@ -45,18 +45,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-webmvc.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webflux</artifactId>
-                <version>${spring-webflux.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.steadybit.demo.shopping</groupId>
                 <artifactId>shared</artifactId>
                 <version>${revision}</version>
