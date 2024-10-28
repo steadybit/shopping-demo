@@ -139,6 +139,16 @@ jobs:
           ./wizcli docker scan --image steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }} --policy "Extensions Policy" --tag github_action_run_id=${{ github.run_id }}
           ./wizcli docker tag --image steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }} --digest ${{ steps.image.outputs.digest }}
 
+      # temporary to compare results to WIZ
+      - name: "Snyk test docker image"
+        uses: snyk/actions/docker@master
+        with:
+          image: "steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }}"
+          args: --file=${{ matrix.image.folder }}/Dockerfile --target-reference=${{ github.ref_name }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
       - name: "[main] Snyk monitor docker image"
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: snyk/actions/docker@master
