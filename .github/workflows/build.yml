@@ -114,7 +114,8 @@ jobs:
             type=sha,format=long,prefix=
 
       - name: Build Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
+        id: image
         with:
           context: ${{ matrix.image.folder }}
           file: ${{ matrix.image.folder }}/Dockerfile
@@ -123,6 +124,21 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main') && ',linux/arm64' || '' }} #for branches we just do a load, and this supports no multi-arch
+
+      - name: Download Wiz CLI
+        run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+
+      - name: Authenticate to Wiz
+        run: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+        env:
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+
+      - name: Run wiz-cli docker image scan
+        run: ./wizcli docker scan --image steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }} --policy "Extensions Policy" --tag github_action_run_id=${{ github.run_id }}
+
+      - name: Fetch digest of Docker image for Graph enrichment
+        run: ./wizcli docker tag --image steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }} --digest ${{ steps.image.outputs.digest }}
 
       - name: "[main] Snyk monitor docker image"
         if: ${{ github.ref == 'refs/heads/main' }}
