@@ -1,9 +1,9 @@
 server:
   port: 8082
 
-spring:
-  application:
-    name: fashion-bestseller
+  spring:
+    application:
+      name: fashion-bestseller
   datasource:
     platform: hsqldb
   jmx:
@@ -17,6 +17,9 @@ management:
           autotime:
             percentiles: 0.95
   endpoints:
+    jmx:
+      exposure:
+        include: beans,mappings
     web:
       exposure:
         include: metrics,prometheus,health
