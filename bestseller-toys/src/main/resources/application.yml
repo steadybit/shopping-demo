@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: toys-bestseller
-  datasource:
-  datasource:
-    platform: hsqldb
   jmx:
     enabled: true
+  sql:
+    init:
+      platform: hsqldb
 
 management:
   metrics:

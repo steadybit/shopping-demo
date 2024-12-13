@@ -1,13 +1,14 @@
 server:
   port: 8082
 
-  spring:
-    application:
-      name: fashion-bestseller
-  datasource:
-    platform: hsqldb
+spring:
+  application:
+    name: fashion-bestseller
   jmx:
     enabled: true
+  sql:
+    init:
+      platform: hsqldb
 
 management:
   metrics:

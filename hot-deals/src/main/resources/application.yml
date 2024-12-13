@@ -4,10 +4,11 @@ server:
 spring:
   application:
     name: hot-deals
-  datasource:
-    platform: hsqldb
   jmx:
     enabled: true
+  sql:
+    init:
+      platform: hsqldb
 
 management:
   metrics:
