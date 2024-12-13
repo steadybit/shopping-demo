@@ -15,6 +15,9 @@ management:
           autotime:
             percentiles: 0.75
   endpoints:
+    jmx:
+      exposure:
+        include: beans,mappings
     web:
       exposure:
         include: metrics,prometheus,health

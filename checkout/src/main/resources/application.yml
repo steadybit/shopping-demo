@@ -4,8 +4,6 @@ server:
 spring:
   application:
     name: checkout
-  datasource:
-    platform: hsqldb
   jmx:
     enabled: true
   activemq:
@@ -13,6 +11,9 @@ spring:
   jpa:
     properties:
       "hibernate.jdbc.log.warnings": "false"
+  sql:
+    init:
+      platform: hsqldb
 
 management:
   metrics:
@@ -22,6 +23,9 @@ management:
           autotime:
             percentiles: 0.95
   endpoints:
+    jmx:
+      exposure:
+        include: beans,mappings
     web:
       exposure:
         include: metrics,prometheus,health
