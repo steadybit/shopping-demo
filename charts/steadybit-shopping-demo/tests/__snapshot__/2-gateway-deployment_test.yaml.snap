@@ -30,6 +30,7 @@ manifest should match snapshot:
             service-tier: "1"
             tags.datadoghq.com/service: shop-gateway
             tags.datadoghq.com/version: 1.0.0
+            tags.steadybit.com/service-validation: http
         spec:
           affinity:
             podAntiAffinity:
@@ -159,6 +160,7 @@ manifest should match snapshot replica count:
             service-tier: "1"
             tags.datadoghq.com/service: shop-gateway
             tags.datadoghq.com/version: 1.0.0
+            tags.steadybit.com/service-validation: http
         spec:
           affinity:
             podAntiAffinity:
@@ -288,6 +290,7 @@ manifest should match snapshot with service type clusterIp:
             service-tier: "1"
             tags.datadoghq.com/service: shop-gateway
             tags.datadoghq.com/version: 1.0.0
+            tags.steadybit.com/service-validation: http
         spec:
           affinity:
             podAntiAffinity:
