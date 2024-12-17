@@ -8,6 +8,7 @@ metadata:
     run: gateway
     service-tier: "1"
     domain: "shop-gateway"
+    tags.steadybit.com/service-validation: "http"
     tags.datadoghq.com/service: shop-gateway
     tags.datadoghq.com/version: 1.0.0
   name: gateway
@@ -27,6 +28,7 @@ spec:
         run: gateway-exposed
         service-tier: "1"
         domain: "shop-gateway"
+        tags.steadybit.com/service-validation: "http"
         tags.datadoghq.com/service: shop-gateway
         tags.datadoghq.com/version: 1.0.0
       {{- with .Values.global.podAnnotations }}

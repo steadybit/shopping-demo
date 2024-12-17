@@ -8,6 +8,7 @@ metadata:
     run: toys-bestseller
     service-tier: "2"
     domain: "shop-products"
+    tags.steadybit.com/service-validation: "http"
     tags.datadoghq.com/service: shop-products
     tags.datadoghq.com/version: 1.0.0
   name: toys-bestseller
@@ -27,6 +28,7 @@ spec:
         run: toys-bestseller-exposed
         service-tier: "2"
         domain: "shop-products"
+        tags.steadybit.com/service-validation: "http"
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
       {{- with .Values.global.podAnnotations }}

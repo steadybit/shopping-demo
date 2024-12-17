@@ -48,6 +48,7 @@ metadata:
     run: hot-deals
     service-tier: "2"
     domain: "shop-products"
+    tags.steadybit.com/service-validation: "http"
     tags.datadoghq.com/service: shop-products
     tags.datadoghq.com/version: 1.0.0
   name: hot-deals
@@ -67,6 +68,7 @@ spec:
         run: hot-deals-exposed
         service-tier: "2"
         domain: "shop-products"
+        tags.steadybit.com/service-validation: "http"
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
       {{- with .Values.global.podAnnotations }}
