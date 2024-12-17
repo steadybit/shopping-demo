@@ -9,6 +9,7 @@ manifest should match snapshot:
         service-tier: "2"
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
+        tags.steadybit.com/service-validation: http
       name: fashion-bestseller
       namespace: NAMESPACE
     spec:
@@ -105,6 +106,7 @@ manifest should match snapshot replica count:
         service-tier: "2"
         tags.datadoghq.com/service: shop-products
         tags.datadoghq.com/version: 1.0.0
+        tags.steadybit.com/service-validation: http
       name: fashion-bestseller
       namespace: NAMESPACE
     spec:
