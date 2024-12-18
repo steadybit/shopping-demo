@@ -8,6 +8,7 @@ metadata:
     run: checkout
     service-tier: "1"
     domain: "shop-checkout"
+    tags.steadybit.com/service-validation: "k6"
     tags.datadoghq.com/service: shop-checkout
     tags.datadoghq.com/version: 1.0.0
   name: checkout
@@ -27,6 +28,7 @@ spec:
         run: checkout
         service-tier: "1"
         domain: "shop-checkout"
+        tags.steadybit.com/service-validation: "k6"
         tags.datadoghq.com/service: shop-checkout
         tags.datadoghq.com/version: 1.0.0
       {{- with .Values.global.podAnnotations }}
