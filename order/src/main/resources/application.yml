@@ -7,8 +7,10 @@ spring:
     enabled: true
 
 management:
-  # This property is deprecated: Should be applied at the ObservationRegistry level.
-            # percentiles: 0.95
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
   endpoints:
     jmx:
       exposure:
