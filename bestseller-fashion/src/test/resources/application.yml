@@ -1,6 +1,5 @@
 spring:
-  datasource:
-    platform: hsqldb
+  sql.init.platform: hsqldb
 
 rest:
   endpoint:

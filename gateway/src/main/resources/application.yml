@@ -10,11 +10,9 @@ management:
     circuitbreakers:
       enabled: true
   metrics:
-    web:
-      server:
-        request:
-          autotime:
-            percentiles: 0.95
+    distribution:
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
   endpoints:
     jmx:
       exposure:

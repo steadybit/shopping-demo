@@ -7,13 +7,12 @@ spring:
   jmx:
     enabled: true
 
+
 management:
   metrics:
-    web:
-      server:
-        request:
-          autotime:
-            percentiles: 0.75
+    distribution:
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
   endpoints:
     jmx:
       exposure:
