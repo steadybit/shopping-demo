@@ -24,17 +24,29 @@ func isAvailable(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, err := w.Write([]byte("OK"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func readinessHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, err := w.Write([]byte("READY"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
 	http.HandleFunc("/inventory", isAvailable)
 	http.Handle("/metrics", promhttp.Handler())
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, err := w.Write([]byte("ok"))
-		if err != nil {
-			log.Error().Err(err).Msg("Failed to write response")
-			return
-		}
-	})
+	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
+	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
 	port := "8084"
 	println("Server running on port:", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
