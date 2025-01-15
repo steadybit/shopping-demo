@@ -125,7 +125,7 @@ inventory:
   enabled: true
   image:
     # Container image name
-    name: steadybit/inventory
+    name: steadybit/inventory-go
     # Container image tag
     tag: develop
   # Container resources
