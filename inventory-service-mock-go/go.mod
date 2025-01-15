@@ -5,6 +5,7 @@ go 1.23.4
 require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/rs/zerolog v1.33.0
+	github.com/steadybit/extension-kit v1.8.23
 )
 
 require (

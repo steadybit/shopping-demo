@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
+	"github.com/steadybit/extension-kit/extlogging"
 	"math/rand"
 	"net/http"
 )
@@ -43,6 +44,7 @@ func readinessHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	extlogging.InitZeroLog()
 	http.HandleFunc("/inventory", isAvailable)
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
