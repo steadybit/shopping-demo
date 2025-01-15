@@ -26,3 +26,5 @@ target/
 /.gnupg
 
 /docker-base-image/instana.key
+/inventory-service-mock-go/licenses/
+/inventory-service-mock-go/inventory-service-mock
