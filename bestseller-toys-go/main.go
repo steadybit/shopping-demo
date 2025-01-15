@@ -5,25 +5,13 @@
 package main
 
 import (
-	"encoding/json"
+	"bestseller-toys/db"
+	"bestseller-toys/products"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-kit/extlogging"
-	"math/rand"
 	"net/http"
 )
-
-func isAvailable(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	response := rand.Float64() > 0.005
-	log.Debug().Str("Id", id).Str("response", "inventoryHandler").Msgf("response: %v", response)
-	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
@@ -44,13 +32,20 @@ func readinessHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Info().Msg("Starting up Inventory Service Mock.")
+	log.Info().Msg("Starting Bestseller Toys Application...")
 	extlogging.InitZeroLog()
-	http.HandleFunc("/inventory", isAvailable)
 	http.Handle("/metrics", promhttp.Handler())
+	defer db.Stop()
+	db.Init()
+	// Setup HTTP server
+	products.Init()
+	http.HandleFunc("/products", func(w http.ResponseWriter, r *http.Request) {
+		log.Info().Str("method", r.Method).Str("path", r.URL.Path).Msg("Incoming request")
+		products.GetBestsellerProducts(w, r)
+	})
 	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
 	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
-	port := "8084"
+	port := "8081"
 	println("Server running on port:", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		panic(err)

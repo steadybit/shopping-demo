@@ -73,6 +73,7 @@ jobs:
         image:
           - {folder: bestseller-fashion}
           - {folder: bestseller-toys}
+          - {folder: bestseller-toys-go}
           - {folder: checkout}
           - {folder: gateway}
           - {folder: hot-deals}
