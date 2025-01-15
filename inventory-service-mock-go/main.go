@@ -35,7 +35,7 @@ func main() {
 			return
 		}
 	})
-	port := "8080"
+	port := "8084"
 	println("Server running on port:", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		panic(err)
