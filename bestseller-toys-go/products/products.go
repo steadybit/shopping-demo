@@ -5,9 +5,9 @@
 package products
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"net/http"
 	"os"
 
@@ -25,7 +25,7 @@ type Product struct {
 }
 
 var (
-	db               *sql.DB
+	products         []Product
 	inventoryURL     string
 	disableInventory bool
 )
@@ -37,49 +37,29 @@ func Init() {
 		inventoryURL = "http://localhost:8084/inventory"
 	}
 	disableInventory = os.Getenv("REST_ENDPOINT_INVENTORY_DISABLE") == "true"
-
-	// Connect to the PostgreSQL database
-	connStr := "host=localhost port=6432 user=postgres dbname=postgres sslmode=disable password=password"
-	var err error
-	db, err = sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to PostgreSQL database")
+	products = []Product{
+		{ID: uuid.New().String(), Name: "Steadybit Stickers", Category: "TOYS", ImageID: "sticker", Price: 0.99},
+		{ID: uuid.New().String(), Name: "Steadybit Keychain", Category: "TOYS", ImageID: "keychain", Price: 3.99},
+		{ID: uuid.New().String(), Name: "Steadybit Pillow", Category: "TOYS", ImageID: "pillow", Price: 8.99},
 	}
 }
 
 // getBestsellerProducts handles the "/products" endpoint.
 func GetBestsellerProducts(w http.ResponseWriter, r *http.Request) {
 	// Query products from the database
-	rows, err := db.Query("SELECT id, name, category, imageId, price FROM products_toys")
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to query products from database")
-		http.Error(w, "Failed to query products", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
 
-	var products []Product
-	for rows.Next() {
-		var product Product
-		err := rows.Scan(&product.ID, &product.Name, &product.Category, &product.ImageID, &product.Price)
-		if err != nil {
-			log.Error().Err(err).Msg("Failed to scan product")
-			continue
-		}
-
+	for _, product := range products {
 		// Set availability
 		if disableInventory {
 			product.Availability = "AVAILABLE"
 		} else {
 			product.Availability = getProductAvailability(product.ID)
 		}
-
-		products = append(products, product)
 	}
 
 	// Write the response as JSON
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(products)
+	err := json.NewEncoder(w).Encode(products)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to encode products to JSON")
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)

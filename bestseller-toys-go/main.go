@@ -5,7 +5,6 @@
 package main
 
 import (
-	"bestseller-toys/db"
 	"bestseller-toys/products"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
@@ -35,8 +34,6 @@ func main() {
 	log.Info().Msg("Starting Bestseller Toys Application...")
 	extlogging.InitZeroLog()
 	http.Handle("/metrics", promhttp.Handler())
-	defer db.Stop()
-	db.Init()
 	// Setup HTTP server
 	products.Init()
 	http.HandleFunc("/products", func(w http.ResponseWriter, r *http.Request) {
