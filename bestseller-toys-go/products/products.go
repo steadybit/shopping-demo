@@ -32,10 +32,15 @@ var (
 
 func Init() {
 	// Load environment variables or defaults
-	inventoryURL = os.Getenv("REST_ENDPOINT_INVENTORY")
-	if inventoryURL == "" {
+	var found bool
+	inventoryURL, found = os.LookupEnv("REST_ENDPOINT_INVENTORY")
+	if !found {
+		inventoryURL, found = os.LookupEnv("rest.endpoint.inventory")
+	}
+	if !found {
 		inventoryURL = "http://localhost:8084/inventory"
 	}
+
 	disableInventory = os.Getenv("REST_ENDPOINT_INVENTORY_DISABLE") == "true"
 	products = []Product{
 		{ID: uuid.New().String(), Name: "Steadybit Stickers", Category: "TOYS", ImageID: "sticker", Price: 0.99},
