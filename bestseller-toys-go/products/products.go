@@ -48,12 +48,12 @@ func Init() {
 func GetBestsellerProducts(w http.ResponseWriter, r *http.Request) {
 	// Query products from the database
 
-	for _, product := range products {
+	for i := range products {
 		// Set availability
 		if disableInventory {
-			product.Availability = "AVAILABLE"
+			products[i].Availability = "AVAILABLE"
 		} else {
-			product.Availability = getProductAvailability(product.ID)
+			products[i].Availability = getProductAvailability(products[i].ID)
 		}
 	}
 
