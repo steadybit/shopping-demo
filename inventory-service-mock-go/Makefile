@@ -8,7 +8,7 @@ docker-build:
 	docker build -t inventory-service-mock .
 
 docker-run:
-	docker run -p 8080:8080 inventory-service-mock
+	docker run -p 8084:8084 inventory-service-mock
 
 ## licenses-report: generate a report of all licenses
 .PHONY: licenses-report
