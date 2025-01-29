@@ -10,7 +10,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-kit/extlogging"
-	"math/big"
 	"net/http"
 	"os"
 	"time"
@@ -35,13 +34,13 @@ func readinessHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type OrderItem struct {
-	ProductID string     `json:"productId"`
-	Quantity  int        `json:"quantity"`
-	Price     *big.Float `json:"price"`
+	ProductID string  `json:"productId"`
+	Quantity  int     `json:"quantity"`
+	Price     float64 `json:"price"`
 }
 type Order struct {
 	ID        string      `json:"id"`
-	Submitted time.Time   `json:"submitted"`
+	Submitted string      `json:"submitted"`
 	Items     []OrderItem `json:"items"`
 }
 
@@ -92,18 +91,23 @@ func main() {
 	go func() {
 		for {
 			msg := <-sub.C
-			if msg.Err != nil {
-				log.Printf("Error while reading message: %v", msg.Err)
+			if msg == nil {
 				continue
 			}
-
+			if msg.Err != nil {
+				log.Error().Err(msg.Err).Msg("Failed to receive message")
+				continue
+			}
+			if msg.Body == nil {
+				continue
+			}
 			var order Order
 			if err := json.Unmarshal(msg.Body, &order); err != nil {
-				log.Printf("Failed to parse message body as Order: %v", err)
+				log.Error().Err(err).Msg("Failed to unmarshal message")
 				continue
 			}
 
-			log.Printf("Order created: %+v", order)
+			log.Info().Str("orderID", order.ID).Msg("Received order")
 		}
 	}()
 
