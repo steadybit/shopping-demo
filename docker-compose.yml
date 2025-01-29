@@ -43,12 +43,12 @@ services:
     depends_on:
       - activemq
 
-#  orders:
-#    image: steadybit/orders:develop
-#    environment:
-#      "spring.activemq.broker-url": "tcp://activemq:61616"
-#    depends_on:
-#      - activemq
+  orders:
+    image: steadybit/orders-go:develop
+    environment:
+      "spring.activemq.broker-url": "tcp://activemq:61616"
+    depends_on:
+      - activemq
 
   activemq:
     image: symptoma/activemq:latest
