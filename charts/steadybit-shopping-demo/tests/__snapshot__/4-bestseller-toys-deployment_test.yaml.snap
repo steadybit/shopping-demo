@@ -54,7 +54,7 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/bestseller-toys:develop
+              image: steadybit/bestseller-toys-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -169,7 +169,7 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/bestseller-toys:develop
+              image: steadybit/bestseller-toys-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:

@@ -65,7 +65,7 @@ bestsellerToys:
   enabled: true
   image:
     # Container image name
-    name: steadybit/bestseller-toys
+    name: steadybit/bestseller-toys-go
     # Container image tag
     tag: develop
   # Container resources

@@ -27,9 +27,17 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: snyk/actions/setup@master
 
-      - name: "[main] Synk monitor: maven"
+      - name: "[main] Synk monitor: maven (Java)"
         if: github.ref == 'refs/heads/main'
-        run: snyk monitor --all-projects --prune-repeated-subdependencies --target-reference=${{ github.ref_name }} -- -s .github/workflows/maven-settings.xml
+        run: snyk monitor --all-projects --exclude=go.mod --prune-repeated-subdependencies --target-reference=${{ github.ref_name }} -- -s .github/workflows/maven-settings.xml
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+      - name: "[main] Synk monitor: maven (Go)"
+        if: github.ref == 'refs/heads/main'
+        run: snyk monitor --all-projects --exclude=pom.xml --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
