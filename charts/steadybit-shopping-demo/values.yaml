@@ -192,7 +192,7 @@ orders:
   enabled: true
   image:
     # Container image name
-    name: steadybit/orders
+    name: steadybit/orders-go
     # Container image tag
     tag: develop
   # Container resources
