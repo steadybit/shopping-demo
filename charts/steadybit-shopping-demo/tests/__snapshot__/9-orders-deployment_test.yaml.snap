@@ -42,7 +42,7 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders-go:develop
+              image: steadybit/orders:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -134,7 +134,7 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders-go:develop
+              image: steadybit/orders:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -236,7 +236,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders-go:develop
+              image: steadybit/orders:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:

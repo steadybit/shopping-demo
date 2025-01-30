@@ -53,6 +53,8 @@ spec:
           ports:
             - containerPort: 61616
               protocol: TCP
+            - containerPort: 61613
+              protocol: TCP
           env:
             - name: DD_SERVICE
               valueFrom:
@@ -166,6 +168,9 @@ spec:
     - port: 61616
       protocol: TCP
       targetPort: 61616
+    - port: 61613
+      protocol: TCP
+      targetPort: 61613
   selector:
     run: activemq
   type: ClusterIP
