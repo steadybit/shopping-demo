@@ -166,9 +166,11 @@ metadata:
 spec:
   ports:
     - port: 61616
+      name: openwire
       protocol: TCP
       targetPort: 61616
     - port: 61613
+      name: stomp
       protocol: TCP
       targetPort: 61613
   selector:

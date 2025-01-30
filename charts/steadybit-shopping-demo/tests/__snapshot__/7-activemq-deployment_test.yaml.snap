@@ -165,10 +165,12 @@ manifest should match snapshot:
       namespace: NAMESPACE
     spec:
       ports:
-        - port: 61616
+        - name: openwire
+          port: 61616
           protocol: TCP
           targetPort: 61616
-        - port: 61613
+        - name: stomp
+          port: 61613
           protocol: TCP
           targetPort: 61613
       selector:
@@ -352,10 +354,12 @@ manifest should match snapshot replica count:
       namespace: NAMESPACE
     spec:
       ports:
-        - port: 61616
+        - name: openwire
+          port: 61616
           protocol: TCP
           targetPort: 61616
-        - port: 61613
+        - name: stomp
+          port: 61613
           protocol: TCP
           targetPort: 61613
       selector:

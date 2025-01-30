@@ -32,6 +32,8 @@ manifest should match snapshot:
         spec:
           containers:
             - env:
+                - name: ACTIVEMQ_BROKER_HOST
+                  value: localhost:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -124,6 +126,8 @@ manifest should match snapshot replica count:
         spec:
           containers:
             - env:
+                - name: ACTIVEMQ_BROKER_HOST
+                  value: localhost:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -226,6 +230,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   topologyKey: topology.kubernetes.io/zone
           containers:
             - env:
+                - name: ACTIVEMQ_BROKER_HOST
+                  value: localhost:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE

@@ -49,9 +49,9 @@ func main() {
 	extlogging.InitZeroLog()
 
 	// Retrieve ActiveMQ connection info from environment variables (or use defaults).
-	brokerAddr, found := os.LookupEnv("SPRING_ACTIVEMQ_BROKER_URL")
+	brokerAddr, found := os.LookupEnv("ACTIVEMQ_BROKER_HOST")
 	if !found {
-		brokerAddr, found = os.LookupEnv("spring.activemq.broker-url")
+		brokerAddr, found = os.LookupEnv("activemq.broker.host")
 	}
 	if !found {
 		brokerAddr = "localhost:61613"
