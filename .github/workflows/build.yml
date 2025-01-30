@@ -88,6 +88,7 @@ jobs:
           - {folder: inventory-service-mock, name: inventory}
           - {folder: inventory-service-mock-go, name: inventory-go}
           - {folder: order, name: orders}
+          - {folder: order-go, name: orders-go}
     steps:
       - uses: actions/checkout@v4
 

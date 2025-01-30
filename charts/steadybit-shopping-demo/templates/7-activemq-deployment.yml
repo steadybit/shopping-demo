@@ -53,6 +53,8 @@ spec:
           ports:
             - containerPort: 61616
               protocol: TCP
+            - containerPort: 61613
+              protocol: TCP
           env:
             - name: DD_SERVICE
               valueFrom:
@@ -164,8 +166,13 @@ metadata:
 spec:
   ports:
     - port: 61616
+      name: openwire
       protocol: TCP
       targetPort: 61616
+    - port: 61613
+      name: stomp
+      protocol: TCP
+      targetPort: 61613
   selector:
     run: activemq
   type: ClusterIP

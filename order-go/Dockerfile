@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 # Build the application with static linking
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bestseller-toys main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o order main.go
 RUN make licenses-report
 
 # Use minimal image for deployment
@@ -20,10 +20,10 @@ FROM alpine:3.18
 WORKDIR /root/
 
 # Copy the binary from builder
-COPY --from=builder /app/bestseller-toys .
+COPY --from=builder /app/order .
 
 # Expose the application port
 EXPOSE 8081
 
 # Run the application
-CMD ["./bestseller-toys"]
+CMD ["./order"]

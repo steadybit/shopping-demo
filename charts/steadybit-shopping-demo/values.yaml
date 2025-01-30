@@ -213,3 +213,6 @@ orders:
   podDisruptionBudget: false
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
+  activeMQ:
+    # ActiveMQ Host
+    host: "localhost:61613"

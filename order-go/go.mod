@@ -1,9 +1,9 @@
-module bestseller-toys
+module order
 
 go 1.22
 
 require (
-	github.com/google/uuid v1.6.0
+	github.com/go-stomp/stomp/v3 v3.1.3
 	github.com/prometheus/client_golang v1.20.5
 	github.com/rs/zerolog v1.33.0
 	github.com/steadybit/extension-kit v1.8.23

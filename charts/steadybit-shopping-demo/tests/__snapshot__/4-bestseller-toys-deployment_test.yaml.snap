@@ -60,7 +60,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8081
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: toys-bestseller
@@ -71,7 +71,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8081
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
@@ -175,7 +175,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8081
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: toys-bestseller
@@ -186,7 +186,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8081
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:

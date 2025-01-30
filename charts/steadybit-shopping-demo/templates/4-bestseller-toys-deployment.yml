@@ -70,14 +70,14 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8081
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             timeoutSeconds: 3
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8081
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             timeoutSeconds: 5
             periodSeconds: 10
       {{- with .Values.bestsellerToys.nodeSelector }}

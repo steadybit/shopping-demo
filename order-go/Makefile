@@ -1,14 +1,14 @@
 build:
-	go build -o inventory-service-mock main.go
+	go build -o order main.go
 
 run:
 	go run main.go
 
 docker-build:
-	docker build -t inventory-service-mock .
+	docker build -t order .
 
 docker-run:
-	docker run -p 8084:8084 inventory-service-mock
+	docker run -p 8086:8086 order
 
 ## licenses-report: generate a report of all licenses
 .PHONY: licenses-report
