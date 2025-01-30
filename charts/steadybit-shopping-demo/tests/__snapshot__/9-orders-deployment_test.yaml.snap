@@ -50,7 +50,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: orders
@@ -61,7 +61,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
@@ -144,7 +144,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: orders
@@ -155,7 +155,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
@@ -248,7 +248,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: orders
@@ -259,7 +259,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8086
-                initialDelaySeconds: 30
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
