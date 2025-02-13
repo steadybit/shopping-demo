@@ -5,8 +5,11 @@
 package main
 
 import (
-	"encoding/json"
+	"checkout/cart"
+	"checkout/chaos"
+	"checkout/checkout"
 	stomp "github.com/go-stomp/stomp/v3"
+	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-kit/extlogging"
@@ -33,10 +36,8 @@ func readinessHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-
 func main() {
-	log.Info().Msg("Starting Order Application...")
+	log.Info().Msg("Starting Checkout Application...")
 	extlogging.InitZeroLog()
 
 	// Retrieve ActiveMQ connection info from environment variables (or use defaults).
@@ -72,44 +73,32 @@ func main() {
 		log.Error().Msg("Connection to ActiveMQ is nil")
 		return
 	}
-	sub, err := conn.Subscribe("order_created", stomp.AckAuto)
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to subscribe to queue")
-	}
 
-	// 3) Consume messages in a separate goroutine.
-	//    Unmarshal into an Order object and log it.
+	http.Handle("/metrics", promhttp.Handler())
+
+	repository := &cart.CartRepository{}
+	controller := checkout.NewCheckoutRestController(conn, repository)
+
+	r := mux.NewRouter()
+	r.HandleFunc("/checkout/direct", controller.CheckoutDirect).Methods("POST")
+	r.HandleFunc("/checkout/buffered", controller.CheckoutAsync).Methods("POST")
+
 	go func() {
 		for {
-			msg := <-sub.C
-			if msg == nil {
-				continue
-			}
-			if msg.Err != nil {
-				log.Error().Err(msg.Err).Msg("Failed to receive message")
-				continue
-			}
-			if msg.Body == nil {
-				continue
-			}
-			var order Order
-			if err := json.Unmarshal(msg.Body, &order); err != nil {
-				log.Error().Err(err).Msg("Failed to unmarshal message")
-				continue
-			}
-
-			log.Info().Str("orderID", order.ID).Msg("Received order")
+			controller.PublishPendingOrders()
+			time.Sleep(1 * time.Second)
 		}
 	}()
 
-	http.Handle("/metrics", promhttp.Handler())
+	chaosController := chaos.NewChaosRestController(conn)
+	r.HandleFunc("/checkout/chaos/flood", chaosController.Flood).Methods("POST")
 
 	// Setup HTTP server
 	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
 	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
 	port := "8086"
 	println("Server running on port:", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	if err := http.ListenAndServe(":"+port, r); err != nil {
 		panic(err)
 	}
 }

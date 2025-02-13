@@ -9,22 +9,12 @@ import (
 	"time"
 )
 
-type Cart struct {
-	ID             string `gorm:"primaryKey"`
-	Version        int64
-	OrderPublished time.Time
-	Submitted      time.Time
-	Items          []Item `gorm:"embedded"`
-}
-
-type Item struct {
-	ID       string
-	Quantity int
-	Price    float64
-}
-
 type CartRepository struct {
 	db *gorm.DB
+}
+
+func (r *CartRepository) Save(cart Cart) {
+	// Save cart to database
 }
 
 func NewCartRepository(db *gorm.DB) *CartRepository {
