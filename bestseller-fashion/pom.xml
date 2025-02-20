@@ -16,48 +16,6 @@
     <artifactId>bestseller-fashion</artifactId>
     <name>steadybit Shopping Demo - Fashion</name>
     <version>${revision}</version>
-    <profiles>
-        <profile>
-            <id>arm64</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.google.cloud.tools</groupId>
-                        <artifactId>jib-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>dockerBuild</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <from>
-                                <image>gcr.io/distroless/java21-debian12:debug</image>
-                                <platforms>
-                                    <platform>
-                                        <architecture>arm64</architecture>
-                                        <os>linux</os>
-                                    </platform>
-                                </platforms>
-                            </from>
-                            <to>
-                                <image>${docker.image.prefix}/bestseller-fashion</image>
-                                <tags>${project.version}</tags>
-                            </to>
-                            <container>
-                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                            </container>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     <dependencies>
         <dependency>
             <groupId>com.steadybit.demo.shopping</groupId>

@@ -5,7 +5,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM azul/zulu-openjdk-debian:21
+FROM gcr.io/distroless/java21-debian12:nonroot
 WORKDIR /application
 
 COPY --from=builder /application/dependencies/ ./
