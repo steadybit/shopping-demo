@@ -5,21 +5,21 @@
 package chaos
 
 import (
-	stomp "github.com/go-stomp/stomp/v3"
-	"log"
+	"checkout/stomp_wrapper"
+	"github.com/rs/zerolog/log"
 	"math/rand"
 	"net/http"
 	"time"
 )
 
 type ChaosRestController struct {
-	conn      *stomp.Conn
+	stompWrapper *stomp_wrapper.ConnWrapper
 	scheduler *time.Ticker
 }
 
-func NewChaosRestController(conn *stomp.Conn) *ChaosRestController {
+func NewChaosRestController(stompWrapper *stomp_wrapper.ConnWrapper) *ChaosRestController {
 	return &ChaosRestController{
-		conn:      conn,
+		stompWrapper: stompWrapper,
 		scheduler: time.NewTicker(30 * time.Second),
 	}
 }
@@ -34,23 +34,23 @@ func (c *ChaosRestController) Flood(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *ChaosRestController) floodQueue(queueName string) {
-	log.Printf("Flooding queue %s", queueName)
+	log.Info().Msgf("Starting flood of %s", queueName)
 	count := 0
 	for {
 		select {
 		case <-c.scheduler.C:
-			log.Printf("Stopped flooding %s after %d messages.", queueName, count)
+			log.Info().Msgf("Stopping flood of %s. %d messages with 1mb sent.", queueName, count)
 			return
 		default:
 			message := randomString(1048567)
-			err := c.conn.Send(queueName, "text/plain", []byte(message))
+			err := c.stompWrapper.Send(queueName,"text/plain", []byte(message), "")
 			if err != nil {
-				log.Printf("Error sending message: %v", err)
+				log.Error().Err(err).Msgf("Failed to send message to %s", queueName)
 				return
 			}
 			count++
 			if count%100 == 0 {
-				log.Printf("Flooding %s. %d messages with 1mb sent.", queueName, count)
+				log.Info().Msgf("Sent %d messages to %s", count, queueName)
 			}
 		}
 	}
@@ -64,4 +64,3 @@ func randomString(n int) string {
 	}
 	return string(b)
 }
-

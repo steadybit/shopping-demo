@@ -92,7 +92,7 @@ func main() {
 		}
 	}()
 
-	chaosController := chaos.NewChaosRestController(conn)
+	chaosController := chaos.NewChaosRestController(stompWrapper)
 	r.HandleFunc("/checkout/chaos/flood", chaosController.Flood).Methods("POST")
 
 	// Setup HTTP server

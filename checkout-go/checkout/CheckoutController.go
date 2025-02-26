@@ -35,12 +35,12 @@ func (c *CheckoutRestController) CheckoutDirect(w http.ResponseWriter, r *http.R
 
 	destination := "/queue/order_created"
 	body := toOrder(toCart(theCart))
-	if err := c.stompWrapper.Send(destination, body, theCart.Id); err != nil {
+	if err := c.stompWrapper.Send(destination, "application/json", body, theCart.Id); err != nil {
 		http.Error(w, "Failed to publish order", http.StatusInternalServerError)
 		log.Error().Err(err).Msgf("Failed to publish direct order %s", theCart.Id)
 		return
 	}
-	log.Printf("Published direct order %s", theCart.Id)
+	log.Info().Msgf("Published direct order %s", theCart.Id)
 }
 
 func (c *CheckoutRestController) CheckoutAsync(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +85,7 @@ func (c *CheckoutRestController) PublishPendingOrders() {
 		var published []string
 		for _, theCart := range publishPending {
 			order := toOrder(*theCart)
-			if err := c.stompWrapper.Send(destination, order, theCart.ID); err != nil {
+			if err := c.stompWrapper.Send(destination, "application/json", order, theCart.ID); err != nil {
 				log.Error().Err(err).Msgf("Failed to publish buffered order %s", theCart.ID)
 				continue
 			}

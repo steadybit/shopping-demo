@@ -50,7 +50,7 @@ func (w *ConnWrapper) Close() error {
 	return w.conn.Disconnect()
 }
 
-func (c *ConnWrapper) Send(destination string, body []byte, ID string) error {
+func (c *ConnWrapper) Send(destination string, contentType string, body []byte, ID string) error {
 	const maxRetries = 3
 	var err error
 
@@ -74,7 +74,7 @@ func (c *ConnWrapper) Send(destination string, body []byte, ID string) error {
 		}
 
 		// Try sending using the internal send method.
-		err = c.send(destination, "application/json", body)
+		err = c.send(destination, contentType, body)
 		if err != nil {
 			// If the error indicates the connection is closed, wait and retry.
 			if err.Error() == "connection is closed" || err.Error() == "connection already closed" {
