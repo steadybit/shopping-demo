@@ -8,6 +8,7 @@ import (
 	"checkout/cart"
 	"checkout/chaos"
 	"checkout/checkout"
+	stomp_connection "checkout/stomp_wrapper"
 	stomp "github.com/go-stomp/stomp/v3"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -76,8 +77,9 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler())
 
-	repository := &cart.CartRepository{}
-	controller := checkout.NewCheckoutRestController(conn, repository)
+	repository := cart.NewCartRepository()
+	stompWrapper := stomp_connection.NewStompConnWrapper(conn)
+	controller := checkout.NewCheckoutRestController(stompWrapper, repository)
 
 	r := mux.NewRouter()
 	r.HandleFunc("/checkout/direct", controller.CheckoutDirect).Methods("POST")
@@ -96,7 +98,7 @@ func main() {
 	// Setup HTTP server
 	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
 	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
-	port := "8086"
+	port := "8085"
 	println("Server running on port:", port)
 	if err := http.ListenAndServe(":"+port, r); err != nil {
 		panic(err)

@@ -6,7 +6,6 @@ package cart
 
 import (
 	_ "gorm.io/gorm"
-	"math/big"
 	"time"
 )
 
@@ -21,10 +20,10 @@ type Cart struct {
 type Item struct {
 	ID       string
 	Quantity int
-	Price    *big.Float
+	Price    float64
 }
 
-func NewItem(id string, quantity int, price *big.Float) Item {
+func NewItem(id string, quantity int, price float64) Item {
 	return Item{
 		ID:       id,
 		Quantity: quantity,
@@ -35,7 +34,7 @@ func NewItem(id string, quantity int, price *big.Float) Item {
 type OrderItem struct {
 	ProductID string  `json:"productId"`
 	Quantity  int     `json:"quantity"`
-	Price     *big.Float `json:"price"`
+	Price     float64 `json:"price"`
 }
 
 type ShoppingCart struct {
@@ -45,6 +44,6 @@ type ShoppingCart struct {
 
 type Order struct {
 	ID        string      `json:"id"`
-	Submitted time.Time      `json:"submitted"`
+	Submitted time.Time   `json:"submitted"`
 	Items     []OrderItem `json:"items"`
 }

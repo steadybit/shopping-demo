@@ -1,33 +1,57 @@
-/*
- * Copyright 2025 steadybit GmbH. All rights reserved.
- */
-
 package cart
 
 import (
-	"gorm.io/gorm"
+	"errors"
+	"sync"
 	"time"
 )
 
 type CartRepository struct {
-	db *gorm.DB
+	mu    sync.RWMutex
+	carts map[string]Cart
 }
 
+// NewCartRepository returns a new in-memory CartRepository.
+func NewCartRepository() *CartRepository {
+	return &CartRepository{
+		carts: make(map[string]Cart),
+	}
+}
+
+// Save adds or updates a Cart in the repository.
 func (r *CartRepository) Save(cart Cart) {
-	// Save cart to database
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.carts[cart.ID] = cart
 }
 
-func NewCartRepository(db *gorm.DB) *CartRepository {
-	return &CartRepository{db: db}
-}
-
+// MarkAsPublished sets the OrderPublished field for each Cart with the given IDs.
 func (r *CartRepository) MarkAsPublished(ids []string, now time.Time) error {
-	return r.db.Model(&Cart{}).Where("id IN ?", ids).Update("order_published", now).Error
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	for _, id := range ids {
+		cart, exists := r.carts[id]
+		if !exists {
+			return errors.New("cart not found: " + id)
+		}
+		cart.OrderPublished = now
+		r.carts[id] = cart
+	}
+	return nil
 }
 
-func (r *CartRepository) FindPublishPending(page, pageSize int) ([]Cart, error) {
-	var carts []Cart
-	offset := (page - 1) * pageSize
-	result := r.db.Where("order_published IS NULL").Offset(offset).Limit(pageSize).Find(&carts)
-	return carts, result.Error
+// FindPublishPending returns a paginated list of Carts that have not been published.
+// A cart is considered pending if its OrderPublished field is the zero value.
+func (r *CartRepository) FindPublishPending() ([]*Cart, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	var pending []*Cart
+	for _, cart := range r.carts {
+		if cart.OrderPublished.IsZero() {
+			pending = append(pending, &cart)
+		}
+	}
+
+	return pending, nil
 }

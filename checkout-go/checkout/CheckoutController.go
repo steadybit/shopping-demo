@@ -6,49 +6,53 @@ package checkout
 
 import (
 	"checkout/cart"
+	"checkout/stomp_wrapper"
 	"encoding/json"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
-
-	"github.com/go-stomp/stomp/v3"
 )
 
 type CheckoutRestController struct {
-	stompConn  *stomp.Conn
-	repository *cart.CartRepository
+	stompWrapper *stomp_wrapper.ConnWrapper
+	repository   *cart.CartRepository
 }
 
-func NewCheckoutRestController(stompConn *stomp.Conn, repository *cart.CartRepository) *CheckoutRestController {
-	return &CheckoutRestController{stompConn: stompConn, repository: repository}
+func NewCheckoutRestController(stompWrapper *stomp_wrapper.ConnWrapper, repository *cart.CartRepository) *CheckoutRestController {
+	return &CheckoutRestController{
+		stompWrapper: stompWrapper,
+		repository:   repository,
+	}
 }
 
 func (c *CheckoutRestController) CheckoutDirect(w http.ResponseWriter, r *http.Request) {
-	var cart cart.ShoppingCart
-	if err := json.NewDecoder(r.Body).Decode(&cart); err != nil {
+	var theCart cart.ShoppingCart
+	if err := json.NewDecoder(r.Body).Decode(&theCart); err != nil {
+		log.Error().Err(err).Msg("Invalid request")
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
 
 	destination := "/queue/order_created"
-	body := toOrder(toCart(cart))
-	if err := c.stompConn.Send(destination, "application/json", body); err != nil {
+	body := toOrder(toCart(theCart))
+	if err := c.stompWrapper.Send(destination, body, theCart.Id); err != nil {
 		http.Error(w, "Failed to publish order", http.StatusInternalServerError)
-		log.Printf("Failed to send order %s: %v", cart.Id, err)
+		log.Error().Err(err).Msgf("Failed to publish direct order %s", theCart.Id)
 		return
 	}
-	log.Printf("Published direct order %s", cart.Id)
+	log.Printf("Published direct order %s", theCart.Id)
 }
 
 func (c *CheckoutRestController) CheckoutAsync(w http.ResponseWriter, r *http.Request) {
-	var cart cart.ShoppingCart
-	if err := json.NewDecoder(r.Body).Decode(&cart); err != nil {
+	var theCart cart.ShoppingCart
+	if err := json.NewDecoder(r.Body).Decode(&theCart); err != nil {
+		log.Error().Err(err).Msg("Invalid request")
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
 
-	c.repository.Save(toCart(cart))
-	log.Printf("Buffered order: %s", cart.Id)
+	c.repository.Save(toCart(theCart))
+	log.Info().Msgf("Buffered order %s", theCart.Id)
 }
 
 func toCart(shoppingCart cart.ShoppingCart) cart.Cart {
@@ -74,17 +78,25 @@ func toItems(items []cart.OrderItem) []cart.Item {
 func (c *CheckoutRestController) PublishPendingOrders() {
 	destination := "/queue/order_created"
 	for {
-		publishPending, _ := c.repository.FindPublishPending(5, 5)
+		publishPending, _ := c.repository.FindPublishPending()
+		if len(publishPending) > 0 {
+			log.Info().Msgf("publishPending: %v", publishPending)
+		}
 		var published []string
-		for _, cart := range publishPending {
-			if err := c.stompConn.Send(destination, "application/json", toOrder(cart)); err != nil {
-				log.Printf("Failed to publish buffered order %s: %v", cart.ID, err)
+		for _, theCart := range publishPending {
+			order := toOrder(*theCart)
+			if err := c.stompWrapper.Send(destination, order, theCart.ID); err != nil {
+				log.Error().Err(err).Msgf("Failed to publish buffered order %s", theCart.ID)
 				continue
 			}
-			published = append(published, cart.ID)
-			log.Printf("Published buffered order %s", cart.ID)
+			published = append(published, theCart.ID)
+			log.Info().Msgf("Published buffered order %s", theCart.ID)
 		}
-		c.repository.MarkAsPublished(published, time.Now())
+		err := c.repository.MarkAsPublished(published, time.Now())
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to mark orders as published")
+			return
+		}
 		if len(publishPending) < 5 {
 			return
 		}

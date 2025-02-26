@@ -6,7 +6,6 @@ package chaos
 
 import (
 	stomp "github.com/go-stomp/stomp/v3"
-	"github.com/gorilla/mux"
 	"log"
 	"math/rand"
 	"net/http"
@@ -66,17 +65,3 @@ func randomString(n int) string {
 	return string(b)
 }
 
-func main() {
-	conn, err := stomp.Dial("tcp", "localhost:61613")
-	if err != nil {
-		log.Fatalf("Failed to connect to ActiveMQ: %v", err)
-	}
-	defer conn.Disconnect()
-
-	controller := NewChaosRestController(conn)
-
-	r := mux.NewRouter()
-	r.HandleFunc("/checkout/chaos/flood", controller.Flood).Methods("POST")
-
-	log.Fatal(http.ListenAndServe(":8080", r))
-}
