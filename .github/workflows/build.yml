@@ -83,6 +83,7 @@ jobs:
           - {folder: bestseller-toys}
           - {folder: bestseller-toys-go}
           - {folder: checkout}
+          - {folder: checkout-go}
           - {folder: gateway}
           - {folder: hot-deals}
           - {folder: inventory-service-mock, name: inventory}
