@@ -7,7 +7,7 @@ package main
 import (
 	"checkout/cart"
 	"checkout/chaos"
-	"checkout/checkout"
+	"checkout/controller"
 	stomp_connection "checkout/stomp_wrapper"
 	stomp "github.com/go-stomp/stomp/v3"
 	"github.com/gorilla/mux"
@@ -79,7 +79,7 @@ func main() {
 
 	repository := cart.NewCartRepository()
 	stompWrapper := stomp_connection.NewStompConnWrapper(conn)
-	controller := checkout.NewCheckoutRestController(stompWrapper, repository)
+	controller := controller.NewCheckoutRestController(stompWrapper, repository)
 
 	r := mux.NewRouter()
 	r.HandleFunc("/checkout/direct", controller.CheckoutDirect).Methods("POST")

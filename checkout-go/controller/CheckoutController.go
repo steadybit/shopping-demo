@@ -2,7 +2,7 @@
  * Copyright 2025 steadybit GmbH. All rights reserved.
  */
 
-package checkout
+package controller
 
 import (
 	"checkout/cart"

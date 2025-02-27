@@ -8,7 +8,7 @@ docker-build:
 	docker build -t checkout .
 
 docker-run:
-	docker run -p 8085:8085 order
+	docker run -p 8085:8085 checkout
 
 ## licenses-report: generate a report of all licenses
 .PHONY: licenses-report
