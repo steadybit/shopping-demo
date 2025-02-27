@@ -35,21 +35,21 @@ services:
     ports:
       - "8084:8084"
 
-#  checkout:
-#    image: steadybit/checkout:develop
-#    ports:
-#      - "8085:8085"
-#    environment:
-#      "spring.activemq.broker-url": "tcp://activemq:61616"
-#    depends_on:
-#      - activemq
+  checkout:
+    image: steadybit/checkout-go:develop
+    ports:
+      - "8085:8085"
+    environment:
+      "ACTIVEMQ_BROKER_HOST": "activemq:61613"
+    depends_on:
+      - activemq
 
-#  orders:
-#    image: steadybit/orders-go:develop
-#    environment:
-#      "spring.activemq.broker-url": "tcp://activemq:61616"
-#    depends_on:
-#      - activemq
+  orders:
+    image: steadybit/orders-go:develop
+    environment:
+      "ACTIVEMQ_BROKER_HOST": "activemq:61613"
+    depends_on:
+      - activemq
 
   activemq:
     image: symptoma/activemq:latest
