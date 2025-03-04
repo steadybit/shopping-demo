@@ -9,30 +9,27 @@ import com.steadybit.shopping.domain.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
     private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
-    private final RestTemplate restTemplateWithoutTimeout;
-    private final RestTemplate restTemplate;
+    private final RestClient restClientNoTimeout;
+    private final RestClient restClient;
     private final WebClient webClient;
-    private final ParameterizedTypeReference<Product> productTypeReference = new ParameterizedTypeReference<Product>() {
-    };
     private final ParameterizedTypeReference<List<Product>> productListTypeReference = new ParameterizedTypeReference<List<Product>>() {
     };
     private final Resilience4jProductService resilience4jProductService;
@@ -44,9 +41,17 @@ public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
 
-    public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient, Resilience4jProductService resilience4jProductService) {
-        this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
-        this.restTemplateWithoutTimeout = restTemplateBuilder.build();
+    public ProductsController(WebClient webClient, Resilience4jProductService resilience4jProductService) {
+        //we allow to set the connection close header, so we can disable the keep-alive
+        System.setProperty("jdk.httpclient.allowRestrictedHeaders", "connection");
+
+        var factoryNoTimeout = new JdkClientHttpRequestFactory(HttpClient.newBuilder().build());
+        factoryNoTimeout.setReadTimeout((Duration) null);
+        this.restClientNoTimeout = RestClient.builder().requestFactory(factoryNoTimeout).defaultHeader("Connection", "close").build();
+
+        var factory = new JdkClientHttpRequestFactory(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build());
+        factory.setReadTimeout(Duration.ofSeconds(2));
+        this.restClient = RestClient.builder().requestFactory(factory).defaultHeader("Connection", "close").build();
         this.webClient = webClient;
         this.resilience4jProductService = resilience4jProductService;
     }
@@ -87,7 +92,7 @@ public class ProductsController {
         return products;
     }
 
-    @GetMapping({ "/circuitbreaker", "/cb", "/v2" })
+    @GetMapping({"/circuitbreaker", "/cb", "/v2"})
     public Products getProductsWithResilience4JRetryAndCircuitBreaker() {
         Products products = new Products();
         products.setFashion(this.resilience4jProductService.getFashionWithRetryAndCircuitBreaker());
@@ -107,7 +112,7 @@ public class ProductsController {
     }
 
     private List<Product> getProduct(String url) {
-        return this.restTemplateWithoutTimeout.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+        return this.restClientNoTimeout.get().uri(url).retrieve().body(this.productListTypeReference);
     }
 
     private List<Product> getProductBasicExceptionHandling(String url) {
@@ -115,23 +120,23 @@ public class ProductsController {
             return this.getProduct(url);
         } catch (RestClientException e) {
             log.error("RestClientException occurred when fetching products", e);
-            return Collections.emptyList();
+            return List.of();
         }
     }
 
     private List<Product> getProductWithTimeout(String url) {
         try {
-            return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+            return restClient.get().uri(url).retrieve().body(this.productListTypeReference);
         } catch (RestClientException e) {
             log.error("RestClientException occurred when fetching products", e);
-            return Collections.emptyList();
+            return List.of();
         }
     }
 
     private Mono<List<Product>> getProductReactive(String uri) {
         return this.webClient.get().uri(uri)
                 .retrieve()
-                .bodyToFlux(this.productTypeReference)
+                .bodyToFlux(Product.class)
                 .collectList()
                 .flatMap(Mono::just)
                 .doOnError(throwable -> log.error("Error occurred", throwable));
