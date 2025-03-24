@@ -41,6 +41,8 @@
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
+        <!-- TODO CVE-2025-22228 Remove if included in next Spring Boot  -->
+        <spring-security.version>6.3.8</spring-security.version>
     </properties>
     <dependencyManagement>
         <dependencies>
