@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      "rest.endpoint.checkout": "http://host.docker.internal:8085"
+      "rest.endpoint.checkout": "http://checkout:8085"
 
   fashion:
     image: steadybit/bestseller-fashion:develop
@@ -40,7 +40,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      "ACTIVEMQ_BROKER_HOST": "activemq:61613"
+      "SPRING_ACTIVEMQ_BROKER_URL": "activemq:61613"
     depends_on:
       - activemq
 
