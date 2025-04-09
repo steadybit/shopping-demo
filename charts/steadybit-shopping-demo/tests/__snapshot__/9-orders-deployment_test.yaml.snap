@@ -33,7 +33,7 @@ manifest should match snapshot:
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: localhost:61613
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -44,7 +44,7 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders:develop
+              image: steadybit/orders-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -127,7 +127,7 @@ manifest should match snapshot replica count:
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: localhost:61613
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -138,7 +138,7 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders:develop
+              image: steadybit/orders-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -231,7 +231,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: localhost:61613
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -242,7 +242,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/orders:develop
+              image: steadybit/orders-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
