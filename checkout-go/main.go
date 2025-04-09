@@ -96,8 +96,8 @@ func main() {
 	r.HandleFunc("/checkout/chaos/flood", chaosController.Flood).Methods("POST")
 
 	// Setup HTTP server
-	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
-	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
+	r.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
+	r.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
 	port := "8085"
 	println("Server running on port:", port)
 	if err := http.ListenAndServe(":"+port, r); err != nil {
