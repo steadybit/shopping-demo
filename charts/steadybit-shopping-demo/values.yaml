@@ -167,7 +167,7 @@ checkout:
   enabled: true
   image:
     # Container image name
-    name: steadybit/checkout
+    name: steadybit/checkout-go
     # Container image tag
     tag: develop
   # Container resources
@@ -188,11 +188,14 @@ checkout:
   podDisruptionBudget: false
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
+  activeMQ:
+    # ActiveMQ Host
+    host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"
 orders:
   enabled: true
   image:
     # Container image name
-    name: steadybit/orders
+    name: steadybit/orders-go
     # Container image tag
     tag: develop
   # Container resources
@@ -215,4 +218,4 @@ orders:
   nodeSelector: {}
   activeMQ:
     # ActiveMQ Host
-    host: "localhost:61613"
+    host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"

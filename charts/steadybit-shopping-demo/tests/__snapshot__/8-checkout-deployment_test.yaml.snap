@@ -46,6 +46,8 @@ manifest should match snapshot:
             - env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
+                - name: SPRING_ACTIVEMQ_BROKER_URL
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -54,13 +56,13 @@ manifest should match snapshot:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/checkout:develop
+              image: steadybit/checkout-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: checkout
@@ -71,7 +73,7 @@ manifest should match snapshot:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
@@ -150,6 +152,8 @@ manifest should match snapshot replica count:
             - env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
+                - name: SPRING_ACTIVEMQ_BROKER_URL
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -158,13 +162,13 @@ manifest should match snapshot replica count:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/checkout:develop
+              image: steadybit/checkout-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: checkout
@@ -175,7 +179,7 @@ manifest should match snapshot replica count:
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:
@@ -254,6 +258,8 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
             - env:
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
+                - name: SPRING_ACTIVEMQ_BROKER_URL
+                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -262,13 +268,13 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
-              image: steadybit/checkout:develop
+              image: steadybit/checkout-go:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
                   path: /actuator/health/liveness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 3
               name: checkout
@@ -279,7 +285,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 httpGet:
                   path: /actuator/health/readiness
                   port: 8085
-                initialDelaySeconds: 60
+                initialDelaySeconds: 10
                 periodSeconds: 10
                 timeoutSeconds: 5
               resources:

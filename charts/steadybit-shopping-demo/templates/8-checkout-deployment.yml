@@ -48,6 +48,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
+            - name: SPRING_ACTIVEMQ_BROKER_URL
+              value: {{.Values.checkout.activeMQ.host}}
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -60,14 +62,14 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8085
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             timeoutSeconds: 3
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8085
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             timeoutSeconds: 5
             periodSeconds: 10
       affinity:
