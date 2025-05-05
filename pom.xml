@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.3.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -35,11 +35,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.4</spring-cloud.version>
+        <netty.version>4.1.118.Final</netty.version><!-- TODO: Remove if included in the next Spring Boot Release -->
         <!--plugins-->
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
+        <!-- TODO CVE-2025-22228 Remove if included in next Spring Boot  -->
+        <spring-security.version>6.3.8</spring-security.version>
     </properties>
     <dependencyManagement>
         <dependencies>
