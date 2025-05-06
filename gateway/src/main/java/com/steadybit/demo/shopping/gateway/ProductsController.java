@@ -45,7 +45,7 @@ public class ProductsController {
     private String urlHotDeals;
 
     public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient, Resilience4jProductService resilience4jProductService) {
-        this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
+        this.restTemplate = restTemplateBuilder.connectTimeout(Duration.ofSeconds(2)).readTimeout(Duration.ofSeconds(2)).build();
         this.restTemplateWithoutTimeout = restTemplateBuilder.build();
         this.webClient = webClient;
         this.resilience4jProductService = resilience4jProductService;

@@ -36,7 +36,7 @@ public class Resilience4jProductService {
     };
 
     public Resilience4jProductService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.setConnectTimeout(Duration.ofSeconds(2)).setReadTimeout(Duration.ofSeconds(2)).build();
+        this.restTemplate = restTemplateBuilder.connectTimeout(Duration.ofSeconds(2)).readTimeout(Duration.ofSeconds(2)).build();
     }
 
     @Retry(name = "fashion", fallbackMethod = "getProductsFallbackRetry")
