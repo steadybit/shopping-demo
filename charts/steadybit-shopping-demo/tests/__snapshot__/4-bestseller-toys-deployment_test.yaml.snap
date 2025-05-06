@@ -45,7 +45,7 @@ manifest should match snapshot:
           containers:
             - env:
                 - name: rest.endpoint.inventory
-                  value: http://inventory:8084/inventory
+                  value: http://inventory:8084
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -160,7 +160,7 @@ manifest should match snapshot replica count:
           containers:
             - env:
                 - name: rest.endpoint.inventory
-                  value: http://inventory:8084/inventory
+                  value: http://inventory:8084
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
