@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -49,6 +50,10 @@ public class ProxyController {
         }
         var uri = new URI(baseUrl + path);
         var httpEntity = new HttpEntity<>(body, headers);
-        return restTemplate.exchange(uri, method, httpEntity, String.class);
+        try {
+            return restTemplate.exchange(uri, method, httpEntity, String.class);
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+        }
     }
 }
