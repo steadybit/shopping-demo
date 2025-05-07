@@ -19,8 +19,6 @@ In addition, each product microservice uses the `inventory-service` to determine
 All services are based on Spring Boot and use different Spring projects.
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
-- [Spring Cloud](https://spring.io/projects/spring-cloud)
-- [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway)
 
 As mentioned above the `gateway` is the entrypoint for the UI.
 

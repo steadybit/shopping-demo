@@ -61,9 +61,9 @@ manifest should match snapshot:
                 - name: rest.endpoint.hotdeals
                   value: http://hot-deals:8083/products
                 - name: rest.endpoint.checkout
-                  value: http://checkout:8085/products
+                  value: http://checkout:8085
                 - name: rest.endpoint.inventory
-                  value: http://inventory:8084/inventory
+                  value: http://inventory:8084
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -191,9 +191,9 @@ manifest should match snapshot replica count:
                 - name: rest.endpoint.hotdeals
                   value: http://hot-deals:8083/products
                 - name: rest.endpoint.checkout
-                  value: http://checkout:8085/products
+                  value: http://checkout:8085
                 - name: rest.endpoint.inventory
-                  value: http://inventory:8084/inventory
+                  value: http://inventory:8084
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -321,9 +321,9 @@ manifest should match snapshot with service type clusterIp:
                 - name: rest.endpoint.hotdeals
                   value: http://hot-deals:8083/products
                 - name: rest.endpoint.checkout
-                  value: http://checkout:8085/products
+                  value: http://checkout:8085
                 - name: rest.endpoint.inventory
-                  value: http://inventory:8084/inventory
+                  value: http://inventory:8084
               image: steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
