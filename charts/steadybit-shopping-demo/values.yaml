@@ -34,10 +34,19 @@ gateway:
     type: LoadBalancer
   # Ingress configuration
   ingress:
+    # Standard ingress configuration
+    enabled: true # Set to false to disable the standard ingress
     # Hostname for the ingress
     host: null
     # Annotations for the ingress
     annotations:
+    # HAProxy configuration
+    haproxy:
+      enabled: false  # Set to true to install HAProxy and create an ingress for gateway
+      controller:
+        service:
+          type: NodePort
+      host: null  # Custom host for HAProxy ingress (if null, uses gateway.ingress.host)
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:
