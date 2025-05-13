@@ -286,6 +286,11 @@ jobs:
         with:
           version: v3.12.2
 
+      - name: Add missing Helm repositories
+        run: |
+          helm repo add haproxytech https://haproxytech.github.io/helm-charts
+          helm repo update
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         with:
