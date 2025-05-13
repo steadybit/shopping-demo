@@ -230,4 +230,4 @@ orders:
 haproxy:
   controller:
     service:
-      type: NodePort
+      type: LoadBalancer
