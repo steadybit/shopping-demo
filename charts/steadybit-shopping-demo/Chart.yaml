@@ -20,3 +20,10 @@ annotations:
       url: https://www.steadybit.com
     - name: Steadybit reliability hub
       url: https://hub.steadybit.com
+
+dependencies:
+  - name: kubernetes-ingress
+    version: "*"
+    repository: "https://haproxytech.github.io/helm-charts"
+    alias: haproxy
+    condition: gateway.ingress.haproxy.enabled

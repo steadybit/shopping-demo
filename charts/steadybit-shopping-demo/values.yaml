@@ -34,10 +34,16 @@ gateway:
     type: LoadBalancer
   # Ingress configuration
   ingress:
+    # Standard ingress configuration
+    enabled: true # Set to false to disable the standard ingress
     # Hostname for the ingress
     host: null
     # Annotations for the ingress
     annotations:
+    # HAProxy configuration
+    haproxy:
+      enabled: false  # Set to true to install HAProxy and create an ingress for gateway
+      host: null  # Custom host for HAProxy ingress (if null, uses gateway.ingress.host)
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:
@@ -219,3 +225,9 @@ orders:
   activeMQ:
     # ActiveMQ Host
     host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"
+
+# configuration for the HAProxy ingress controller for the gateway. See gateway.ingress.haproxy.enabled to enable it
+haproxy:
+  controller:
+    service:
+      type: LoadBalancer
