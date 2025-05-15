@@ -4,4 +4,3 @@ rest:
     toys: "http://toys:8081/products"
     hotdeals: "http://hot-deals:8083/products"
     checkout: "http://checkout:8085/"
-    inventory: "http://inventory:8084/"
