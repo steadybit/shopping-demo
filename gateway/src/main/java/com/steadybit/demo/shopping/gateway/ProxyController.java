@@ -26,6 +26,10 @@ public class ProxyController {
     @Value("${rest.endpoint.checkout}")
     private String urlCheckout;
 
+    @Value("${rest.endpoint.inventory}")
+    private String urlInventory;
+
+
     public ProxyController(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
@@ -39,14 +43,28 @@ public class ProxyController {
     public ResponseEntity<?> proxyCheckout(
             @RequestBody(required = false) String body,
             @RequestHeader HttpHeaders headers, HttpMethod method, HttpServletRequest request) throws URISyntaxException {
-        return proxyRequest(body, headers, method, request, urlCheckout);
+        return proxyRequest(body, headers, method, request, urlCheckout, "/checkout");
     }
 
-    private ResponseEntity<?> proxyRequest(String body, HttpHeaders headers, HttpMethod method, HttpServletRequest request, String baseUrl)
+    @RequestMapping("/inventory/**")
+    @ResponseBody
+    public ResponseEntity<?> proxyInventory(
+            @RequestBody(required = false) String body,
+            @RequestHeader HttpHeaders headers, HttpMethod method, HttpServletRequest request) throws URISyntaxException {
+        return proxyRequest(body, headers, method, request, urlInventory, "/inventory");
+    }
+
+    private ResponseEntity<?> proxyRequest(String body, HttpHeaders headers, HttpMethod method, HttpServletRequest request, String baseUrl, String proxyPath)
             throws URISyntaxException {
         var path = request.getRequestURI();
+        if (path.startsWith(proxyPath)) {
+            path = path.substring(proxyPath.length());
+        }
         if (path.startsWith("/") && baseUrl.endsWith("/")) {
             path = path.substring(1);
+        }
+        if (request.getQueryString()!=null) {
+            path += "?" + request.getQueryString();
         }
         var uri = new URI(baseUrl + path);
         var httpEntity = new HttpEntity<>(body, headers);

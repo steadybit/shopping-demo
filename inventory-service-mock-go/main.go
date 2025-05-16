@@ -15,7 +15,11 @@ import (
 
 func isAvailable(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
-	response := rand.Float64() > 0.005
+	if id == "" {
+		http.Error(w, "'id' needs to be set", http.StatusBadRequest)
+		return
+	}
+	response := rand.Float64() > 0.05
 	log.Debug().Str("Id", id).Str("response", "inventoryHandler").Msgf("response: %v", response)
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(response)
