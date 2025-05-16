@@ -64,6 +64,8 @@ spec:
               value: {{ .Values.global.endpoints.hotDeals }}
             - name: rest.endpoint.checkout
               value: {{ .Values.global.endpoints.checkout }}
+            - name: rest.endpoint.inventory
+              value: {{ .Values.global.endpoints.inventory }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

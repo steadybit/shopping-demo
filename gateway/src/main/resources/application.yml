@@ -66,4 +66,5 @@ rest:
     fashion: "http://localhost:8082/products"
     toys: "http://localhost:8081/products"
     hotdeals: "http://localhost:8083/products"
-    checkout: "http://localhost:8085/"
+    checkout: "http://localhost:8085/checkout"
+    inventory: "http://localhost:8084/inventory"
