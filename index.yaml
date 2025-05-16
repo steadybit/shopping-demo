@@ -39,6 +39,38 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
+    created: "2025-05-16T11:32:55.163409354Z"
+    dependencies:
+    - alias: haproxy
+      condition: gateway.ingress.haproxy.enabled
+      name: kubernetes-ingress
+      repository: https://haproxytech.github.io/helm-charts
+      version: '*'
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: 7dbdbec32fb020cbc51a3f54098a6091d04319b5b10e9757843c402760b79b4a
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-1.1.20/steadybit-shopping-demo-1.1.20.tgz
+    version: 1.1.20
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
     created: "2025-05-15T12:20:35.157476479Z"
     dependencies:
     - alias: haproxy
@@ -676,4 +708,4 @@ entries:
     urls:
     - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-0.1.0/steadybit-shopping-demo-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-15T12:20:35.157716963Z"
+generated: "2025-05-16T11:32:55.163591766Z"
