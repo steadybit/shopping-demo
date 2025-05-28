@@ -44,6 +44,15 @@ gateway:
     haproxy:
       enabled: false  # Set to true to install HAProxy and create an ingress for gateway
       host: null  # Custom host for HAProxy ingress (if null, uses gateway.ingress.host)
+    # OpenShift ingress configuration
+    openshift:
+      enabled: false # Set to true to enable OpenShift ingress
+      host: null # Hostname for OpenShift ingress
+      annotations: {}
+      ingressClassName: openshift-default
+      tls:
+        enabled: false
+        secretName: gateway-tls-secret
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:
@@ -231,3 +240,4 @@ haproxy:
   controller:
     service:
       type: LoadBalancer
+
