@@ -35,7 +35,7 @@ gateway:
   # Ingress configuration
   ingress:
     # Standard ingress configuration
-    enabled: true # Set to false to disable the standard ingress
+    enabled: true  # Set to false to disable the standard ingress
     # Hostname for the ingress
     host: null
     # Annotations for the ingress
@@ -46,8 +46,8 @@ gateway:
       host: null  # Custom host for HAProxy ingress (if null, uses gateway.ingress.host)
     # OpenShift ingress configuration
     openshift:
-      enabled: false # Set to true to enable OpenShift ingress
-      host: null # Hostname for OpenShift ingress
+      enabled: false  # Set to true to enable OpenShift ingress
+      host: null  # Hostname for OpenShift ingress
       annotations: {}
       ingressClassName: openshift-default
       tls:
@@ -240,4 +240,3 @@ haproxy:
   controller:
     service:
       type: LoadBalancer
-
