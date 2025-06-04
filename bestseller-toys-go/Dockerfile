@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o bestseller-toys main.go
 RUN make licenses-report
 
 # Use amazonlinux to support FIS attacks
-FROM amazonlinux:2023
+FROM ubuntu:25.10
 
 WORKDIR /root/
 
