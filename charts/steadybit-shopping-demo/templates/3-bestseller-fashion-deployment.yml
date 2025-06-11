@@ -69,6 +69,8 @@ spec:
       nodeSelector:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      imagePullSecrets:
+        - name: regcredinternal
 ---
 apiVersion: v1
 kind: Service

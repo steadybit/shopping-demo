@@ -91,6 +91,8 @@ spec:
       nodeSelector:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      imagePullSecrets:
+        - name: regcredinternal
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
