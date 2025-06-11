@@ -49,7 +49,6 @@ gateway:
       enabled: false  # Set to true to enable OpenShift ingress
       host: null  # Hostname for OpenShift ingress
       annotations: {}
-      ingressClassName: openshift-default
       tls:
         enabled: false
         secretName: gateway-tls-secret

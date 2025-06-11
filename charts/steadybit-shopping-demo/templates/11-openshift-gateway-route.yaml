@@ -1,0 +1,29 @@
+{{- if and .Values.gateway.enabled .Values.gateway.ingress.openshift.enabled -}}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: gateway-route
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.gateway.ingress.openshift.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  host: {{ .Values.gateway.ingress.openshift.host | default "" }}
+  to:
+    kind: Service
+    name: gateway
+    weight: 100
+  port:
+    targetPort: 8080
+  {{- if .Values.gateway.ingress.openshift.tls.enabled }}
+  tls:
+    termination: edge
+    {{- if .Values.gateway.ingress.openshift.tls.secretName }}
+    key: ${key}
+    certificate: ${certificate}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
