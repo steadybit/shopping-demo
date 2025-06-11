@@ -96,6 +96,8 @@ manifest should match snapshot:
               volumeMounts:
                 - mountPath: /work
                   name: work-dir
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - emptyDir:
@@ -226,6 +228,8 @@ manifest should match snapshot replica count:
               volumeMounts:
                 - mountPath: /work
                   name: work-dir
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - emptyDir:
@@ -356,6 +360,8 @@ manifest should match snapshot with service type clusterIp:
               volumeMounts:
                 - mountPath: /work
                   name: work-dir
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - emptyDir:

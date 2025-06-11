@@ -68,6 +68,8 @@ manifest should match snapshot:
                   cpu: 100m
                   ephemeral-storage: 100Mi
                   memory: 128Mi
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
   2: |
     apiVersion: v1
@@ -166,6 +168,8 @@ manifest should match snapshot replica count:
                   cpu: 100m
                   ephemeral-storage: 100Mi
                   memory: 128Mi
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
   2: |
     apiVersion: v1

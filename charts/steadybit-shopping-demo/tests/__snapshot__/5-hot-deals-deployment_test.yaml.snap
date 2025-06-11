@@ -144,6 +144,8 @@ manifest should match snapshot:
                 - mountPath: /etc/nginx/nginx.conf
                   name: nginx-proxy-config
                   subPath: nginx.conf
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - configMap:
@@ -311,6 +313,8 @@ manifest should match snapshot replica count:
                 - mountPath: /etc/nginx/nginx.conf
                   name: nginx-proxy-config
                   subPath: nginx.conf
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - configMap:
@@ -488,6 +492,8 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                 - mountPath: /etc/nginx/nginx.conf
                   name: nginx-proxy-config
                   subPath: nginx.conf
+          imagePullSecrets:
+            - name: regcredinternal
           serviceAccountName: steadybit-demo
           volumes:
             - configMap:
