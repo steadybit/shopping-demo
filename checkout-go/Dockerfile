@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/checkout .
-RUN chmod 755 /app/checkout
+RUN chgrp -R 0 /app/checkout && chmod -R g=u /app/checkout
 
 # Expose the application port
 EXPOSE 8085

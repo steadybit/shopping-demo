@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/bestseller-toys .
-RUN chmod 755 /app/bestseller-toys
+RUN chgrp -R 0 /app/bestseller-toys && chmod -R g=u /app/bestseller-toys
 
 # Expose the application port
 EXPOSE 8081

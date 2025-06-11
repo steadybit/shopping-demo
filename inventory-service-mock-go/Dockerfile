@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/inventory-service-mock .
-RUN chmod 755 /app/inventory-service-mock
+RUN chgrp -R 0 /app/inventory-service-mock && chmod -R g=u /app/inventory-service-mock
 
 # Expose the application port
 EXPOSE 8084
