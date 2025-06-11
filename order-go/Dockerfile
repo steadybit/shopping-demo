@@ -17,10 +17,11 @@ RUN make licenses-report
 # Use minimal image for deployment
 FROM ubuntu:22.04
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/order .
+RUN chgrp -R 0 /app/order && chmod -R g=u /app/order
 
 # Expose the application port
 EXPOSE 8081
