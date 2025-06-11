@@ -17,10 +17,11 @@ RUN make licenses-report
 # Use minimal image for deployment
 FROM ubuntu:22.04
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/inventory-service-mock .
+RUN chmod 755 /app/inventory-service-mock
 
 # Expose the application port
 EXPOSE 8084

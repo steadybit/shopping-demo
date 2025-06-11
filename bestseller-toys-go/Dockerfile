@@ -17,10 +17,11 @@ RUN make licenses-report
 # Use amazonlinux to support FIS attacks
 FROM ubuntu:22.04
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/bestseller-toys .
+RUN chmod 755 /app/bestseller-toys
 
 # Expose the application port
 EXPOSE 8081

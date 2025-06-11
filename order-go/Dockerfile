@@ -15,12 +15,13 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o order main.go
 RUN make licenses-report
 
 # Use minimal image for deployment
-FROM ubuntu:22.04
+FROM alpine:3.18
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy the binary from builder
 COPY --from=builder /app/order .
+RUN chmod 755 /app/order
 
 # Expose the application port
 EXPOSE 8081
