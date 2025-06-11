@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o inventory-service-mock 
 RUN make licenses-report
 
 # Use minimal image for deployment
-FROM ubuntu:22.04
+FROM alpine:3.18
 
 WORKDIR /app
 
