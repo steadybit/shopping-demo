@@ -240,5 +240,3 @@ haproxy:
   controller:
     service:
       type: LoadBalancer
-
-
