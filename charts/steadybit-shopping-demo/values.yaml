@@ -15,7 +15,7 @@ gateway:
   # Container image
   image:
     # Container image name
-    name: steadybit/gateway
+    name: ghcr.io/steadybit/gateway
     # Container image tag
     tag: develop
   # Container resources
@@ -59,7 +59,7 @@ bestsellerFashion:
   enabled: true
   image:
     # Container image name
-    name: steadybit/bestseller-fashion
+    name: ghcr.io/steadybit/bestseller-fashion
     # Container image tag
     tag: develop
   # Container resources
@@ -80,7 +80,7 @@ bestsellerToys:
   enabled: true
   image:
     # Container image name
-    name: steadybit/bestseller-toys-go
+    name: ghcr.io/steadybit/bestseller-toys-go
     # Container image tag
     tag: develop
   # Container resources
@@ -101,7 +101,7 @@ hotDeals:
   enabled: true
   image:
     # Container image name
-    name: steadybit/hot-deals
+    name: ghcr.io/steadybit/hot-deals
     # Container image tag
     tag: develop
   # Container resources
@@ -140,7 +140,7 @@ inventory:
   enabled: true
   image:
     # Container image name
-    name: steadybit/inventory-go
+    name: ghcr.io/steadybit/inventory-go
     # Container image tag
     tag: develop
   # Container resources
@@ -182,7 +182,7 @@ checkout:
   enabled: true
   image:
     # Container image name
-    name: steadybit/checkout-go
+    name: ghcr.io/steadybit/checkout-go
     # Container image tag
     tag: develop
   # Container resources
@@ -210,7 +210,7 @@ orders:
   enabled: true
   image:
     # Container image name
-    name: steadybit/orders-go
+    name: ghcr.io/steadybit/orders-go
     # Container image tag
     tag: develop
   # Container resources
@@ -240,3 +240,5 @@ haproxy:
   controller:
     service:
       type: LoadBalancer
+
+
