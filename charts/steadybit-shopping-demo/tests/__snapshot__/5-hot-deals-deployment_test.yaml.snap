@@ -86,7 +86,7 @@ manifest should match snapshot:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/hot-deals:develop
+              image: ghcr.io/steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -253,7 +253,7 @@ manifest should match snapshot replica count:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/hot-deals:develop
+              image: ghcr.io/steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -430,7 +430,7 @@ manifest should match snapshot with podAffinity and service type and podDisrupti
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/hot-deals:develop
+              image: ghcr.io/steadybit/hot-deals:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:

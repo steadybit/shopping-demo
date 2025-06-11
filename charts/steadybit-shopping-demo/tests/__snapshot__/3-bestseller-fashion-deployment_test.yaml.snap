@@ -39,7 +39,7 @@ manifest should match snapshot:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/bestseller-fashion:develop
+              image: ghcr.io/steadybit/bestseller-fashion:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -137,7 +137,7 @@ manifest should match snapshot replica count:
                       fieldPath: metadata.labels['tags.datadoghq.com/version']
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/bestseller-fashion:develop
+              image: ghcr.io/steadybit/bestseller-fashion:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:

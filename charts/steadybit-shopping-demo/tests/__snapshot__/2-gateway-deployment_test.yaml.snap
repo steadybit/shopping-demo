@@ -64,7 +64,7 @@ manifest should match snapshot:
                   value: http://checkout:8085/checkout
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/gateway:develop
+              image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -194,7 +194,7 @@ manifest should match snapshot replica count:
                   value: http://checkout:8085/checkout
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/gateway:develop
+              image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
@@ -324,7 +324,7 @@ manifest should match snapshot with service type clusterIp:
                   value: http://checkout:8085/checkout
                 - name: rest.endpoint.inventory
                   value: http://inventory:8084/inventory
-              image: steadybit/gateway:develop
+              image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
                 httpGet:
