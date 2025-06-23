@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -39,8 +39,6 @@
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.4.0</license-maven-plugin.version>
-        <!-- remove if included in spring boot version -->
-        <postgresql.version>42.7.7</postgresql.version>
     </properties>
     <dependencyManagement>
         <dependencies>
