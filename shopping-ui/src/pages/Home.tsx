@@ -90,6 +90,8 @@ const getEndpointName = function (version: Version = 'simple'): string {
             return 'with timeout and exception handling';
         case 'simple':
             return 'as simple implementation';
+        case 'fallback':
+            return 'with active passive for toys bestseller';
     }
 };
 
