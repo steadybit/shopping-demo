@@ -104,6 +104,9 @@ function Debug(props: { version?: Version; loading: boolean; timestamp: Date }) 
                 <Dropdown.Item href={'/#/circuitBreaker'} active={props.version === 'circuitBreaker'}>
                     {getEndpointName('circuitBreaker')}
                 </Dropdown.Item>
+                <Dropdown.Item href={'/#/fallback'} active={props.version === 'fallback'}>
+                    {getEndpointName('fallback')}
+                </Dropdown.Item>
                 <Dropdown.Item href={'/#/parallel'} active={props.version === 'parallel'}>
                     {getEndpointName('parallel')}
                 </Dropdown.Item>

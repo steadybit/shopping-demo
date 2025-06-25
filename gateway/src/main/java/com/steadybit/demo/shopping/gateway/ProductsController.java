@@ -39,10 +39,12 @@ public class ProductsController {
 
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
-    @Value("${rest.endpoint.toys}")
-    private String urlToys;
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
+    @Value("${rest.endpoint.toys}")
+    private String urlToys;
+    @Value("${rest.endpoint.toysBackup}")
+    private String urlToysBackup;
 
     public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient, Resilience4jProductService resilience4jProductService) {
         this.restTemplate = restTemplateBuilder.connectTimeout(Duration.ofSeconds(2)).readTimeout(Duration.ofSeconds(2)).build();
@@ -96,6 +98,15 @@ public class ProductsController {
         return products;
     }
 
+    @GetMapping("/fallback")
+    public Products getProductsWithActivePassiveFallback() {
+        Products products = new Products();
+        products.setFashion(this.getProductBasicExceptionHandling(this.urlFashion));
+        products.setToys(this.getProductWithFallback(this.urlToys, this.urlToysBackup));
+        products.setHotDeals(this.getProductBasicExceptionHandling(this.urlHotDeals));
+        return products;
+    }
+
     @GetMapping("/parallel")
     public Mono<Products> getProductsParallel() {
         Mono<List<Product>> hotdeals = this.getProductReactive(this.urlHotDeals);
@@ -135,5 +146,19 @@ public class ProductsController {
                 .collectList()
                 .flatMap(Mono::just)
                 .doOnError(throwable -> log.error("Error occurred", throwable));
+    }
+
+    private List<Product> getProductWithFallback(String primaryUrl, String fallbackUrl) {
+        try {
+            return this.restTemplate.exchange(primaryUrl, HttpMethod.GET, null, this.productListTypeReference).getBody();
+        } catch (RestClientException e) {
+            log.warn("Primary URL failed, trying fallback for URL: {}", fallbackUrl, e);
+            try {
+                return this.restTemplate.exchange(fallbackUrl, HttpMethod.GET, null, this.productListTypeReference).getBody();
+            } catch (RestClientException ex) {
+                log.error("Fallback URL also failed", ex);
+                return Collections.emptyList();
+            }
+        }
     }
 }
