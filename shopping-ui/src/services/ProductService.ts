@@ -6,7 +6,7 @@ import useAsync from '../utils/useAsync';
 
 axios.defaults.timeout = 3000;
 
-export type Version = 'simple' | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker' | 'retry';
+export type Version = 'simple' | 'timeout' | 'exception' | 'parallel' | 'circuitBreaker' | 'retry' | 'fallback';
 
 export function useProducts(version: Version) {
     const [timestamp, setTimestamp] = React.useState(new Date());
@@ -20,6 +20,8 @@ export function useProducts(version: Version) {
                 return ProductService.parallel.fetch();
             case 'circuitBreaker':
                 return ProductService.circuitBreaker.fetch();
+            case 'fallback':
+                return ProductService.fallback.fetch();
             case 'retry':
                 return ProductService.retry.fetch();
             default:
@@ -63,6 +65,11 @@ export const ProductService = {
     circuitBreaker: {
         async fetch(): Promise<Products> {
             return (await axios.get('/products/circuitbreaker')).data;
+        },
+    },
+    fallback: {
+        async fetch(): Promise<Products> {
+            return (await axios.get('/products/fallback')).data;
         },
     },
     retry: {
