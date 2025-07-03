@@ -52,6 +52,14 @@ gateway:
       tls:
         enabled: false
         secretName: gateway-tls-secret
+    # Enterprise Nginx ingress configuration
+    nginx:
+      enabled: false  # Set to true to enable Nginx ingress
+      host: null  # Custom host for Nginx ingress (if null, uses gateway.ingress.host)
+      annotations: {}
+      tls:
+        enabled: false
+        secretName: gateway-nginx-tls-secret
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:

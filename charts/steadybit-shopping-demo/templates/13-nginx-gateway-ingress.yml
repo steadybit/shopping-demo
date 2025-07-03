@@ -1,0 +1,51 @@
+{{- if and .Values.gateway.enabled .Values.gateway.ingress.nginx.enabled -}}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-nginx-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- with .Values.gateway.ingress.nginx.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.gateway.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ingressClassName: nginx
+  {{- if and .Values.gateway.ingress.nginx.tls.enabled }}
+  tls:
+    - hosts:
+        {{- $host := .Values.gateway.ingress.nginx.host | default .Values.gateway.ingress.host }}
+        {{- if $host }}
+        - {{ $host }}
+        {{- end }}
+      secretName: {{ .Values.gateway.ingress.nginx.tls.secretName }}
+  {{- end }}
+  rules:
+  {{- $host := .Values.gateway.ingress.nginx.host | default .Values.gateway.ingress.host }}
+  {{- if $host }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 80
+  {{- else }}
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 80
+  {{- end }}
+{{- end -}}
+
