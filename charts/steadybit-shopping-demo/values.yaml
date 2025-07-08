@@ -55,7 +55,6 @@ gateway:
     # Enterprise Nginx ingress configuration
     nginx:
       enabled: false  # Set to true to enable Nginx ingress
-      openshift: false  # Set to true if running on OpenShift
       host: null  # Custom host for Nginx ingress (if null, uses gateway.ingress.host)
       annotations: {}
       tls:
