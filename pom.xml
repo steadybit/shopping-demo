@@ -36,6 +36,7 @@
         <java.version>21</java.version>
         <!-- Security fix for CVE-2025-53506 - remove when upgrade to spring boot starter v4.x.x-->
         <tomcat.version>10.1.43</tomcat.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version> <!-- remove whn included in spring boot -->
         <!--plugins-->
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
