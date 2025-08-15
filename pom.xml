@@ -34,6 +34,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
+        <tomcat.version>10.1.44</tomcat.version> <!-- remove whn included in spring boot -->
         <!--plugins-->
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
