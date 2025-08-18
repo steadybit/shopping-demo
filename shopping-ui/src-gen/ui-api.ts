@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2024-12-20 08:28:45.
+// Generated using typescript-generator version 3.2.1263 on 2025-08-18 12:51:24.
 
 export interface Order {
     id: string;
