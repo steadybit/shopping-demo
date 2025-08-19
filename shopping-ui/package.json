@@ -16,7 +16,7 @@
     "@ungap/structured-clone": "^1.0.1",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.3",
-    "http-proxy-middleware": "^2.0.7",
+    "http-proxy-middleware": "^2.0.9",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.3",
     "react-dom": "^18.3.0",
