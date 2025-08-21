@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -34,8 +34,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
-        <tomcat.version>10.1.44</tomcat.version> <!-- remove whn included in spring boot -->
-        <netty.version>4.1.124.Final</netty.version> <!-- remove whn included in spring boot -->
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <!--plugins-->
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
