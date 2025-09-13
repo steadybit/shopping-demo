@@ -5,6 +5,6 @@
   "author": "Daniel Reuter",
   "dependencies": {
     "@steadybit/failure-lambda": "^0.6.0",
-    "axios": "^1.11.0"
+    "axios": "^1.12.0"
   }
 }
