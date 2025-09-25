@@ -11,7 +11,7 @@ RUN go mod download
 COPY . .
 
 # Build the application with static linking
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o inventory-service-mock main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -o inventory-service-mock main.go
 RUN make licenses-report
 
 # Use minimal image for deployment
