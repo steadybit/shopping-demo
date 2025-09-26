@@ -9,7 +9,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM --platform=$TARGETPLATFORM gcr.io/distroless/java21-debian12:nonroot
+FROM  gcr.io/distroless/java21-debian12:nonroot
 WORKDIR /application
 
 COPY --from=builder /application/dependencies/ ./

@@ -10,7 +10,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM --platform=$TARGETPLATFORM azul/zulu-openjdk-debian:21
+FROM  azul/zulu-openjdk-debian:21
 WORKDIR /application
 
 COPY --from=builder /application/dependencies/ ./
