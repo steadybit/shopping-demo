@@ -1,5 +1,10 @@
 # Use official Golang image as builder
-FROM golang:1.22 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.22 AS builder
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 WORKDIR /app
 
@@ -11,11 +16,11 @@ RUN go mod download
 COPY . .
 
 # Build the application with static linking
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -o bestseller-toys main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o bestseller-toys main.go
 RUN make licenses-report
 
 # Use minimal image for deployment
-FROM alpine:3.18
+FROM --platform=$TARGETPLATFORM alpine:3.18
 
 WORKDIR /app
 
