@@ -33,7 +33,7 @@
         <docker.image.prefix>steadybit</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <!-- REMOVE IF INCLUDED IN SPRING BOOT -->
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <!--plugins-->
