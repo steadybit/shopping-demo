@@ -12,6 +12,10 @@ RUN java -Djarmode=layertools -jar application.jar extract
 FROM  azul/zulu-openjdk-debian:25
 WORKDIR /application
 
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean
+
 COPY --from=builder /application/dependencies/ ./
 COPY --from=builder /application/spring-boot-loader/ ./
 COPY --from=builder /application/snapshot-dependencies/ ./
