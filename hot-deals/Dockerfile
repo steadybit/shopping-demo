@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:21 AS builder
+FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:25 AS builder
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
 ARG TARGETARCH
@@ -9,7 +9,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM  gcr.io/distroless/java21-debian12:nonroot
+FROM gcr.io/distroless/java25-debian13:nonroot
 WORKDIR /application
 
 COPY --from=builder /application/dependencies/ ./

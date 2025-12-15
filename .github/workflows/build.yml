@@ -1,6 +1,8 @@
 name: Build
 
-on: [ push ]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,11 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 21
+          java-version: 25
           cache: maven
 
       - name: Setup Node.js
@@ -171,7 +173,7 @@ jobs:
       - name: Dispatch event to trigger deployment to PROD
         if: github.ref == 'refs/heads/main'
         run: |
-          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-prod-demo"}'
+          curl -XPOST -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json"  -H "Content-Type: application/json" https://api.github.com/repos/steadybit/demo-infrastructure/dispatches --data '{"event_type": "deploy-to-demo-prod"}'
 
   build-fashion-lambda:
     name: "Build and Upload fashion-bestseller Lambda"
