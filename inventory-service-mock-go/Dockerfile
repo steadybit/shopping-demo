@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o inventory-ser
 RUN make licenses-report
 
 # Use minimal image for deployment
-FROM  alpine:3.18
+FROM alpine:3.18
 
 WORKDIR /app
 

@@ -1,4 +1,3 @@
-
 FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:25 AS builder
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
