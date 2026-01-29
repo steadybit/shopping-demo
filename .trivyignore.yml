@@ -1,0 +1,16 @@
+vulnerabilities:
+  - id: CVE-2023-45853
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
+  - id: CVE-2026-0861
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
+  - id: CVE-2026-22695
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
+  - id: CVE-2026-24882
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
+  - id: CVE-2026-22801
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
