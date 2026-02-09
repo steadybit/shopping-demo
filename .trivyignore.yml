@@ -14,3 +14,6 @@ vulnerabilities:
   - id: CVE-2026-22801
     statement: Wait for upstream fix in debian
     expired_at: 2026-05-01
+  - id: CVE-2026-24515
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-05-01
