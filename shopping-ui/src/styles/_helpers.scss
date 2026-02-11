@@ -1,7 +1,7 @@
 /*!
  * Copyright 2019 steadybit GmbH. All rights reserved.
  */
-@import 'colors';
+@use 'colors' as *;
 
 $desktop: 1024px;
 $desktop-wide: 1440px;

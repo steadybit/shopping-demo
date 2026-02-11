@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up JDK 25
         uses: actions/setup-java@v4
@@ -18,7 +18,7 @@ jobs:
           cache: maven
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: v18
           cache: 'npm'
@@ -93,10 +93,10 @@ jobs:
           - {folder: order, name: orders}
           - {folder: order-go, name: orders-go}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download JARs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: demo-jars
           path: .
@@ -182,9 +182,9 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: v20
           cache: 'npm'
@@ -201,8 +201,6 @@ jobs:
         run: snyk monitor --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Install zip
-        uses: montudor/action-zip@0852c26906e00f8a315c704958823928d8018b28 # v1.0.0
       - name: Zip lambda
         run: mkdir -p ../dist && zip -r --exclude="*test*" ../dist/fashion-bestseller.zip .
         working-directory: bestseller-fashion-lambda
@@ -246,7 +244,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -288,7 +286,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
