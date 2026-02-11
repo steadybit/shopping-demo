@@ -1,4 +1,4 @@
-@import 'src/styles/colors';
+@use 'src/styles/colors' as *;
 
 .bg-available {
     background-color: $color-success;

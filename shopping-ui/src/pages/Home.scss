@@ -1,6 +1,6 @@
-@import 'src/styles/colors';
-@import 'src/styles/typography';
-@import 'src/styles/helpers';
+@use 'src/styles/colors' as *;
+@use 'src/styles/typography' as *;
+@use 'src/styles/helpers' as *;
 
 .home {
   margin-top: 24px;

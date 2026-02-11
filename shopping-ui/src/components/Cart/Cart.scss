@@ -1,4 +1,4 @@
-@import 'src/styles/colors';
+@use 'src/styles/colors' as *;
 
 .cart {
   background-color: #d0d0d0;
