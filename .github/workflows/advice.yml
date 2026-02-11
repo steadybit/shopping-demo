@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate advice
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Steadybit CLI
         run: npm install -g steadybit
