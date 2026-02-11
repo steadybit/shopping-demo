@@ -20,6 +20,14 @@ export default defineConfig(() => {
             }
         },
 
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    loadPaths: ['.'],
+                },
+            },
+        },
+
         build: {
             outDir: 'build'
         },

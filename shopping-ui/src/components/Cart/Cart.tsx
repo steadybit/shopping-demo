@@ -1,7 +1,6 @@
 import './Cart.scss';
 import React, { useCallback, useState } from 'react';
 import { Product, ShoppingCart } from '../../../src-gen/ui-api';
-import structuredClone from '@ungap/structured-clone';
 import { v4 as uuidv4 } from 'uuid';
 import { Alert, Button, Card, Dropdown, DropdownButton, ListGroup, Stack } from 'react-bootstrap';
 import classname from '../../utils/classname';
