@@ -243,6 +243,76 @@ orders:
     # ActiveMQ Host
     host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"
 
+# Redis configuration (opt-in). Set redis.enabled=true to deploy Redis via Bitnami subchart.
+redis:
+  enabled: false
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "256Mi"
+        cpu: "250m"
+
+# Kafka configuration (opt-in). Set kafka.enabled=true to deploy Kafka via Bitnami subchart.
+kafka:
+  enabled: false
+  controller:
+    replicaCount: 1
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+  listeners:
+    client:
+      protocol: PLAINTEXT
+    interbroker:
+      protocol: PLAINTEXT
+
+# RabbitMQ configuration (opt-in). Set rabbitmq.enabled=true to deploy RabbitMQ via Bitnami subchart.
+rabbitmq:
+  enabled: false
+  auth:
+    username: guest
+    password: guest
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Notification service (opt-in, requires rabbitmq.enabled=true)
+notification:
+  enabled: true
+  image:
+    # Container image name
+    name: ghcr.io/steadybit/notification-go
+    # Container image tag
+    tag: develop
+  # Container resources
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+      ephemeral-storage: "100Mi"
+    limits:
+      memory: "256Mi"
+      cpu: "250m"
+      ephemeral-storage: "500Mi"
+  # Number of notification replicas
+  replicaCount: 1
+  # nodeSelector -- Node labels for pod assignment
+  nodeSelector: {}
+
 # configuration for the HAProxy ingress controller for the gateway. See gateway.ingress.haproxy.enabled to enable it
 haproxy:
   controller:
