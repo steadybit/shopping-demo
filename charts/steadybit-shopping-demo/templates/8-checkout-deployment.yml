@@ -58,6 +58,14 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            {{- if .Values.kafka.enabled }}
+            - name: KAFKA_BROKERS
+              value: "{{ .Release.Name }}-kafka:9092"
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: "{{ .Release.Name }}-redis-master:6379"
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
