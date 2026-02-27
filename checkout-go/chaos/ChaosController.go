@@ -5,7 +5,7 @@
 package chaos
 
 import (
-	"checkout/stomp_wrapper"
+	"checkout/messaging"
 	"github.com/rs/zerolog/log"
 	"math/rand"
 	"net/http"
@@ -13,13 +13,13 @@ import (
 )
 
 type ChaosRestController struct {
-	stompWrapper *stomp_wrapper.ConnWrapper
+	publisher messaging.Publisher
 	scheduler *time.Ticker
 }
 
-func NewChaosRestController(stompWrapper *stomp_wrapper.ConnWrapper) *ChaosRestController {
+func NewChaosRestController(publisher messaging.Publisher) *ChaosRestController {
 	return &ChaosRestController{
-		stompWrapper: stompWrapper,
+		publisher: publisher,
 		scheduler: time.NewTicker(30 * time.Second),
 	}
 }
@@ -43,7 +43,7 @@ func (c *ChaosRestController) floodQueue(queueName string) {
 			return
 		default:
 			message := randomString(1048567)
-			err := c.stompWrapper.Send(queueName,"text/plain", []byte(message), "")
+			err := c.publisher.Send(queueName, "text/plain", []byte(message), "")
 			if err != nil {
 				log.Error().Err(err).Msgf("Failed to send message to %s", queueName)
 				return

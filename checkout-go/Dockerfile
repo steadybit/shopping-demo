@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the application with static linking
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o checkout main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o checkout .
 RUN make licenses-report
 
 # Use minimal image for deployment
