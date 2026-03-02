@@ -5,12 +5,6 @@ vulnerabilities:
   - id: CVE-2026-0861
     statement: "glibc vulnerability in Debian base image, no fix available"
     expired_at: 2026-05-01
-  - id: CVE-2026-22695
-    statement: "libpng vulnerability in Debian base image, no fix available"
-    expired_at: 2026-05-01
-  - id: CVE-2026-22801
-    statement: "libpng vulnerability in Debian base image, no fix available"
-    expired_at: 2026-05-01
   - id: CVE-2026-25646
     statement: "libpng vulnerability in Debian base image, no fix available"
     expired_at: 2026-05-01
