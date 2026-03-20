@@ -49,7 +49,7 @@ jobs:
         run: mvn -s .github/workflows/maven-settings.xml verify -B -V -U
 
       - name: Upload JARs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: demo-jars
           path: |
