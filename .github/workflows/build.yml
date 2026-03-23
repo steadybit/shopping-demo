@@ -211,6 +211,7 @@ jobs:
           if-no-files-found: error
           retention-days: 3
       - name: Configure AWS credentials (eu-central-1)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'eu-central-1'
@@ -219,12 +220,14 @@ jobs:
           role-duration-seconds: 1200
           role-session-name: S3DeployLicense
       - name: Push zips to S3 (eu-central-1)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         working-directory: dist
         run: |
           aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas/fashion-bestseller.zip
           VERSION_ID=$(aws s3api list-object-versions --bucket steadybit-lambdas --prefix fashion-bestseller.zip --query 'Versions[?IsLatest].[VersionId]' --output text)
           echo "::notice:: eu-central-1 -> fashion_bestseller_lambda_version = \"$VERSION_ID\""
       - name: Configure AWS credentials (eu-west-1)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'eu-west-1'
@@ -233,6 +236,7 @@ jobs:
           role-duration-seconds: 1200
           role-session-name: S3DeployLicense
       - name: Push zips to S3 (eu-west-1)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         working-directory: dist
         run: |
           aws s3 cp fashion-bestseller.zip s3://steadybit-lambdas-region-eu-west-1/fashion-bestseller.zip
