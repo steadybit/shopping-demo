@@ -47,7 +47,7 @@ public class ChaosRestController {
                 var count = 0;
                 try {
                     while (true) {
-                        this.jmsTemplate.send(destination, session -> session.createTextMessage(RandomStringUtils.randomAlphanumeric(1_048_567)));
+                        this.jmsTemplate.send(destination, session -> session.createTextMessage(RandomStringUtils.secure().nextAlphanumeric(1_048_567)));
                         count++;
                         if (count % 100 == 0) {
                             log.info("Flooding {}. {} messages with 1mb sent.", destination, count);
