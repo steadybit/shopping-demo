@@ -66,7 +66,7 @@ spec:
             {{- end }}
             {{- if .Values.redis.enabled }}
             - name: REDIS_URL
-              value: "{{ .Release.Name }}-redis-master:6379"
+              value: "redis://{{ .Release.Name }}-redis-master:6379"
             {{- end }}
           livenessProbe:
             httpGet:
