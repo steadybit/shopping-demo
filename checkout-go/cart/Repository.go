@@ -6,6 +6,14 @@ import (
 	"time"
 )
 
+// Repository abstracts cart storage so that both in-memory and Redis
+// can be used interchangeably at runtime.
+type Repository interface {
+	Save(cart Cart)
+	MarkAsPublished(ids []string, now time.Time) error
+	FindPublishPending() ([]*Cart, error)
+}
+
 type CartRepository struct {
 	mu    sync.RWMutex
 	carts map[string]Cart

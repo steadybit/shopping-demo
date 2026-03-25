@@ -27,3 +27,15 @@ dependencies:
     repository: "https://haproxytech.github.io/helm-charts"
     alias: haproxy
     condition: gateway.ingress.haproxy.enabled
+  - name: redis
+    version: "~20"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+  - name: kafka
+    version: "~31"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: kafka.enabled
+  - name: rabbitmq
+    version: "~16"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: rabbitmq.enabled

@@ -1,3 +1,4 @@
+# Use official Golang image as builder
 FROM --platform=$BUILDPLATFORM golang:1.25 AS builder
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
@@ -15,7 +16,7 @@ RUN go mod download
 COPY . .
 
 # Build the application with static linking
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o checkout .
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o notification main.go
 RUN make licenses-report
 
 # Use minimal image for deployment
@@ -24,11 +25,11 @@ FROM alpine:3.18
 WORKDIR /app
 
 # Copy the binary from builder
-COPY --from=builder /app/checkout .
-RUN chgrp -R 0 /app/checkout && chmod -R g=u /app/checkout
+COPY --from=builder /app/notification .
+RUN chgrp -R 0 /app/notification && chmod -R g=u /app/notification
 
 # Expose the application port
-EXPOSE 8085
+EXPOSE 8087
 
 # Run the application
-CMD ["./checkout"]
+CMD ["./notification"]

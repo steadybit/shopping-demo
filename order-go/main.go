@@ -5,7 +5,6 @@
 package main
 
 import (
-	"encoding/json"
 	stomp "github.com/go-stomp/stomp/v3"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
@@ -44,10 +43,47 @@ type Order struct {
 	Items     []OrderItem `json:"items"`
 }
 
+var rabbitPublisher *RabbitMQPublisher
+
 func main() {
 	log.Info().Msg("Starting Order Application...")
 	extlogging.InitZeroLog()
 
+	if rabbitmqURL, ok := os.LookupEnv("RABBITMQ_URL"); ok {
+		var err error
+		rabbitPublisher, err = NewRabbitMQPublisher(rabbitmqURL)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to connect to RabbitMQ")
+		}
+		defer rabbitPublisher.Close()
+		log.Info().Msg("RabbitMQ publisher initialized")
+	}
+
+	if kafkaBrokers, ok := os.LookupEnv("KAFKA_BROKERS"); ok {
+		// Use Kafka consumer
+		log.Info().Msg("Using Kafka consumer")
+		if err := startKafkaConsumer(kafkaBrokers); err != nil {
+			log.Fatal().Err(err).Msg("Failed to start Kafka consumer")
+		}
+	} else {
+		// Use ActiveMQ/STOMP consumer
+		log.Info().Msg("Using ActiveMQ/STOMP consumer")
+		startStompConsumer()
+	}
+
+	http.Handle("/metrics", promhttp.Handler())
+
+	// Setup HTTP server
+	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
+	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
+	port := "8086"
+	println("Server running on port:", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		panic(err)
+	}
+}
+
+func startStompConsumer() {
 	// Retrieve ActiveMQ connection info from environment variables (or use defaults).
 	brokerAddr, found := os.LookupEnv("ACTIVEMQ_BROKER_HOST")
 	if !found {
@@ -59,7 +95,7 @@ func main() {
 	user := os.Getenv("ACTIVEMQ_USER")
 	pass := os.Getenv("ACTIVEMQ_PASS")
 
-	// 1) Connect to ActiveMQ using STOMP.
+	// Connect to ActiveMQ using STOMP.
 	var conn *stomp.Conn
 	var err error
 	if user == "" {
@@ -68,27 +104,17 @@ func main() {
 		conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.Login(user, pass), stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
 	}
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to connect to ActiveMQ")
+		log.Fatal().Err(err).Msg("Failed to connect to ActiveMQ")
 	}
-	defer func() {
-		if conn != nil {
-			_ = conn.Disconnect()
-		}
-	}()
 
-	// 2) Subscribe to the "order_created" queue. (Equivalent of @JmsListener in Java.)
-	if conn == nil {
-		log.Error().Msg("Connection to ActiveMQ is nil")
-		return
-	}
 	sub, err := conn.Subscribe("order_created", stomp.AckAuto)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to subscribe to queue")
+		log.Fatal().Err(err).Msg("Failed to subscribe to queue")
 	}
 
-	// 3) Consume messages in a separate goroutine.
-	//    Unmarshal into an Order object and log it.
+	// Consume messages in a separate goroutine.
 	go func() {
+		defer conn.Disconnect()
 		for {
 			msg := <-sub.C
 			if msg == nil {
@@ -101,24 +127,7 @@ func main() {
 			if msg.Body == nil {
 				continue
 			}
-			var order Order
-			if err := json.Unmarshal(msg.Body, &order); err != nil {
-				log.Error().Err(err).Msg("Failed to unmarshal message")
-				continue
-			}
-
-			log.Info().Str("orderID", order.ID).Msg("Received order")
+			processOrderMessage(msg.Body)
 		}
 	}()
-
-	http.Handle("/metrics", promhttp.Handler())
-
-	// Setup HTTP server
-	http.HandleFunc("/actuator/health/liveness", healthHandler)     // Liveness Probe
-	http.HandleFunc("/actuator/health/readiness", readinessHandler) // Readiness Probe
-	port := "8086"
-	println("Server running on port:", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		panic(err)
-	}
 }
