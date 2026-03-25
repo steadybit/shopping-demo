@@ -52,7 +52,7 @@ public class BestsellerToysRestController {
             }
 
             try {
-                String urlTemplate = UriComponentsBuilder.fromHttpUrl(urlInventory)
+                String urlTemplate = UriComponentsBuilder.fromUriString(urlInventory)
                         .queryParam("id", product.getId()).encode().toUriString();
                 Boolean isAvailable = restTemplate.getForObject(urlTemplate, Boolean.class);
                 if (Boolean.TRUE.equals(isAvailable)) {

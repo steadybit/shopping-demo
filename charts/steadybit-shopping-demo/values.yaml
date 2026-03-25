@@ -61,6 +61,15 @@ gateway:
       tls:
         enabled: false
         secretName: gateway-nginx-tls-secret
+  # Gateway API HTTPRoute configuration
+  httpRoute:
+    enabled: false  # Set to true to create an HTTPRoute resource (requires Gateway API CRDs)
+    host: null  # Hostname for the HTTPRoute (if null, uses gateway.ingress.host)
+    annotations: {}
+    parentRefs:
+      name: ""  # Name of the Gateway resource to attach to
+      namespace: null  # Namespace of the Gateway resource (if different from release namespace)
+      sectionName: null  # Specific listener name on the Gateway
   # nodeSelector -- Node labels for pod assignment
   nodeSelector: {}
 bestsellerFashion:

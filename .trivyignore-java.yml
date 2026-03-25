@@ -1,0 +1,10 @@
+vulnerabilities:
+  - id: CVE-2023-45853
+    statement: "zlib vulnerability in Debian 12.13 base image, no fix available"
+    expired_at: 2026-05-01
+  - id: CVE-2026-0861
+    statement: "glibc vulnerability in Debian base image, no fix available"
+    expired_at: 2026-05-01
+  - id: CVE-2026-25210
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01

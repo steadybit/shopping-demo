@@ -13,28 +13,25 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.util.LinkedMultiValueMap;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
 public class CheckoutApplicationTest {
     @Container
     public static final ActiveMqContainer broker = new ActiveMqContainer("symptoma/activemq:latest");
@@ -98,16 +95,18 @@ public class CheckoutApplicationTest {
     }
 
     @TestConfiguration
-    static class TestConfig implements AsyncConfigurer {
+    static class TestConfig {
 
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
-            return new RestTemplateBuilder().setReadTimeout(Duration.ofSeconds(2));
+            return new RestTemplateBuilder().readTimeout(Duration.ofSeconds(2));
         }
     }
 
     private static HttpEntity<String> asJsonBody(String s) {
-        return new HttpEntity<>(s, new LinkedMultiValueMap<>(Map.of(HttpHeaders.CONTENT_TYPE, List.of(MediaType.APPLICATION_JSON_VALUE))));
+        var headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(s, headers);
     }
 
     private void drainJmsQueue() {
