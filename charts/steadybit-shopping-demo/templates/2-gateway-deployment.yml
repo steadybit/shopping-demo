@@ -66,8 +66,10 @@ spec:
               value: {{ .Values.global.endpoints.checkout }}
             - name: rest.endpoint.inventory
               value: {{ .Values.global.endpoints.inventory }}
+            {{- if .Values.activemq.enabled }}
             - name: HEALTH_ACTIVEMQ_HOST
               value: "activemq"
+            {{- end }}
             {{- if .Values.redis.enabled }}
             - name: HEALTH_REDIS_HOST
               value: "{{ .Release.Name }}-redis-master"

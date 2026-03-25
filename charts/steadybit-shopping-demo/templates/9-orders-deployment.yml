@@ -70,8 +70,10 @@ spec:
             - containerPort: 8086
               protocol: TCP
           env:
+            {{- if and .Values.activemq.enabled (not .Values.kafka.enabled) }}
             - name: ACTIVEMQ_BROKER_HOST
               value: {{.Values.orders.activeMQ.host}}
+            {{- end }}
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
             - name: DD_SERVICE

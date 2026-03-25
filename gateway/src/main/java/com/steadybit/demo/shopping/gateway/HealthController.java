@@ -36,7 +36,7 @@ public class HealthController {
     @Value("${rest.endpoint.inventory}")
     private String urlInventory;
 
-    @Value("${health.activemq.host:activemq}")
+    @Value("${health.activemq.host:#{null}}")
     private String activemqHost;
     @Value("${health.activemq.port:61613}")
     private int activemqPort;
@@ -84,7 +84,9 @@ public class HealthController {
         status.put("inventory", checkHttp(urlInventory));
         status.put("orders", checkTcp(ordersHost, ordersPort));
         status.put("notification", checkTcp(notificationHost, notificationPort));
-        status.put("activemq", checkTcp(activemqHost, activemqPort));
+        if (activemqHost != null) {
+            status.put("activemq", checkTcp(activemqHost, activemqPort));
+        }
         if (redisHost != null) {
             status.put("redis", checkTcp(redisHost, redisPort));
         }
