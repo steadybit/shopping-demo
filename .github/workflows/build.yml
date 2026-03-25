@@ -346,6 +346,7 @@ jobs:
       - name: Add missing Helm repositories
         run: |
           helm repo add haproxytech https://haproxytech.github.io/helm-charts
+          helm repo add bitnami https://charts.bitnami.com/bitnami
           helm repo update
 
       - name: Set develop chart version
