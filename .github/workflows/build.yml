@@ -317,3 +317,56 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
+  release-helm-chart-develop:
+    name: "Release Helm Chart (develop)"
+    runs-on: ubuntu-latest
+    needs: [ test-helm-charts ]
+    if: github.ref == 'refs/heads/develop'
+
+    permissions:
+      contents: write
+      pages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v5
+        with:
+          version: v3.12.2
+
+      - name: Add missing Helm repositories
+        run: |
+          helm repo add haproxytech https://haproxytech.github.io/helm-charts
+          helm repo update
+
+      - name: Set develop chart version
+        run: |
+          CHART_VERSION=$(grep '^version:' charts/steadybit-shopping-demo/Chart.yaml | awk '{print $2}')
+          DEV_VERSION="${CHART_VERSION}-develop.$(date +%Y%m%d%H%M%S)"
+          sed -i "s/^version: .*/version: ${DEV_VERSION}/" charts/steadybit-shopping-demo/Chart.yaml
+          echo "DEV_VERSION=${DEV_VERSION}" >> $GITHUB_ENV
+
+      - name: Package chart
+        run: |
+          helm dependency build charts/steadybit-shopping-demo
+          helm package charts/steadybit-shopping-demo -d .cr-release-packages
+
+      - name: Upload chart to gh-pages
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          cp .cr-release-packages/*.tgz .
+          helm repo index . --url https://steadybit.github.io/shopping-demo --merge index.yaml
+          git add *.tgz index.yaml
+          git commit -m "Release develop chart ${DEV_VERSION}"
+          git push origin gh-pages
+
