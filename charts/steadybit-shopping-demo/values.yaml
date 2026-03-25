@@ -213,7 +213,7 @@ checkout:
   nodeSelector: {}
   activeMQ:
     # ActiveMQ Host
-    host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"
+    host: "activemq:61613"
 orders:
   enabled: true
   image:
@@ -241,7 +241,7 @@ orders:
   nodeSelector: {}
   activeMQ:
     # ActiveMQ Host
-    host: "activemq.steadybit-shopping-demo.svc.cluster.local:61613"
+    host: "activemq:61613"
 
 # Redis configuration (opt-in). Set redis.enabled=true to deploy Redis via Bitnami subchart.
 redis:
@@ -252,11 +252,11 @@ redis:
   master:
     resources:
       requests:
-        memory: "64Mi"
-        cpu: "50m"
+        memory: "32Mi"
+        cpu: "10m"
       limits:
-        memory: "256Mi"
-        cpu: "250m"
+        memory: "128Mi"
+        cpu: "100m"
 
 # Kafka configuration (opt-in). Set kafka.enabled=true to deploy Kafka via Bitnami subchart.
 kafka:
@@ -266,10 +266,11 @@ kafka:
     resources:
       requests:
         memory: "256Mi"
-        cpu: "100m"
+        cpu: "50m"
       limits:
         memory: "512Mi"
-        cpu: "500m"
+        cpu: "250m"
+    heapOpts: "-Xmx256m -Xms256m"
   listeners:
     client:
       protocol: PLAINTEXT
@@ -284,11 +285,11 @@ rabbitmq:
     password: guest
   resources:
     requests:
-      memory: "128Mi"
-      cpu: "100m"
+      memory: "64Mi"
+      cpu: "25m"
     limits:
-      memory: "512Mi"
-      cpu: "500m"
+      memory: "256Mi"
+      cpu: "250m"
 
 # Notification service (opt-in, requires rabbitmq.enabled=true)
 notification:
