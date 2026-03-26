@@ -8,6 +8,7 @@ import (
 	"checkout/cart"
 	"checkout/messaging"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
@@ -23,6 +24,20 @@ func NewCheckoutRestController(publisher messaging.Publisher, repository cart.Re
 		publisher:  publisher,
 		repository: repository,
 	}
+}
+
+func (c *CheckoutRestController) GetCart(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	theCart, err := c.repository.FindByID(id)
+	if err != nil {
+		http.Error(w, "Cart not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(theCart)
 }
 
 func (c *CheckoutRestController) CheckoutDirect(w http.ResponseWriter, r *http.Request) {

@@ -104,6 +104,7 @@ func main() {
 	checkoutController := controller.NewCheckoutRestController(publisher, repo)
 
 	r := mux.NewRouter()
+	r.HandleFunc("/checkout/cart/{id}", checkoutController.GetCart).Methods("GET")
 	r.HandleFunc("/checkout/direct", checkoutController.CheckoutDirect).Methods("POST")
 	r.HandleFunc("/checkout/buffered", checkoutController.CheckoutAsync).Methods("POST")
 

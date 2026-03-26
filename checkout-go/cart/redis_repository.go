@@ -34,6 +34,19 @@ func NewRedisCartRepository(redisURL string) (*RedisCartRepository, error) {
 	return &RedisCartRepository{client: client}, nil
 }
 
+func (r *RedisCartRepository) FindByID(id string) (*Cart, error) {
+	ctx := context.Background()
+	data, err := r.client.Get(ctx, redisKey(id)).Bytes()
+	if err != nil {
+		return nil, fmt.Errorf("cart not found: %s", id)
+	}
+	var c Cart
+	if err := json.Unmarshal(data, &c); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal cart %s: %w", id, err)
+	}
+	return &c, nil
+}
+
 func (r *RedisCartRepository) Save(c Cart) {
 	ctx := context.Background()
 	data, err := json.Marshal(c)

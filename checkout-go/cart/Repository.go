@@ -10,6 +10,7 @@ import (
 // can be used interchangeably at runtime.
 type Repository interface {
 	Save(cart Cart)
+	FindByID(id string) (*Cart, error)
 	MarkAsPublished(ids []string, now time.Time) error
 	FindPublishPending() ([]*Cart, error)
 }
@@ -24,6 +25,17 @@ func NewCartRepository() *CartRepository {
 	return &CartRepository{
 		carts: make(map[string]Cart),
 	}
+}
+
+// FindByID returns a Cart by its ID.
+func (r *CartRepository) FindByID(id string) (*Cart, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	c, exists := r.carts[id]
+	if !exists {
+		return nil, errors.New("cart not found: " + id)
+	}
+	return &c, nil
 }
 
 // Save adds or updates a Cart in the repository.
