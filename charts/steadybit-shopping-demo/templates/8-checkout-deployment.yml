@@ -63,11 +63,11 @@ spec:
             {{- if .Values.kafka.enabled }}
             - name: KAFKA_BROKERS
               value: "{{ .Release.Name }}-kafka:9092"
-            {{- if .Values.kafka.sasl }}
+            {{- if .Values.kafka.appAuth }}
             - name: KAFKA_SASL_USERNAME
-              value: {{ .Values.kafka.sasl.username | quote }}
+              value: {{ .Values.kafka.appAuth.username | quote }}
             - name: KAFKA_SASL_PASSWORD
-              value: {{ .Values.kafka.sasl.password | quote }}
+              value: {{ .Values.kafka.appAuth.password | quote }}
             {{- end }}
             {{- end }}
             {{- if .Values.redis.enabled }}

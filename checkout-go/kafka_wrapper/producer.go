@@ -68,10 +68,16 @@ func configureSASL(config *sarama.Config) {
 	if user == "" || pass == "" {
 		return
 	}
+	mechanism := os.Getenv("KAFKA_SASL_MECHANISM")
 	config.Net.SASL.Enable = true
 	config.Net.SASL.User = user
 	config.Net.SASL.Password = pass
-	config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
-	config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &XDGSCRAMClient{HashGeneratorFcn: SHA512} }
-	log.Info().Str("user", user).Msg("Kafka SASL/SCRAM-SHA-512 enabled")
+	switch mechanism {
+	case "SCRAM-SHA-512":
+		config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+		config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &XDGSCRAMClient{HashGeneratorFcn: SHA512} }
+	default:
+		config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
+	}
+	log.Info().Str("user", user).Str("mechanism", string(config.Net.SASL.Mechanism)).Msg("Kafka SASL enabled")
 }
