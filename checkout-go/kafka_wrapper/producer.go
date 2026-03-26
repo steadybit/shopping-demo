@@ -6,6 +6,7 @@ package kafka_wrapper
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/IBM/sarama"
@@ -23,6 +24,8 @@ func NewKafkaProducer(brokers string, topic string) (*Producer, error) {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	config.Producer.RequiredAcks = sarama.WaitForAll
+
+	configureSASL(config)
 
 	producer, err := sarama.NewSyncProducer(brokerList, config)
 	if err != nil {
@@ -57,4 +60,18 @@ func (p *Producer) Send(destination, contentType string, body []byte, ID string)
 
 func (p *Producer) Close() error {
 	return p.producer.Close()
+}
+
+func configureSASL(config *sarama.Config) {
+	user := os.Getenv("KAFKA_SASL_USERNAME")
+	pass := os.Getenv("KAFKA_SASL_PASSWORD")
+	if user == "" || pass == "" {
+		return
+	}
+	config.Net.SASL.Enable = true
+	config.Net.SASL.User = user
+	config.Net.SASL.Password = pass
+	config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+	config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &XDGSCRAMClient{HashGeneratorFcn: SHA512} }
+	log.Info().Str("user", user).Msg("Kafka SASL/SCRAM-SHA-512 enabled")
 }

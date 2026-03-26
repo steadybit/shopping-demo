@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"strings"
 
 	"github.com/IBM/sarama"
@@ -47,6 +48,8 @@ func startKafkaConsumer(brokers string) error {
 	config.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{sarama.NewBalanceStrategyRoundRobin()}
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
 
+	configureSASL(config)
+
 	group, err := sarama.NewConsumerGroup(brokerList, "order-service", config)
 	if err != nil {
 		return err
@@ -63,4 +66,18 @@ func startKafkaConsumer(brokers string) error {
 	}()
 
 	return nil
+}
+
+func configureSASL(config *sarama.Config) {
+	user := os.Getenv("KAFKA_SASL_USERNAME")
+	pass := os.Getenv("KAFKA_SASL_PASSWORD")
+	if user == "" || pass == "" {
+		return
+	}
+	config.Net.SASL.Enable = true
+	config.Net.SASL.User = user
+	config.Net.SASL.Password = pass
+	config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+	config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient { return &XDGSCRAMClient{HashGeneratorFcn: SHA512} }
+	log.Info().Str("user", user).Msg("Kafka SASL/SCRAM-SHA-512 enabled")
 }
