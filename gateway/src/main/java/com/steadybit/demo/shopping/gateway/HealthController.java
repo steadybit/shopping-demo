@@ -19,6 +19,8 @@ import java.net.Socket;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/api/health")
@@ -68,35 +70,48 @@ public class HealthController {
 
     public HealthController(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-                .connectTimeout(Duration.ofSeconds(2))
-                .readTimeout(Duration.ofSeconds(2))
+                .connectTimeout(Duration.ofMillis(500))
+                .readTimeout(Duration.ofMillis(500))
                 .build();
     }
 
     @GetMapping("/dependencies")
     public Map<String, DependencyStatus> getDependencyHealth() {
-        Map<String, DependencyStatus> status = new LinkedHashMap<>();
-        status.put("gateway", new DependencyStatus("UP", "self", null));
-        status.put("fashion-bestseller", checkHttp(urlFashion));
-        status.put("toys-bestseller", checkHttp(urlToys));
-        status.put("hot-deals", checkHttp(urlHotDeals));
-        status.put("checkout", checkHttp(urlCheckout));
-        status.put("inventory", checkHttp(urlInventory));
-        status.put("orders", checkTcp(ordersHost, ordersPort));
-        status.put("notification", checkTcp(notificationHost, notificationPort));
+        Map<String, DependencyStatus> results = new ConcurrentHashMap<>();
+        results.put("gateway", new DependencyStatus("UP", "self", null));
+
+        var futures = new java.util.ArrayList<CompletableFuture<Void>>();
+        futures.add(CompletableFuture.runAsync(() -> results.put("fashion-bestseller", checkHttp(urlFashion))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("toys-bestseller", checkHttp(urlToys))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("hot-deals", checkHttp(urlHotDeals))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("checkout", checkHttp(urlCheckout))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("inventory", checkHttp(urlInventory))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("orders", checkTcp(ordersHost, ordersPort))));
+        futures.add(CompletableFuture.runAsync(() -> results.put("notification", checkTcp(notificationHost, notificationPort))));
         if (activemqHost != null) {
-            status.put("activemq", checkTcp(activemqHost, activemqPort));
+            futures.add(CompletableFuture.runAsync(() -> results.put("activemq", checkTcp(activemqHost, activemqPort))));
         }
         if (redisHost != null) {
-            status.put("redis", checkTcp(redisHost, redisPort));
+            futures.add(CompletableFuture.runAsync(() -> results.put("redis", checkTcp(redisHost, redisPort))));
         }
         if (kafkaHost != null) {
-            status.put("kafka", checkTcp(kafkaHost, kafkaPort));
+            futures.add(CompletableFuture.runAsync(() -> results.put("kafka", checkTcp(kafkaHost, kafkaPort))));
         }
         if (rabbitmqHost != null) {
-            status.put("rabbitmq", checkTcp(rabbitmqHost, rabbitmqPort));
+            futures.add(CompletableFuture.runAsync(() -> results.put("rabbitmq", checkTcp(rabbitmqHost, rabbitmqPort))));
         }
-        return status;
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        // Preserve consistent ordering
+        Map<String, DependencyStatus> ordered = new LinkedHashMap<>();
+        for (String key : new String[]{"gateway", "fashion-bestseller", "toys-bestseller", "hot-deals",
+                "checkout", "inventory", "orders", "notification", "activemq", "redis", "kafka", "rabbitmq"}) {
+            if (results.containsKey(key)) {
+                ordered.put(key, results.get(key));
+            }
+        }
+        return ordered;
     }
 
     private DependencyStatus checkHttp(String url) {
@@ -113,7 +128,7 @@ public class HealthController {
     private DependencyStatus checkTcp(String host, int port) {
         String address = host + ":" + port;
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(host, port), 2000);
+            socket.connect(new InetSocketAddress(host, port), 500);
             return new DependencyStatus("UP", address, null);
         } catch (IOException e) {
             return new DependencyStatus("DOWN", address, e.getMessage());
