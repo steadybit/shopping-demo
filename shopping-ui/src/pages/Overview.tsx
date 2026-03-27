@@ -4,26 +4,27 @@ import { Badge, Container } from 'react-bootstrap';
 import { useDependencyHealth } from '../services/HealthService';
 
 import { AiOutlineLoading } from 'react-icons/ai';
+import { BsPersonFill } from 'react-icons/bs';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-const NODES: Record<string, { label: string; x: number; y: number; type: 'service' | 'infra'; statusKeys?: string[] }> = {
-    // Row 1: Inventory (top center)
-    'inventory':           { label: 'Inventory',           x: 50,  y: 5,   type: 'service' },
-    // Row 2: Product services
-    'fashion-bestseller':  { label: 'Fashion Bestseller',  x: 15,  y: 20,  type: 'service' },
-    'toys-bestseller':     { label: 'Toys Bestseller',     x: 50,  y: 20,  type: 'service' },
-    'hot-deals':           { label: 'Hot Deals',           x: 85,  y: 20,  type: 'service' },
-    // Row 3: Gateway (center)
-    'gateway':             { label: 'Gateway',             x: 50,  y: 35,  type: 'service' },
-    // Row 4: Checkout (center) + Redis (right)
-    'redis':               { label: 'Redis',               x: 85,  y: 50,  type: 'infra' },
-    'checkout':            { label: 'Checkout',            x: 50,  y: 50,  type: 'service' },
-    // Row 5: Broker (left) + Orders (center)
-    'broker':              { label: 'ActiveMQ / Kafka',    x: 15,  y: 66,  type: 'infra', statusKeys: ['activemq', 'kafka'] },
-    'orders':              { label: 'Orders',              x: 50,  y: 66,  type: 'service' },
-    // Row 6: RabbitMQ (left) + Notification (center)
-    'rabbitmq':            { label: 'RabbitMQ',            x: 15,  y: 82,  type: 'infra' },
-    'notification':        { label: 'Notification',        x: 50,  y: 82,  type: 'service' },
+const NODES: Record<string, { label: string; x: number; y: number; type: 'service' | 'infra' | 'user'; statusKeys?: string[] }> = {
+    // Row 1: User (top center)
+    'user':                { label: 'User',                x: 50,  y: 8,   type: 'user' },
+    // Row 2: Gateway (center) + Bestsellers (right) + Inventory (far right)
+    'gateway':             { label: 'Gateway',             x: 50,  y: 23,  type: 'service' },
+    'fashion-bestseller':  { label: 'Fashion Bestseller',  x: 75,  y: 11,  type: 'service' },
+    'toys-bestseller':     { label: 'Toys Bestseller',     x: 75,  y: 23,  type: 'service' },
+    'hot-deals':           { label: 'Hot Deals',           x: 75,  y: 35,  type: 'service' },
+    'inventory':           { label: 'Inventory',           x: 95,  y: 23,  type: 'service' },
+    // Row 3: Redis (left) + Checkout (center)
+    'redis':               { label: 'Redis',               x: 20,  y: 47,  type: 'infra' },
+    'checkout':            { label: 'Checkout',            x: 50,  y: 47,  type: 'service' },
+    // Row 4: Broker (left) + Orders (center)
+    'broker':              { label: 'ActiveMQ / Kafka',    x: 20,  y: 65,  type: 'infra', statusKeys: ['activemq', 'kafka'] },
+    'orders':              { label: 'Orders',              x: 50,  y: 65,  type: 'service' },
+    // Row 5: RabbitMQ (left) + Notification (center)
+    'rabbitmq':            { label: 'RabbitMQ',            x: 20,  y: 83,  type: 'infra' },
+    'notification':        { label: 'Notification',        x: 50,  y: 83,  type: 'service' },
 };
 
 interface Connection {
@@ -33,11 +34,11 @@ interface Connection {
 }
 
 const CONNECTIONS: Connection[] = [
+    { from: 'user',    to: 'gateway',            style: 'solid' },
     { from: 'gateway', to: 'fashion-bestseller', style: 'solid' },
     { from: 'gateway', to: 'toys-bestseller',    style: 'solid' },
     { from: 'gateway', to: 'hot-deals',          style: 'solid' },
     { from: 'gateway', to: 'checkout',           style: 'solid' },
-    { from: 'gateway', to: 'inventory',          style: 'solid' },
     { from: 'fashion-bestseller', to: 'inventory', style: 'solid' },
     { from: 'toys-bestseller',    to: 'inventory', style: 'solid' },
     { from: 'hot-deals',          to: 'inventory', style: 'solid' },
@@ -61,6 +62,7 @@ const Overview: React.FC = () => {
     const [lines, setLines] = useState<LineData[]>([]);
 
     const getStatus = useCallback((key: string): 'up' | 'down' | 'unknown' => {
+        if (key === 'user') return 'up';
         const node = NODES[key];
         // For merged nodes (e.g. broker = activemq/kafka), check if any key is UP
         if (node?.statusKeys) {
@@ -113,7 +115,7 @@ const Overview: React.FC = () => {
     }, [content, getStatus]);
 
     const nodeClass = (type: string, status: string) => {
-        const base = type === 'infra' ? 'ov-infra-node' : 'ov-service-node';
+        const base = type === 'infra' ? 'ov-infra-node' : type === 'user' ? 'ov-user-node' : 'ov-service-node';
         return `${base} ov-node--${status}`;
     };
 
@@ -163,10 +165,13 @@ const Overview: React.FC = () => {
                                 style={{ left: `${node.x}%`, top: `${node.y}%` }}
                                 title={content[key]?.error || ''}
                             >
+                                {node.type === 'user' && <BsPersonFill size={20} style={{ marginBottom: 2 }} />}
                                 <div className="ov-node-label">{node.label}</div>
-                                <Badge bg={status === 'up' ? 'success' : status === 'down' ? 'danger' : 'secondary'}>
-                                    {status === 'up' ? 'UP' : status === 'down' ? 'DOWN' : '...'}
-                                </Badge>
+                                {node.type !== 'user' && (
+                                    <Badge bg={status === 'up' ? 'success' : status === 'down' ? 'danger' : 'secondary'}>
+                                        {status === 'up' ? 'UP' : status === 'down' ? 'DOWN' : '...'}
+                                    </Badge>
+                                )}
                             </div>
                         );
                     })}
