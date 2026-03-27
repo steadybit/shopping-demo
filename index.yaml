@@ -39,7 +39,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.125751446Z"
+    created: "2026-03-27T13:56:00.615656698Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -59,7 +59,7 @@ entries:
       repository: https://charts.bitnami.com/bitnami
       version: ~16
     description: Steadybit shopping-demo application Helm chart for Kubernetes.
-    digest: f3e87202ad4fd807078d685bd4dcd806dd8e9a4dd41e304845488b1eb9196e84
+    digest: a2728771f2c6df41c9d31fb9e29c1a661f532d580cbf680c3463b4c3f72765f0
     home: https://www.steadybit.com/
     icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
     maintainers:
@@ -70,8 +70,8 @@ entries:
     - https://github.com/steadybit/shopping-demo
     type: application
     urls:
-    - https://steadybit.github.io/shopping-demo/.cr-release-packages/steadybit-shopping-demo-1.1.33-develop.20260327130608.tgz
-    version: 1.1.33-develop.20260327130608
+    - https://steadybit.github.io/shopping-demo/.cr-release-packages/steadybit-shopping-demo-1.1.33-develop.20260327135554.tgz
+    version: 1.1.33-develop.20260327135554
   - annotations:
       artifacthub.io/images: |
         - name: logo
@@ -83,7 +83,51 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.102372714Z"
+    created: "2026-03-27T13:56:00.593602144Z"
+    dependencies:
+    - alias: haproxy
+      condition: gateway.ingress.haproxy.enabled
+      name: kubernetes-ingress
+      repository: https://haproxytech.github.io/helm-charts
+      version: '*'
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~20
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: ~31
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: a2728771f2c6df41c9d31fb9e29c1a661f532d580cbf680c3463b4c3f72765f0
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://steadybit.github.io/shopping-demo/steadybit-shopping-demo-1.1.33-develop.20260327135554.tgz
+    version: 1.1.33-develop.20260327135554
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-03-27T13:56:00.570867759Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -127,7 +171,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.080958133Z"
+    created: "2026-03-27T13:56:00.545928639Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -171,7 +215,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.058575478Z"
+    created: "2026-03-27T13:56:00.522704921Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -215,7 +259,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.03648884Z"
+    created: "2026-03-27T13:56:00.500557924Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -259,7 +303,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:15.01420601Z"
+    created: "2026-03-27T13:56:00.478952323Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -303,7 +347,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:14.991586398Z"
+    created: "2026-03-27T13:56:00.45687713Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -347,7 +391,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:14.969673353Z"
+    created: "2026-03-27T13:56:00.433340057Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -391,7 +435,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:14.947978507Z"
+    created: "2026-03-27T13:56:00.407296237Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -435,7 +479,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:14.926264408Z"
+    created: "2026-03-27T13:56:00.381911857Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -479,7 +523,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T13:06:14.90567306Z"
+    created: "2026-03-27T13:56:00.359837904Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1416,4 +1460,4 @@ entries:
     urls:
     - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-0.1.0/steadybit-shopping-demo-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-27T13:06:14.883340492Z"
+generated: "2026-03-27T13:56:00.337961396Z"
