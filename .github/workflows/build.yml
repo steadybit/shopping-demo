@@ -360,16 +360,15 @@ jobs:
       - name: Package chart
         run: |
           helm dependency build charts/steadybit-shopping-demo
-          helm package charts/steadybit-shopping-demo -d .cr-release-packages
+          helm package charts/steadybit-shopping-demo -d /tmp/chart-packages
 
       - name: Upload chart to gh-pages
         run: |
-          cp .cr-release-packages/*.tgz /tmp/
-          git stash
+          DEV_VERSION="${{ env.DEV_VERSION }}"
           git checkout gh-pages
-          cp /tmp/*.tgz .
+          cp /tmp/chart-packages/*.tgz .
           helm repo index . --url https://steadybit.github.io/shopping-demo --merge index.yaml
-          git add *.tgz index.yaml
+          git add -- *.tgz index.yaml
           git commit -m "Release develop chart ${DEV_VERSION}"
           git push origin gh-pages
 
