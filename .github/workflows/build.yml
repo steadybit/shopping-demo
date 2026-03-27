@@ -365,6 +365,7 @@ jobs:
       - name: Upload chart to gh-pages
         run: |
           DEV_VERSION="${{ env.DEV_VERSION }}"
+          git checkout -- charts/steadybit-shopping-demo/Chart.yaml
           git checkout gh-pages
           cp /tmp/chart-packages/*.tgz .
           helm repo index . --url https://steadybit.github.io/shopping-demo --merge index.yaml
