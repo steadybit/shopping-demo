@@ -10,9 +10,9 @@ import (
 	"os"
 	"time"
 
-	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-kit/extlogging"
 )
@@ -92,11 +92,11 @@ func main() {
 	}
 
 	q, err := ch.QueueDeclare(
-		"",    // anonymous queue
-		false, // durable
-		true,  // delete when unused
-		true,  // exclusive
-		false, // no-wait
+		"notification.orders", // named queue
+		true,                  // durable
+		false,                 // delete when unused
+		false,                 // exclusive
+		false,                 // no-wait
 		nil,
 	)
 	if err != nil {
