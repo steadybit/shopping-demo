@@ -39,7 +39,95 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:55.030998252Z"
+    created: "2026-03-27T13:06:15.125751446Z"
+    dependencies:
+    - alias: haproxy
+      condition: gateway.ingress.haproxy.enabled
+      name: kubernetes-ingress
+      repository: https://haproxytech.github.io/helm-charts
+      version: '*'
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~20
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: ~31
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: f3e87202ad4fd807078d685bd4dcd806dd8e9a4dd41e304845488b1eb9196e84
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://steadybit.github.io/shopping-demo/.cr-release-packages/steadybit-shopping-demo-1.1.33-develop.20260327130608.tgz
+    version: 1.1.33-develop.20260327130608
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-03-27T13:06:15.102372714Z"
+    dependencies:
+    - alias: haproxy
+      condition: gateway.ingress.haproxy.enabled
+      name: kubernetes-ingress
+      repository: https://haproxytech.github.io/helm-charts
+      version: '*'
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~20
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: ~31
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: f3e87202ad4fd807078d685bd4dcd806dd8e9a4dd41e304845488b1eb9196e84
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://steadybit.github.io/shopping-demo/steadybit-shopping-demo-1.1.33-develop.20260327130608.tgz
+    version: 1.1.33-develop.20260327130608
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-03-27T13:06:15.080958133Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -83,51 +171,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:55.052875578Z"
-    dependencies:
-    - alias: haproxy
-      condition: gateway.ingress.haproxy.enabled
-      name: kubernetes-ingress
-      repository: https://haproxytech.github.io/helm-charts
-      version: '*'
-    - condition: redis.enabled
-      name: redis
-      repository: https://charts.bitnami.com/bitnami
-      version: ~20
-    - condition: kafka.enabled
-      name: kafka
-      repository: https://charts.bitnami.com/bitnami
-      version: ~31
-    - condition: rabbitmq.enabled
-      name: rabbitmq
-      repository: https://charts.bitnami.com/bitnami
-      version: ~16
-    description: Steadybit shopping-demo application Helm chart for Kubernetes.
-    digest: e54d61d6fe5a3cfc724b39e1b799ac04865452f14114661d85a1cca6917ff271
-    home: https://www.steadybit.com/
-    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
-    maintainers:
-    - email: ansgar.schulte@steadybit.com
-      name: ansgarschulte
-    name: steadybit-shopping-demo
-    sources:
-    - https://github.com/steadybit/shopping-demo
-    type: application
-    urls:
-    - https://steadybit.github.io/shopping-demo/.cr-release-packages/steadybit-shopping-demo-1.1.33-develop.20260327110948.tgz
-    version: 1.1.33-develop.20260327110948
-  - annotations:
-      artifacthub.io/images: |
-        - name: logo
-          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
-      artifacthub.io/links: |-
-        - name: Steadybit website
-          url: https://www.steadybit.com
-        - name: Steadybit reliability hub
-          url: https://hub.steadybit.com
-    apiVersion: v2
-    appVersion: latest
-    created: "2026-03-27T11:09:55.008420384Z"
+    created: "2026-03-27T13:06:15.058575478Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -171,7 +215,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.985803052Z"
+    created: "2026-03-27T13:06:15.03648884Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -215,7 +259,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.962671362Z"
+    created: "2026-03-27T13:06:15.01420601Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -259,7 +303,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.93324167Z"
+    created: "2026-03-27T13:06:14.991586398Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -303,7 +347,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.90985146Z"
+    created: "2026-03-27T13:06:14.969673353Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -347,7 +391,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.886637034Z"
+    created: "2026-03-27T13:06:14.947978507Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -391,7 +435,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.864541945Z"
+    created: "2026-03-27T13:06:14.926264408Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -435,7 +479,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-03-27T11:09:54.843461808Z"
+    created: "2026-03-27T13:06:14.90567306Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1372,4 +1416,4 @@ entries:
     urls:
     - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-0.1.0/steadybit-shopping-demo-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-27T11:09:54.821160332Z"
+generated: "2026-03-27T13:06:14.883340492Z"
