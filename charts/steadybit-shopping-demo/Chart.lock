@@ -1,15 +1,15 @@
 dependencies:
 - name: kubernetes-ingress
-  repository: https://haproxytech.github.io/helm-charts
+  repository: oci://ghcr.io/haproxytech/helm-charts
   version: 1.49.0
 - name: redis
-  repository: https://charts.bitnami.com/bitnami
+  repository: oci://registry-1.docker.io/bitnamicharts
   version: 20.13.4
 - name: kafka
-  repository: https://charts.bitnami.com/bitnami
+  repository: oci://registry-1.docker.io/bitnamicharts
   version: 31.5.0
 - name: rabbitmq
-  repository: https://charts.bitnami.com/bitnami
+  repository: oci://registry-1.docker.io/bitnamicharts
   version: 16.0.14
-digest: sha256:5887b48aa6087e179ba565a827d77ac5fa4295cc4fc1b47a4b20a78f2576c772
-generated: "2026-02-27T14:58:23.916399+01:00"
+digest: sha256:c695be4d41909a79c7a4eb0c97e1288dabc65c7921b3342d48f7604962748063
+generated: "2026-03-31T11:36:24.807939+02:00"
