@@ -70,8 +70,10 @@ spec:
             - containerPort: 8086
               protocol: TCP
           env:
+            {{- if and .Values.activemq.enabled (not .Values.kafka.enabled) }}
             - name: ACTIVEMQ_BROKER_HOST
               value: {{.Values.orders.activeMQ.host}}
+            {{- end }}
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
             - name: DD_SERVICE
@@ -82,6 +84,20 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            {{- if .Values.kafka.enabled }}
+            - name: KAFKA_BROKERS
+              value: "{{ .Release.Name }}-kafka:9092"
+            {{- if .Values.kafka.appAuth }}
+            - name: KAFKA_SASL_USERNAME
+              value: {{ .Values.kafka.appAuth.username | quote }}
+            - name: KAFKA_SASL_PASSWORD
+              value: {{ .Values.kafka.appAuth.password | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.rabbitmq.enabled }}
+            - name: RABBITMQ_URL
+              value: "amqp://{{ .Values.rabbitmq.auth.username }}:{{ .Values.rabbitmq.auth.password }}@{{ .Release.Name }}-rabbitmq:5672/"
+            {{- end }}
       {{- with .Values.orders.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}

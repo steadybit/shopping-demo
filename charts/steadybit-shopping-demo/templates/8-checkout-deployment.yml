@@ -48,8 +48,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
+            {{- if and .Values.activemq.enabled (not .Values.kafka.enabled) }}
             - name: SPRING_ACTIVEMQ_BROKER_URL
               value: {{.Values.checkout.activeMQ.host}}
+            {{- end }}
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -58,6 +60,20 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            {{- if .Values.kafka.enabled }}
+            - name: KAFKA_BROKERS
+              value: "{{ .Release.Name }}-kafka:9092"
+            {{- if .Values.kafka.appAuth }}
+            - name: KAFKA_SASL_USERNAME
+              value: {{ .Values.kafka.appAuth.username | quote }}
+            - name: KAFKA_SASL_PASSWORD
+              value: {{ .Values.kafka.appAuth.password | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: "redis://{{ .Release.Name }}-redis-master:6379"
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

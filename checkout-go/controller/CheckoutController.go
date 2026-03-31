@@ -6,23 +6,38 @@ package controller
 
 import (
 	"checkout/cart"
-	"checkout/stomp_wrapper"
+	"checkout/messaging"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
 )
 
 type CheckoutRestController struct {
-	stompWrapper *stomp_wrapper.ConnWrapper
-	repository   *cart.CartRepository
+	publisher  messaging.Publisher
+	repository cart.Repository
 }
 
-func NewCheckoutRestController(stompWrapper *stomp_wrapper.ConnWrapper, repository *cart.CartRepository) *CheckoutRestController {
+func NewCheckoutRestController(publisher messaging.Publisher, repository cart.Repository) *CheckoutRestController {
 	return &CheckoutRestController{
-		stompWrapper: stompWrapper,
-		repository:   repository,
+		publisher:  publisher,
+		repository: repository,
 	}
+}
+
+func (c *CheckoutRestController) GetCart(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	theCart, err := c.repository.FindByID(id)
+	if err != nil {
+		http.Error(w, "Cart not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(theCart)
 }
 
 func (c *CheckoutRestController) CheckoutDirect(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +50,7 @@ func (c *CheckoutRestController) CheckoutDirect(w http.ResponseWriter, r *http.R
 
 	destination := "/queue/order_created"
 	body := toOrder(toCart(theCart))
-	if err := c.stompWrapper.Send(destination, "application/json", body, theCart.Id); err != nil {
+	if err := c.publisher.Send(destination, "application/json", body, theCart.Id); err != nil {
 		http.Error(w, "Failed to publish order", http.StatusInternalServerError)
 		log.Error().Err(err).Msgf("Failed to publish direct order %s", theCart.Id)
 		return
@@ -85,7 +100,7 @@ func (c *CheckoutRestController) PublishPendingOrders() {
 		var published []string
 		for _, theCart := range publishPending {
 			order := toOrder(*theCart)
-			if err := c.stompWrapper.Send(destination, "application/json", order, theCart.ID); err != nil {
+			if err := c.publisher.Send(destination, "application/json", order, theCart.ID); err != nil {
 				log.Error().Err(err).Msgf("Failed to publish buffered order %s", theCart.ID)
 				continue
 			}

@@ -94,7 +94,7 @@ export function useCart(): [Cart, (product: Product) => void, Checkout] {
 
     const onCheckout = useCallback(async (type: string) => {
         const shoppingcart: ShoppingCart = {
-            id: uuidv4(),
+            id: "demo-cart",
             items: cart.items.map(item => ({
                 productId: item.product.id,
                 quantity: item.quantity,

@@ -33,7 +33,7 @@ manifest should match snapshot:
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -127,7 +127,7 @@ manifest should match snapshot replica count:
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE
@@ -231,7 +231,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
           containers:
             - env:
                 - name: ACTIVEMQ_BROKER_HOST
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: DD_SERVICE

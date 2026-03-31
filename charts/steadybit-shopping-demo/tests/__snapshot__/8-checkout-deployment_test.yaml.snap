@@ -47,7 +47,7 @@ manifest should match snapshot:
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: SPRING_ACTIVEMQ_BROKER_URL
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -153,7 +153,7 @@ manifest should match snapshot replica count:
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: SPRING_ACTIVEMQ_BROKER_URL
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:
@@ -259,7 +259,7 @@ manifest should match snapshot with horizontalPodAutoscaler and podDisruptionBud
                 - name: SPRING_PROFILES_ACTIVE
                   value: kubernetes
                 - name: SPRING_ACTIVEMQ_BROKER_URL
-                  value: activemq.steadybit-shopping-demo.svc.cluster.local:61613
+                  value: activemq:61613
                 - name: DD_SERVICE
                   valueFrom:
                     fieldRef:

@@ -66,6 +66,22 @@ spec:
               value: {{ .Values.global.endpoints.checkout }}
             - name: rest.endpoint.inventory
               value: {{ .Values.global.endpoints.inventory }}
+            {{- if .Values.activemq.enabled }}
+            - name: HEALTH_ACTIVEMQ_HOST
+              value: "activemq"
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: HEALTH_REDIS_HOST
+              value: "{{ .Release.Name }}-redis-master"
+            {{- end }}
+            {{- if .Values.kafka.enabled }}
+            - name: HEALTH_KAFKA_HOST
+              value: "{{ .Release.Name }}-kafka"
+            {{- end }}
+            {{- if .Values.rabbitmq.enabled }}
+            - name: HEALTH_RABBITMQ_HOST
+              value: "{{ .Release.Name }}-rabbitmq"
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

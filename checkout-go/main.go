@@ -8,6 +8,8 @@ import (
 	"checkout/cart"
 	"checkout/chaos"
 	"checkout/controller"
+	"checkout/kafka_wrapper"
+	"checkout/messaging"
 	stomp_connection "checkout/stomp_wrapper"
 	stomp "github.com/go-stomp/stomp/v3"
 	"github.com/gorilla/mux"
@@ -41,58 +43,79 @@ func main() {
 	log.Info().Msg("Starting Checkout Application...")
 	extlogging.InitZeroLog()
 
-	// Retrieve ActiveMQ connection info from environment variables (or use defaults).
-	brokerAddr, found := os.LookupEnv("SPRING_ACTIVEMQ_BROKER_URL")
-	if !found {
-		brokerAddr, found = os.LookupEnv("spring.activemq.broker-url")
-	}
-	if !found {
-		brokerAddr = "localhost:61613"
-	}
-	user := os.Getenv("ACTIVEMQ_USER")
-	pass := os.Getenv("ACTIVEMQ_PASS")
-
-	// 1) Connect to ActiveMQ using STOMP.
-	var conn *stomp.Conn
-	var err error
-	if user == "" {
-		conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
-	} else {
-		conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.Login(user, pass), stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
-	}
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to connect to ActiveMQ")
-	}
-	defer func() {
-		if conn != nil {
-			_ = conn.Disconnect()
+	// Select cart repository: Redis if REDIS_URL is set, otherwise in-memory.
+	var repo cart.Repository
+	if redisURL, ok := os.LookupEnv("REDIS_URL"); ok {
+		redisRepo, err := cart.NewRedisCartRepository(redisURL)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to connect to Redis")
 		}
-	}()
-
-	// 2) Subscribe to the "order_created" queue. (Equivalent of @JmsListener in Java.)
-	if conn == nil {
-		log.Error().Msg("Connection to ActiveMQ is nil")
-		return
+		repo = redisRepo
+		log.Info().Msg("Using Redis cart repository")
+	} else {
+		repo = cart.NewCartRepository()
+		log.Info().Msg("Using in-memory cart repository")
 	}
+
+	// Select publisher: Kafka if KAFKA_BROKERS is set, otherwise STOMP/ActiveMQ.
+	var publisher messaging.Publisher
+	if kafkaBrokers, ok := os.LookupEnv("KAFKA_BROKERS"); ok {
+		kafkaProducer, err := kafka_wrapper.NewKafkaProducer(kafkaBrokers, "order_created")
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to create Kafka producer")
+		}
+		publisher = kafkaProducer
+		log.Info().Msg("Using Kafka publisher")
+	} else {
+		// Retrieve ActiveMQ connection info from environment variables (or use defaults).
+		brokerAddr, found := os.LookupEnv("SPRING_ACTIVEMQ_BROKER_URL")
+		if !found {
+			brokerAddr, found = os.LookupEnv("spring.activemq.broker-url")
+		}
+		if !found {
+			brokerAddr = "localhost:61613"
+		}
+		user := os.Getenv("ACTIVEMQ_USER")
+		pass := os.Getenv("ACTIVEMQ_PASS")
+
+		var conn *stomp.Conn
+		var err error
+		if user == "" {
+			conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
+		} else {
+			conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.Login(user, pass), stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
+		}
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to connect to ActiveMQ")
+		}
+		defer func() {
+			if conn != nil {
+				_ = conn.Disconnect()
+			}
+		}()
+
+		publisher = stomp_connection.NewStompConnWrapper(conn)
+		log.Info().Msg("Using ActiveMQ/STOMP publisher")
+	}
+	defer publisher.Close()
 
 	http.Handle("/metrics", promhttp.Handler())
 
-	repository := cart.NewCartRepository()
-	stompWrapper := stomp_connection.NewStompConnWrapper(conn)
-	controller := controller.NewCheckoutRestController(stompWrapper, repository)
+	checkoutController := controller.NewCheckoutRestController(publisher, repo)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/checkout/direct", controller.CheckoutDirect).Methods("POST")
-	r.HandleFunc("/checkout/buffered", controller.CheckoutAsync).Methods("POST")
+	r.HandleFunc("/checkout/cart/{id}", checkoutController.GetCart).Methods("GET")
+	r.HandleFunc("/checkout/direct", checkoutController.CheckoutDirect).Methods("POST")
+	r.HandleFunc("/checkout/buffered", checkoutController.CheckoutAsync).Methods("POST")
 
 	go func() {
 		for {
-			controller.PublishPendingOrders()
+			checkoutController.PublishPendingOrders()
 			time.Sleep(1 * time.Second)
 		}
 	}()
 
-	chaosController := chaos.NewChaosRestController(stompWrapper)
+	chaosController := chaos.NewChaosRestController(publisher)
 	r.HandleFunc("/checkout/chaos/flood", chaosController.Flood).Methods("POST")
 
 	// Setup HTTP server
