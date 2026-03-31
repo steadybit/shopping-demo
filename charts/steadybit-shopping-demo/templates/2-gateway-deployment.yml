@@ -82,6 +82,10 @@ spec:
             - name: HEALTH_RABBITMQ_HOST
               value: "{{ .Release.Name }}-rabbitmq"
             {{- end }}
+            {{- if .Values.notification.enabled }}
+            - name: HEALTH_NOTIFICATION_HOST
+              value: "notification"
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

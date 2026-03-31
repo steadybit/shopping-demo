@@ -61,6 +61,15 @@ const Overview: React.FC = () => {
     const nodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const [lines, setLines] = useState<LineData[]>([]);
 
+    const isNodeVisible = useCallback((key: string): boolean => {
+        if (key === 'user' || key === 'gateway') return true;
+        const node = NODES[key];
+        if (node?.statusKeys) {
+            return node.statusKeys.some(k => content[k] !== undefined);
+        }
+        return content[key] !== undefined;
+    }, [content]);
+
     const getStatus = useCallback((key: string): 'up' | 'down' | 'unknown' => {
         if (key === 'user') return 'up';
         const node = NODES[key];
@@ -155,7 +164,7 @@ const Overview: React.FC = () => {
                         ))}
                     </svg>
 
-                    {Object.entries(NODES).map(([key, node]) => {
+                    {Object.entries(NODES).filter(([key]) => isNodeVisible(key)).map(([key, node]) => {
                         const status = getStatus(key);
                         return (
                             <div
