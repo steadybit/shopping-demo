@@ -63,7 +63,7 @@ public class HealthController {
     @Value("${health.orders.port:8086}")
     private int ordersPort;
 
-    @Value("${health.notification.host:notification}")
+    @Value("${health.notification.host:#{null}}")
     private String notificationHost;
     @Value("${health.notification.port:8087}")
     private int notificationPort;
@@ -87,7 +87,9 @@ public class HealthController {
         futures.add(CompletableFuture.runAsync(() -> results.put("checkout", checkHttp(urlCheckout))));
         futures.add(CompletableFuture.runAsync(() -> results.put("inventory", checkHttp(urlInventory))));
         futures.add(CompletableFuture.runAsync(() -> results.put("orders", checkTcp(ordersHost, ordersPort))));
-        futures.add(CompletableFuture.runAsync(() -> results.put("notification", checkTcp(notificationHost, notificationPort))));
+        if (notificationHost != null) {
+            futures.add(CompletableFuture.runAsync(() -> results.put("notification", checkTcp(notificationHost, notificationPort))));
+        }
         if (activemqHost != null) {
             futures.add(CompletableFuture.runAsync(() -> results.put("activemq", checkTcp(activemqHost, activemqPort))));
         }
