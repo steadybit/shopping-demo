@@ -1,7 +1,7 @@
 apiVersion: v2
 name: steadybit-shopping-demo
 description: Steadybit shopping-demo application Helm chart for Kubernetes.
-version: 1.1.33
+version: 1.2.0
 appVersion: latest
 type: application
 home: https://www.steadybit.com/
@@ -24,18 +24,18 @@ annotations:
 dependencies:
   - name: kubernetes-ingress
     version: "*"
-    repository: "https://haproxytech.github.io/helm-charts"
+    repository: "oci://ghcr.io/haproxytech/helm-charts"
     alias: haproxy
     condition: gateway.ingress.haproxy.enabled
   - name: redis
     version: "~20"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: redis.enabled
   - name: kafka
     version: "~31"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: kafka.enabled
   - name: rabbitmq
     version: "~16"
-    repository: "https://charts.bitnami.com/bitnami"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: rabbitmq.enabled
