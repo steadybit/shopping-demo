@@ -82,7 +82,7 @@ spec:
             - name: HEALTH_RABBITMQ_HOST
               value: "{{ .Release.Name }}-rabbitmq"
             {{- end }}
-            {{- if .Values.notification.enabled }}
+            {{- if and .Values.rabbitmq.enabled .Values.notification.enabled }}
             - name: HEALTH_NOTIFICATION_HOST
               value: "notification"
             {{- end }}
