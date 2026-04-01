@@ -66,8 +66,6 @@ manifest should match snapshot:
                   value: http://inventory:8084/inventory
                 - name: HEALTH_ACTIVEMQ_HOST
                   value: activemq
-                - name: HEALTH_NOTIFICATION_HOST
-                  value: notification
               image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -202,8 +200,6 @@ manifest should match snapshot replica count:
                   value: http://inventory:8084/inventory
                 - name: HEALTH_ACTIVEMQ_HOST
                   value: activemq
-                - name: HEALTH_NOTIFICATION_HOST
-                  value: notification
               image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
@@ -338,8 +334,6 @@ manifest should match snapshot with service type clusterIp:
                   value: http://inventory:8084/inventory
                 - name: HEALTH_ACTIVEMQ_HOST
                   value: activemq
-                - name: HEALTH_NOTIFICATION_HOST
-                  value: notification
               image: ghcr.io/steadybit/gateway:develop
               imagePullPolicy: Always
               livenessProbe:
