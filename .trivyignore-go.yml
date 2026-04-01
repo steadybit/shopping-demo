@@ -1,1 +1,4 @@
 vulnerabilities:
+  - id: CVE-2026-4046
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
