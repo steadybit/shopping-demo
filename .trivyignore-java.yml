@@ -20,6 +20,6 @@ vulnerabilities:
   - id: CVE-2025-69720
     statement: Wait for upstream fix in debian
     expired_at: 2026-09-01
-  - id: CVE-2026-4046
-    statement: Wait for upstream fix in debian
+  - id: GHSA-2m67-wjpj-xhg9
+    statement: Wait for upstream fix in spring boot
     expired_at: 2026-09-01
