@@ -26,6 +26,6 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: {{ .Release.Name }}-haproxy-kubernetes-ingress
+        - name: {{ .Release.Name }}-haproxy
           port: 80
 {{- end -}}
