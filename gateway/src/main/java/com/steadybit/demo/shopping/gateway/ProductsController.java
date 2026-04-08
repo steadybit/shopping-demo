@@ -9,14 +9,14 @@ import com.steadybit.shopping.domain.Products;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
+import org.springframework.boot.http.client.HttpClientSettings;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -28,8 +28,8 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductsController {
     private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
-    private final RestTemplate restTemplateWithoutTimeout;
-    private final RestTemplate restTemplate;
+    private final RestClient restClientWithoutTimeout;
+    private final RestClient restClient;
     private final WebClient webClient;
     private final ParameterizedTypeReference<Product> productTypeReference = new ParameterizedTypeReference<Product>() {
     };
@@ -44,9 +44,14 @@ public class ProductsController {
     @Value("${rest.endpoint.hotdeals}")
     private String urlHotDeals;
 
-    public ProductsController(RestTemplateBuilder restTemplateBuilder, WebClient webClient, Resilience4jProductService resilience4jProductService) {
-        this.restTemplate = restTemplateBuilder.connectTimeout(Duration.ofSeconds(2)).readTimeout(Duration.ofSeconds(2)).build();
-        this.restTemplateWithoutTimeout = restTemplateBuilder.build();
+    public ProductsController(RestClient.Builder restClientBuilder, WebClient webClient, Resilience4jProductService resilience4jProductService) {
+        this.restClientWithoutTimeout = restClientBuilder.build();
+        this.restClient = restClientBuilder.clone()
+                .requestFactory(ClientHttpRequestFactoryBuilder.detect().build(
+                        HttpClientSettings.defaults()
+                                .withConnectTimeout(Duration.ofSeconds(2))
+                                .withReadTimeout(Duration.ofSeconds(2))))
+                .build();
         this.webClient = webClient;
         this.resilience4jProductService = resilience4jProductService;
     }
@@ -107,7 +112,7 @@ public class ProductsController {
     }
 
     private List<Product> getProduct(String url) {
-        return this.restTemplateWithoutTimeout.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+        return this.restClientWithoutTimeout.get().uri(url).retrieve().body(this.productListTypeReference);
     }
 
     private List<Product> getProductBasicExceptionHandling(String url) {
@@ -121,7 +126,7 @@ public class ProductsController {
 
     private List<Product> getProductWithTimeout(String url) {
         try {
-            return this.restTemplate.exchange(url, HttpMethod.GET, null, this.productListTypeReference).getBody();
+            return this.restClient.get().uri(url).retrieve().body(this.productListTypeReference);
         } catch (RestClientException e) {
             log.error("RestClientException occurred when fetching products", e);
             return Collections.emptyList();

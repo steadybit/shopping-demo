@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#555" stroke-width="1"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#198754" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="620" fill="#fafafa" rx="12"/>
+
+  <!-- Title -->
+  <text x="480" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#212529">Shopping Demo — Architecture</text>
+
+  <!-- Legend -->
+  <line x1="310" y1="52" x2="340" y2="52" stroke="#198754" stroke-width="2"/>
+  <text x="345" y="56" font-size="11" fill="#6c757d">HTTP (sync)</text>
+  <line x1="440" y1="52" x2="470" y2="52" stroke="#198754" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="475" y="56" font-size="11" fill="#6c757d">Async messaging</text>
+  <rect x="570" y="44" width="12" height="12" rx="2" fill="none" stroke="#0d6efd" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="588" y="56" font-size="11" fill="#6c757d">Optional component</text>
+
+  <!-- ==================== NODES ==================== -->
+
+  <!-- User -->
+  <circle cx="480" cy="95" r="26" fill="#e7f1ff" stroke="#0d6efd" stroke-width="2"/>
+  <text x="480" y="84" text-anchor="middle" font-size="18">&#128100;</text>
+  <text x="480" y="102" text-anchor="middle" font-size="11" font-weight="600" fill="#0d6efd">User</text>
+
+  <!-- Gateway -->
+  <rect x="420" y="140" width="120" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="480" y="162" text-anchor="middle" font-weight="600" fill="#212529">Gateway</text>
+  <text x="480" y="178" text-anchor="middle" font-size="10" fill="#6c757d">Java / Spring</text>
+
+  <!-- Fashion Bestseller -->
+  <rect x="620" y="80" width="150" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="695" y="102" text-anchor="middle" font-weight="600" fill="#212529">Fashion Bestseller</text>
+  <text x="695" y="118" text-anchor="middle" font-size="10" fill="#6c757d">Java / Spring</text>
+
+  <!-- Toys Bestseller -->
+  <rect x="620" y="140" width="150" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="695" y="162" text-anchor="middle" font-weight="600" fill="#212529">Toys Bestseller</text>
+  <text x="695" y="178" text-anchor="middle" font-size="10" fill="#6c757d">Go / Java</text>
+
+  <!-- Hot Deals -->
+  <rect x="620" y="200" width="150" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="695" y="222" text-anchor="middle" font-weight="600" fill="#212529">Hot Deals</text>
+  <text x="695" y="238" text-anchor="middle" font-size="10" fill="#6c757d">Java / Spring</text>
+
+  <!-- Inventory -->
+  <rect x="810" y="140" width="120" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="870" y="162" text-anchor="middle" font-weight="600" fill="#212529">Inventory</text>
+  <text x="870" y="178" text-anchor="middle" font-size="10" fill="#6c757d">Go</text>
+
+  <!-- Checkout -->
+  <rect x="420" y="280" width="120" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="480" y="302" text-anchor="middle" font-weight="600" fill="#212529">Checkout</text>
+  <text x="480" y="318" text-anchor="middle" font-size="10" fill="#6c757d">Go</text>
+
+  <!-- Redis (optional) -->
+  <rect x="140" y="280" width="120" height="48" rx="8" fill="#f8f9fa" stroke="#0d6efd" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="200" y="302" text-anchor="middle" font-weight="600" fill="#212529">Redis</text>
+  <text x="200" y="318" text-anchor="middle" font-size="10" fill="#0d6efd">optional</text>
+
+  <!-- ActiveMQ / Kafka (optional) -->
+  <rect x="120" y="390" width="160" height="48" rx="8" fill="#f8f9fa" stroke="#0d6efd" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="200" y="412" text-anchor="middle" font-weight="600" fill="#212529">ActiveMQ / Kafka</text>
+  <text x="200" y="428" text-anchor="middle" font-size="10" fill="#0d6efd">optional</text>
+
+  <!-- Orders -->
+  <rect x="420" y="390" width="120" height="48" rx="8" fill="#fff" stroke="#198754" stroke-width="2"/>
+  <text x="480" y="412" text-anchor="middle" font-weight="600" fill="#212529">Orders</text>
+  <text x="480" y="428" text-anchor="middle" font-size="10" fill="#6c757d">Go</text>
+
+  <!-- RabbitMQ (optional) -->
+  <rect x="140" y="500" width="120" height="48" rx="8" fill="#f8f9fa" stroke="#0d6efd" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="200" y="522" text-anchor="middle" font-weight="600" fill="#212529">RabbitMQ</text>
+  <text x="200" y="538" text-anchor="middle" font-size="10" fill="#0d6efd">optional</text>
+
+  <!-- Notification (optional) -->
+  <rect x="420" y="500" width="120" height="48" rx="8" fill="#f8f9fa" stroke="#0d6efd" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="480" y="522" text-anchor="middle" font-weight="600" fill="#212529">Notification</text>
+  <text x="480" y="538" text-anchor="middle" font-size="10" fill="#0d6efd">optional · Go</text>
+
+  <!-- ==================== CONNECTIONS ==================== -->
+
+  <!-- User -> Gateway -->
+  <line x1="480" y1="121" x2="480" y2="140" stroke="#198754" stroke-width="2"/>
+
+  <!-- Gateway -> Fashion -->
+  <line x1="540" y1="152" x2="620" y2="104" stroke="#198754" stroke-width="2"/>
+  <!-- Gateway -> Toys -->
+  <line x1="540" y1="164" x2="620" y2="164" stroke="#198754" stroke-width="2"/>
+  <!-- Gateway -> Hot Deals -->
+  <line x1="540" y1="176" x2="620" y2="224" stroke="#198754" stroke-width="2"/>
+
+  <!-- Fashion -> Inventory -->
+  <line x1="770" y1="104" x2="810" y2="152" stroke="#198754" stroke-width="2"/>
+  <!-- Toys -> Inventory -->
+  <line x1="770" y1="164" x2="810" y2="164" stroke="#198754" stroke-width="2"/>
+  <!-- Hot Deals -> Inventory -->
+  <line x1="770" y1="224" x2="810" y2="176" stroke="#198754" stroke-width="2"/>
+
+  <!-- Gateway -> Checkout -->
+  <line x1="480" y1="188" x2="480" y2="280" stroke="#198754" stroke-width="2"/>
+
+  <!-- Checkout -> Redis -->
+  <line x1="420" y1="304" x2="260" y2="304" stroke="#198754" stroke-width="2"/>
+
+  <!-- Checkout -> Broker (dashed) -->
+  <line x1="440" y1="328" x2="280" y2="400" stroke="#198754" stroke-width="2" stroke-dasharray="6 4"/>
+
+  <!-- Broker -> Orders (dashed) -->
+  <line x1="280" y1="414" x2="420" y2="414" stroke="#198754" stroke-width="2" stroke-dasharray="6 4"/>
+
+  <!-- Orders -> RabbitMQ (dashed) -->
+  <line x1="440" y1="438" x2="260" y2="510" stroke="#198754" stroke-width="2" stroke-dasharray="6 4"/>
+
+  <!-- RabbitMQ -> Notification (dashed) -->
+  <line x1="260" y1="524" x2="420" y2="524" stroke="#198754" stroke-width="2" stroke-dasharray="6 4"/>
+
+</svg>

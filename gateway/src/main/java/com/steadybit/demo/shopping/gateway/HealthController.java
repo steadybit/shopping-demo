@@ -5,13 +5,13 @@
 package com.steadybit.demo.shopping.gateway;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.restclient.RestTemplateBuilder;
-import org.springframework.http.HttpMethod;
+import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
+import org.springframework.boot.http.client.HttpClientSettings;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @RequestMapping("/api/health")
 public class HealthController {
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     @Value("${rest.endpoint.fashion}")
     private String urlFashion;
@@ -68,10 +68,12 @@ public class HealthController {
     @Value("${health.notification.port:8087}")
     private int notificationPort;
 
-    public HealthController(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder
-                .connectTimeout(Duration.ofMillis(500))
-                .readTimeout(Duration.ofMillis(500))
+    public HealthController(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder
+                .requestFactory(ClientHttpRequestFactoryBuilder.detect().build(
+                        HttpClientSettings.defaults()
+                                .withConnectTimeout(Duration.ofMillis(500))
+                                .withReadTimeout(Duration.ofMillis(500))))
                 .build();
     }
 
@@ -118,7 +120,7 @@ public class HealthController {
 
     private DependencyStatus checkHttp(String url) {
         try {
-            restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+            restClient.get().uri(url).retrieve().body(String.class);
             return new DependencyStatus("UP", url, null);
         } catch (RestClientResponseException e) {
             return new DependencyStatus("UP", url, null);

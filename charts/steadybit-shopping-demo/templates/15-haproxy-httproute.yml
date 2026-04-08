@@ -1,0 +1,31 @@
+{{- if and .Values.gateway.enabled .Values.gateway.ingress.haproxy.enabled .Values.gateway.httpRoute.enabled -}}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: haproxy-httproute
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.gateway.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+    - name: {{ .Values.gateway.httpRoute.parentRefs.name }}
+      {{- with .Values.gateway.httpRoute.parentRefs.namespace }}
+      namespace: {{ . }}
+      {{- end }}
+      {{- with .Values.gateway.httpRoute.parentRefs.sectionName }}
+      sectionName: {{ . }}
+      {{- end }}
+  hostnames:
+    - {{ .Values.gateway.ingress.haproxy.host | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ .Release.Name }}-haproxy
+          port: 80
+{{- end -}}
