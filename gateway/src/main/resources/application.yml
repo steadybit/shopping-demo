@@ -29,6 +29,12 @@ management:
       show-details: always
 
 resilience4j:
+  ratelimiter:
+    instances:
+      dnsResolve:
+        limitForPeriod: 1
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0s
   retry:
     instances:
       fashion:
