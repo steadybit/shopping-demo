@@ -2,8 +2,6 @@ package com.steadybit.demo.shopping.gateway;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.restclient.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 public class ProxyController {
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     @Value("${rest.endpoint.checkout}")
     private String urlCheckout;
@@ -29,9 +27,8 @@ public class ProxyController {
     @Value("${rest.endpoint.inventory}")
     private String urlInventory;
 
-
-    public ProxyController(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public ProxyController(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder.build();
     }
 
     @RequestMapping("/") public RedirectView indexRedirect() {
@@ -63,15 +60,21 @@ public class ProxyController {
         if (path.startsWith("/") && baseUrl.endsWith("/")) {
             path = path.substring(1);
         }
-        if (request.getQueryString()!=null) {
+        if (request.getQueryString() != null) {
             path += "?" + request.getQueryString();
         }
         var uri = new URI(baseUrl + path);
-        var httpEntity = new HttpEntity<>(body, headers);
-        try {
-            return restTemplate.exchange(uri, method, httpEntity, String.class);
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+        var requestSpec = restClient.method(method)
+                .uri(uri)
+                .headers(h -> h.addAll(headers));
+        if (body != null) {
+            requestSpec.body(body);
         }
+        return requestSpec.exchange((req, response) -> {
+            var responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
+            return ResponseEntity.status(response.getStatusCode())
+                    .headers(response.getHeaders())
+                    .body(responseBody);
+        });
     }
 }
