@@ -1,0 +1,16 @@
+{{- if and .Values.gateway.enabled .Values.gateway.ingress.haproxy.enabled .Values.gateway.httpRoute.enabled -}}
+---
+apiVersion: gateway.k8s.aws/v1beta1
+kind: TargetGroupConfiguration
+metadata:
+  name: {{ .Release.Name }}-haproxy-tgc
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetReference:
+    kind: Service
+    name: {{ .Release.Name }}-haproxy
+  defaultConfiguration:
+    healthCheckConfig:
+      healthCheckPath: /healthz
+      healthCheckPort: "1042"
+{{- end -}}
