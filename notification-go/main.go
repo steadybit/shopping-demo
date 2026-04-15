@@ -59,7 +59,7 @@ func main() {
 
 	var conn *amqp.Connection
 	var err error
-	for i := 0; i < 30; i++ {
+	for i := range 30 {
 		conn, err = amqp.Dial(rabbitmqURL)
 		if err == nil {
 			break
