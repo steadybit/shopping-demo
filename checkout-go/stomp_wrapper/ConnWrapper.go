@@ -54,7 +54,7 @@ func (c *ConnWrapper) Send(destination string, contentType string, body []byte, 
 	const maxRetries = 3
 	var err error
 
-	for i := 0; i < maxRetries; i++ {
+	for range maxRetries {
 		// Check if the connection is marked as closed.
 		c.mu.RLock()
 		closed := c.closed

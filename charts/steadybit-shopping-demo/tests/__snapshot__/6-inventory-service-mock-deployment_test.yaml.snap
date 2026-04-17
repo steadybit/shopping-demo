@@ -78,7 +78,7 @@ manifest should match snapshot:
                   ephemeral-storage: 500Mi
                   memory: 1024Mi
                 requests:
-                  cpu: 100m
+                  cpu: 50m
                   ephemeral-storage: 100Mi
                   memory: 128Mi
           imagePullSecrets:
@@ -191,7 +191,7 @@ manifest should match snapshot replica count:
                   ephemeral-storage: 500Mi
                   memory: 1024Mi
                 requests:
-                  cpu: 100m
+                  cpu: 50m
                   ephemeral-storage: 100Mi
                   memory: 128Mi
           imagePullSecrets:
