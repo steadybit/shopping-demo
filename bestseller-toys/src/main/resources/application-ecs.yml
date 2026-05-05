@@ -1,3 +1,0 @@
-rest:
-  endpoint:
-    inventory: "http://inventory.steadybit.local:8084/inventory"

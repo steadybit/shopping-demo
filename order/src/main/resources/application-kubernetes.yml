@@ -1,3 +1,0 @@
-spring:
-  activemq:
-    broker-url: "tcp://activemq.steadybit-demo.svc.cluster.local:61616"
