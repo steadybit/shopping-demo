@@ -16,13 +16,9 @@
     <modules>
         <module>hot-deals</module>
         <module>bestseller-fashion</module>
-        <module>bestseller-toys</module>
         <module>gateway</module>
-        <module>checkout</module>
-        <module>order</module>
         <module>shared</module>
         <module>shopping-ui</module>
-        <module>inventory-service-mock</module>
     </modules>
 
     <properties>
