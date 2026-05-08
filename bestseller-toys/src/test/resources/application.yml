@@ -1,6 +1,0 @@
-spring:
-  sql.init.platform: hsqldb
-
-rest:
-  endpoint:
-    inventory: "http://localhost:8084/inventory"

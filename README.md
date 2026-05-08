@@ -14,10 +14,10 @@ The live architecture overview with real-time health status is available in the 
 ### Core Services
 
 | Service | Tech | Description |
-|---------|------|-------------|
+|---------|----|-------------|
 | **Gateway** | Java / Spring Boot | API gateway — proxies all requests, aggregates products, health checks |
 | **Fashion Bestseller** | Java / Spring Boot | Product catalog for fashion items |
-| **Toys Bestseller** | Go or Java | Product catalog for toys |
+| **Toys Bestseller** | Go | Product catalog for toys |
 | **Hot Deals** | Java / Spring Boot | Product catalog for hot deals |
 | **Inventory** | Go | Stock availability service used by all product services |
 | **Checkout** | Go | Cart management (Redis) and order submission (Kafka or ActiveMQ) |

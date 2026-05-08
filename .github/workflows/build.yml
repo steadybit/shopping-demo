@@ -60,18 +60,10 @@ jobs:
           path: |
             bestseller-fashion/target/*.jar
             bestseller-fashion/target/licenses/
-            bestseller-toys/target/*.jar
-            bestseller-toys/target/licenses/
-            checkout/target/*.jar
-            checkout/target/licenses/
             gateway/target/*.jar
             gateway/target/licenses/
             hot-deals/target/*.jar
             hot-deals/target/licenses/
-            inventory-service-mock/target/*.jar
-            inventory-service-mock/target/licenses/
-            order/target/*.jar
-            order/target/licenses/
           if-no-files-found: error
           retention-days: 3
 
@@ -87,16 +79,12 @@ jobs:
       matrix:
         image:
           - {folder: bestseller-fashion}
-          - {folder: bestseller-toys}
           - {folder: bestseller-toys-go}
-          - {folder: checkout}
           - {folder: checkout-go}
           - {folder: gateway}
           - {folder: hot-deals}
-          - {folder: inventory-service-mock, name: inventory}
           - {folder: inventory-service-mock-go, name: inventory-go}
           - {folder: notification-go}
-          - {folder: order, name: orders}
           - {folder: order-go, name: orders-go}
     steps:
       - uses: actions/checkout@v6

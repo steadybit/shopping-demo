@@ -26,3 +26,24 @@ vulnerabilities:
   - id: CVE-2026-39304
     statement: Wait for upstream fix in spring boot
     expired_at: 2026-09-01
+  - id: CVE-2026-41989
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2026-4878
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2026-33845
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2026-0861
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2023-45853
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2026-33846
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
+  - id: CVE-2026-3833
+    statement: Wait for upstream fix in debian
+    expired_at: 2026-09-01
