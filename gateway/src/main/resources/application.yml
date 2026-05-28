@@ -32,7 +32,7 @@ resilience4j:
   ratelimiter:
     instances:
       dnsResolve:
-        limitForPeriod: 1
+        limitForPeriod: 5
         limitRefreshPeriod: 1s
         timeoutDuration: 0s
   retry:
