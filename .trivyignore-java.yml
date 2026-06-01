@@ -2,37 +2,16 @@ vulnerabilities:
   - id: CVE-2023-45853
     statement: "zlib vulnerability in Debian 12.13 base image, no fix available"
     expired_at: 2026-09-01
-  - id: CVE-2026-0861
-    statement: "glibc vulnerability in Debian base image, no fix available"
-    expired_at: 2026-09-01
   - id: CVE-2026-25210
     statement: Wait for upstream fix in debian
     expired_at: 2026-09-01
   - id: CVE-2025-69720
     statement: Wait for upstream fix in debian
     expired_at: 2026-09-01
-  - id: CVE-2026-41989
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
-  - id: CVE-2026-33845
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
   - id: CVE-2026-0861
     statement: Wait for upstream fix in debian
     expired_at: 2026-09-01
   - id: CVE-2023-45853
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
-  - id: CVE-2026-33846
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
-  - id: CVE-2026-3833
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
-  - id: CVE-2026-42010
-    statement: Wait for upstream fix in debian
-    expired_at: 2026-09-01
-  - id: CVE-2026-42011
     statement: Wait for upstream fix in debian
     expired_at: 2026-09-01
   - id: CVE-2026-45186
@@ -51,5 +30,8 @@ vulnerabilities:
     statement: Waiting for debian upstream fix
     expired_at: 2026-09-01
   - id: CVE-2026-9538
+    statement: Waiting for debian upstream fix
+    expired_at: 2026-09-01
+  - id: CVE-2026-48962
     statement: Waiting for debian upstream fix
     expired_at: 2026-09-01
