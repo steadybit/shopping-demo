@@ -5,31 +5,65 @@
 package main
 
 import (
+	"fmt"
 	stomp "github.com/go-stomp/stomp/v3"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/zerolog/log"
 	"github.com/steadybit/extension-kit/extlogging"
 	"net/http"
 	"os"
+	"sync/atomic"
 	"time"
 )
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	_, err := w.Write([]byte("OK"))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+// consumerReady is true while the active consumer is connected to its broker and
+// subscribed. It backs the readiness probe so a pod with a dead broker connection
+// is taken out of the Service endpoints.
+var consumerReady atomic.Bool
+
+// lastProgressUnix holds the unix-nano time of the last consumer "progress" event:
+// a (re)connect attempt or a consumed message. The liveness probe uses it to detect
+// a wedged consumer goroutine (one making no attempts at all), while still tolerating
+// a broker outage, where reconnect attempts keep progress fresh but consumerReady stays false.
+var lastProgressUnix atomic.Int64
+
+// livenessTimeout is how long the consumer may make no progress before the liveness
+// probe fails and Kubernetes restarts the pod.
+const livenessTimeout = 60 * time.Second
+
+func markProgress() { lastProgressUnix.Store(time.Now().UnixNano()) }
+
+// nextBackoff doubles cur up to max, for reconnect loops.
+func nextBackoff(cur, max time.Duration) time.Duration {
+	cur *= 2
+	if cur > max {
+		return max
 	}
+	return cur
 }
 
-func readinessHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	_, err := w.Write([]byte("READY"))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+// healthHandler backs the liveness probe. It fails only when the consumer goroutine
+// has made no progress (no reconnect attempt or message) for longer than livenessTimeout,
+// i.e. it is wedged. A plain broker outage keeps reconnect attempts flowing and so stays alive.
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	last := lastProgressUnix.Load()
+	if last != 0 && time.Since(time.Unix(0, last)) > livenessTimeout {
+		http.Error(w, "consumer wedged: no progress", http.StatusServiceUnavailable)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("OK"))
+}
+
+// readinessHandler backs the readiness probe. It is ready only while the consumer is
+// connected to its broker and subscribed, so a disconnected pod is removed from endpoints.
+func readinessHandler(w http.ResponseWriter, r *http.Request) {
+	if !consumerReady.Load() {
+		http.Error(w, "consumer not connected", http.StatusServiceUnavailable)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write([]byte("READY"))
 }
 
 type OrderItem struct {
@@ -62,9 +96,7 @@ func main() {
 	if kafkaBrokers, ok := os.LookupEnv("KAFKA_BROKERS"); ok {
 		// Use Kafka consumer
 		log.Info().Msg("Using Kafka consumer")
-		if err := startKafkaConsumer(kafkaBrokers); err != nil {
-			log.Fatal().Err(err).Msg("Failed to start Kafka consumer")
-		}
+		startKafkaConsumer(kafkaBrokers)
 	} else {
 		// Use ActiveMQ/STOMP consumer
 		log.Info().Msg("Using ActiveMQ/STOMP consumer")
@@ -95,39 +127,63 @@ func startStompConsumer() {
 	user := os.Getenv("ACTIVEMQ_USER")
 	pass := os.Getenv("ACTIVEMQ_PASS")
 
-	// Connect to ActiveMQ using STOMP.
-	var conn *stomp.Conn
-	var err error
-	if user == "" {
-		conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
-	} else {
-		conn, err = stomp.Dial("tcp", brokerAddr, stomp.ConnOpt.Login(user, pass), stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second))
+	// Reconnect loop: a dropped connection ("connection closed") must not silently kill
+	// the consumer. runStompSession blocks until the connection ends, then we back off and
+	// reconnect. consumerReady reflects the live connection for the readiness probe.
+	go func() {
+		const maxBackoff = 30 * time.Second
+		backoff := time.Second
+		for {
+			markProgress()
+			if err := runStompSession(brokerAddr, user, pass); err != nil {
+				consumerReady.Store(false)
+				log.Error().Err(err).Dur("retryIn", backoff).Msg("ActiveMQ/STOMP consumer disconnected, reconnecting")
+				time.Sleep(backoff)
+				backoff = nextBackoff(backoff, maxBackoff)
+				continue
+			}
+			backoff = time.Second
+		}
+	}()
+}
+
+// runStompSession connects to ActiveMQ, subscribes, and consumes until the connection
+// drops. It returns an error whenever the session ends so the caller can reconnect.
+func runStompSession(brokerAddr, user, pass string) error {
+	opts := []func(*stomp.Conn) error{stomp.ConnOpt.HeartBeat(5*time.Second, 5*time.Second)}
+	if user != "" {
+		opts = append(opts, stomp.ConnOpt.Login(user, pass))
 	}
+
+	conn, err := stomp.Dial("tcp", brokerAddr, opts...)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to ActiveMQ")
+		return fmt.Errorf("connect to ActiveMQ: %w", err)
 	}
+	defer conn.Disconnect()
 
 	sub, err := conn.Subscribe("order_created", stomp.AckAuto)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to subscribe to queue")
+		return fmt.Errorf("subscribe to order_created: %w", err)
 	}
 
-	// Consume messages in a separate goroutine.
-	go func() {
-		defer conn.Disconnect()
-		for {
-			msg := <-sub.C
-			if msg == nil {
-				continue
-			}
-			if msg.Err != nil {
-				log.Error().Err(msg.Err).Msg("Failed to receive message")
-				continue
-			}
-			if msg.Body == nil {
-				continue
-			}
-			processOrderMessage(msg.Body)
+	consumerReady.Store(true)
+	defer consumerReady.Store(false)
+	log.Info().Str("broker", brokerAddr).Msg("ActiveMQ/STOMP consumer connected")
+
+	// Ranging over sub.C exits when the connection closes (the channel is closed),
+	// which ends the session and triggers a reconnect in the caller.
+	for msg := range sub.C {
+		if msg == nil {
+			continue
 		}
-	}()
+		if msg.Err != nil {
+			return fmt.Errorf("receive message: %w", msg.Err)
+		}
+		if msg.Body == nil {
+			continue
+		}
+		markProgress()
+		processOrderMessage(msg.Body)
+	}
+	return fmt.Errorf("subscription closed")
 }
