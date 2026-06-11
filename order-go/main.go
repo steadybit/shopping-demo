@@ -42,14 +42,17 @@ func nextBackoff(cur, max time.Duration) time.Duration {
 	return cur
 }
 
-// healthHandler backs the liveness probe. It fails only when the consumer goroutine
-// has made no progress (no reconnect attempt or message) for longer than livenessTimeout,
-// i.e. it is wedged. A plain broker outage keeps reconnect attempts flowing and so stays alive.
+// healthHandler backs the liveness probe. A currently-connected consumer is alive by
+// definition — the broker's own session/heartbeat keeps it honest, and an idle topic
+// must not look "wedged". The progress-timeout check only applies while disconnected,
+// to catch a reconnect loop that has truly stopped making attempts.
 func healthHandler(w http.ResponseWriter, r *http.Request) {
-	last := lastProgressUnix.Load()
-	if last != 0 && time.Since(time.Unix(0, last)) > livenessTimeout {
-		http.Error(w, "consumer wedged: no progress", http.StatusServiceUnavailable)
-		return
+	if !consumerReady.Load() {
+		last := lastProgressUnix.Load()
+		if last != 0 && time.Since(time.Unix(0, last)) > livenessTimeout {
+			http.Error(w, "consumer wedged: no progress", http.StatusServiceUnavailable)
+			return
+		}
 	}
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte("OK"))
