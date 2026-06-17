@@ -2,10 +2,16 @@ name: Build
 
 on:
   push:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
   workflow_dispatch:
 
 jobs:
   build:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -171,6 +177,7 @@ jobs:
 
   build-fashion-lambda:
     name: "Build and Upload fashion-bestseller Lambda"
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -267,6 +274,8 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: make chartlint
+        env:
+          CHARTLINT_FLAGS: ${{ github.event_name == 'pull_request' && '' || '--check-version-increment=false' }}
 
   release-helm-chart:
     name: "Release Helm Chart"
