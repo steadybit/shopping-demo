@@ -18,10 +18,10 @@ charttesting:
 		helm unittest $$dir; \
 	done
 
-## chartlint: Lint charts
+## chartlint: Lint charts (override CHARTLINT_FLAGS to pass extra ct flags)
 .PHONY: chartlint
 chartlint:
-	ct lint --config chartTesting.yaml
+	ct lint --config chartTesting.yaml $(CHARTLINT_FLAGS)
 
 ## chart-bump-version: Bump the patch version and optionally set the appVersion
 .PHONY: chart-bump-version
