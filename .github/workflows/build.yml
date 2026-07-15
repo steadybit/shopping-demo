@@ -7,6 +7,8 @@ on:
       - main
     paths:
       - 'charts/**'
+    paths-ignore:
+      - '.trivyignore-*.yml'
   workflow_dispatch:
 
 jobs:
