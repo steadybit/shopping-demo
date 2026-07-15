@@ -2,13 +2,13 @@ name: Build
 
 on:
   push:
+    paths-ignore:
+    - '.trivyignore-*.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'charts/**'
-    paths-ignore:
-      - '.trivyignore-*.yml'
   workflow_dispatch:
 
 jobs:
