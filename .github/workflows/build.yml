@@ -137,6 +137,8 @@ jobs:
 
       - name: Build Docker image
         uses: docker/build-push-action@v7
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: "false"
         id: image
         with:
           context: ${{ matrix.image.folder }}
