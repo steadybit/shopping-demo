@@ -30,6 +30,9 @@
         <spring-boot.version>4.0.7</spring-boot.version>
         <lombok.version>1.18.46</lombok.version>
         <commons-lang3.version>3.20.0</commons-lang3.version> <!-- remove when spring boot contains this version -->
+        <netty.version>4.2.16.Final</netty.version> <!-- remove when spring boot >= this netty version -->
+        <postgresql.version>42.7.12</postgresql.version> <!-- remove when spring boot >= this postgresql version -->
+
         <!--plugins-->
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -40,12 +43,28 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- Imported before spring-boot-dependencies so it wins: overriding netty.version has no
+                 effect on an imported BOM, so we pin netty-bom explicitly to pull in security fixes. -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- Direct management entry overrides the version from the imported spring-boot-dependencies
+                 BOM (a netty.version-style property override does not affect an imported BOM). -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.steadybit.demo.shopping</groupId>
