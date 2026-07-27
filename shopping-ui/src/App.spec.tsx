@@ -1,25 +1,45 @@
-import * as React from 'react';
-
+import { jest } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 
-import App from './App';
+jest.unstable_mockModule('react-icons/ai', () => ({
+    __esModule: true,
+    AiOutlineLoading: () => <div className="mock_AiOutlineLoadingIcon" />,
+}));
 
-jest.mock('react-icons/ai', () => {
-    const icons = {
-        __esModule: true,
-    };
+jest.unstable_mockModule('axios', () => ({
+    __esModule: true,
+    default: {
+        defaults: {},
+        get: async (url: string) => ({
+            data: url.startsWith('/products') ? { fashion: [], toys: [], hotDeals: [] } : {},
+        }),
+        post: async () => ({ data: {} }),
+    },
+}));
 
-    const handler = {
-        get: function (_: any, prop: any) {
-            return () => <div className={`mock_${prop}Icon`} />;
-        },
-    };
+const { default: App } = await import('./App');
 
-    return new Proxy(icons, handler);
+const renderAt = (hash: string) => {
+    window.location.hash = hash;
+    return render(<App />);
+};
+
+test('render', async () => {
+    renderAt('#/');
+    expect(await screen.findByText(/Swag Shop/i)).toBeInTheDocument();
 });
 
-test('render', () => {
-    render(<App />);
-    const el = screen.getByText(/Swag Shop/i);
-    expect(el).toBeInTheDocument();
+test('renders the shop on the index route', async () => {
+    renderAt('#/');
+    expect(await screen.findByRole('button', { name: /as simple implementation/i })).toBeInTheDocument();
+});
+
+test('renders the overview on /overview', async () => {
+    renderAt('#/overview');
+    expect(await screen.findByText(/Architecture Overview/i)).toBeInTheDocument();
+});
+
+test('passes the optional :version param to the shop', async () => {
+    renderAt('#/retry');
+    expect(await screen.findByRole('button', { name: /with retry/i })).toBeInTheDocument();
 });
