@@ -3,7 +3,7 @@ import './Home.scss';
 import { Card, Col, Container, Dropdown, DropdownButton, Row } from 'react-bootstrap';
 import { CartView, useCart } from '../components/Cart/Cart';
 import { Version, useProducts } from '../services/ProductService';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { AiOutlineLoading } from 'react-icons/ai';
 import Deal from '../components/Deal/Deal';

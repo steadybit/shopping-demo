@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { Route, HashRouter as Router, Routes } from 'react-router-dom';
+import { Route, HashRouter as Router, Routes } from 'react-router';
 
 import Home from './pages/Home';
 import Overview from './pages/Overview';
