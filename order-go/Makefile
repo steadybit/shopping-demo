@@ -1,8 +1,8 @@
 build:
-	go build -o order main.go
+	go build -o order .
 
 run:
-	go run main.go
+	go run .
 
 docker-build:
 	docker build -t order .
