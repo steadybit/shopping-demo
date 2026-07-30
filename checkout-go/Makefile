@@ -1,8 +1,8 @@
 build:
-	go build -o checkout main.go
+	go build -o checkout .
 
 run:
-	go run main.go
+	go run .
 
 docker-build:
 	docker build -t checkout .
