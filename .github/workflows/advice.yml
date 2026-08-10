@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Install Steadybit CLI
-        run: npm install -g steadybit
+        run: |
+          npm install -g npm@12
+          npm install -g steadybit
         shell: bash
 
       - name: Add Mask
