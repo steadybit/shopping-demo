@@ -28,15 +28,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '22.22'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: |
             shopping-ui/package-lock.json
 
+      - run: npm install -g npm@12
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.26'
+          check-latest: 'true'
 
       - name: "[main] Set up Snyk CLI"
         if: github.ref == 'refs/heads/main'
@@ -191,10 +193,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: v20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: |
             bestseller-fashion-lambda/package-lock.json
+      - run: npm install -g npm@12
       - run: npm install
         working-directory: bestseller-fashion-lambda
       - name: "[main] setup snyk"
