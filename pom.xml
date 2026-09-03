@@ -29,6 +29,7 @@
         <java.version>25</java.version>
         <spring-boot.version>4.0.8</spring-boot.version>
         <lombok.version>1.18.46</lombok.version>
+        <tomcat.version>11.0.25</tomcat.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
@@ -40,6 +41,43 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- Tomcat overrides (CVE-2026-65182) - a tomcat.version property override has no effect on the
+                 imported spring-boot-dependencies BOM. Remove when spring boot contains this version. -->
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-annotations-api</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jsp-api</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-el</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-jasper</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
