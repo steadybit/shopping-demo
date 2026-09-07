@@ -30,6 +30,28 @@ gateway:
       ephemeral-storage: "500Mi"
   # Number of gateway replicas
   replicaCount: 1
+  # Additional certificate authorities the gateway should trust when it calls its
+  # HTTPS dependencies. Needed to fault an HTTPS dependency with Steadybit's
+  # 'Intercept Outgoing HTTP Request' attack, which answers on the dependency's
+  # behalf with a certificate minted by an authority of your choosing.
+  extraTrustedCAs:
+    # Name of an existing Secret, in this namespace, holding PEM certificates.
+    # Empty (the default) leaves the gateway on the JDK's stock truststore.
+    existingSecret: ""
+    # Keys within that Secret to import. Each must be a PEM *certificate*; a
+    # private key here would fail the import and hold the pod in Init.
+    keys:
+      - ca.crt
+    # Resources for the init container that builds the truststore
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+        ephemeral-storage: "50Mi"
+      limits:
+        memory: "256Mi"
+        cpu: "200m"
+        ephemeral-storage: "100Mi"
   service:
     # Service type, put to ClusterIP for OpenShift
     type: LoadBalancer
