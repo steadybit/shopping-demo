@@ -37,6 +37,35 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: steadybit-demo
+      {{- if .Values.gateway.extraTrustedCAs.existingSecret }}
+      # A JVM reads its truststore once, at startup, and cannot be told to trust
+      # an extra authority on top of the default one - it takes a single
+      # truststore or none. So build a copy of the JDK's own cacerts with the
+      # extra authorities imported, and point the gateway at that copy.
+      initContainers:
+        - name: import-trusted-cas
+          image: {{ .Values.gateway.image.name }}:{{ .Values.gateway.image.tag }}
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              cp "$JAVA_HOME/lib/security/cacerts" /truststore/cacerts
+              chmod 0644 /truststore/cacerts
+              for cert in /extra-cas/*; do
+                keytool -importcert -noprompt -file "$cert" \
+                  -alias "extra-$(basename "$cert")" \
+                  -keystore /truststore/cacerts -storepass changeit
+              done
+          resources: {{ toYaml .Values.gateway.extraTrustedCAs.resources | nindent 14 }}
+          volumeMounts:
+            - name: extra-cas
+              mountPath: /extra-cas
+              readOnly: true
+            - name: java-truststore
+              mountPath: /truststore
+      {{- end }}
       containers:
         - image: {{ .Values.gateway.image.name}}:{{ .Values.gateway.image.tag }}
           imagePullPolicy: Always
@@ -47,7 +76,7 @@ spec:
               protocol: TCP
           env:
             - name: JAVA_TOOL_OPTIONS
-              value: "-Dsun.net.inetaddr.ttl=0"
+              value: "-Dsun.net.inetaddr.ttl=0{{ if .Values.gateway.extraTrustedCAs.existingSecret }} -Djavax.net.ssl.trustStore=/truststore/cacerts -Djavax.net.ssl.trustStorePassword=changeit{{ end }}"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -103,10 +132,30 @@ spec:
           volumeMounts:
             - name: work-dir
               mountPath: /work
+            {{- if .Values.gateway.extraTrustedCAs.existingSecret }}
+            - name: java-truststore
+              mountPath: /truststore
+              readOnly: true
+            {{- end }}
       volumes:
         - name: work-dir
           emptyDir:
             sizeLimit: 256Mi
+        {{- with .Values.gateway.extraTrustedCAs.existingSecret }}
+        - name: extra-cas
+          secret:
+            secretName: {{ . }}
+            # Only the keys named in gateway.extraTrustedCAs.keys, so a private
+            # key sharing the Secret is never handed to keytool.
+            items:
+              {{- range $.Values.gateway.extraTrustedCAs.keys }}
+              - key: {{ . }}
+                path: {{ . }}
+              {{- end }}
+        - name: java-truststore
+          emptyDir:
+            sizeLimit: 16Mi
+        {{- end }}
       {{- with .Values.gateway.nodeSelector }}
       nodeSelector:
       {{- toYaml . | nindent 8 }}

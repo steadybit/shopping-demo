@@ -20,3 +20,10 @@ tests:
     asserts:
       - matchSnapshot: { }
 
+  - it: manifest should match snapshot with extra trusted CAs
+    set:
+      gateway:
+        extraTrustedCAs:
+          existingSecret: intercept-ca
+    asserts:
+      - matchSnapshot: { }
