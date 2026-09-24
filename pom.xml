@@ -30,6 +30,7 @@
         <spring-boot.version>4.0.8</spring-boot.version>
         <lombok.version>1.18.46</lombok.version>
         <tomcat.version>11.0.25</tomcat.version> <!-- remove when spring boot contains this version -->
+        <jackson-bom.version>3.1.7</jackson-bom.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
@@ -77,6 +78,15 @@
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-websocket</artifactId>
                 <version>${tomcat.version}</version>
+            </dependency>
+            <!-- Jackson override (CVE-2026-89425, CVE-2026-68497, CVE-2026-91777) - must be imported before the
+                 spring-boot-dependencies BOM to take precedence. Remove when spring boot contains this version. -->
+            <dependency>
+                <groupId>tools.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
