@@ -80,3 +80,12 @@ vulnerabilities:
   - id: CVE-2026-85091
     statement: Waiting for debian upstream fix
     expired_at: 2027-02-01
+  - id: CVE-2026-93990
+    statement: Waiting for debian upstream fix
+    expired_at: 2027-02-01
+  - id: CVE-2026-88806
+    statement: Waiting for debian upstream fix
+    expired_at: 2027-02-01
+  - id: CVE-2026-88807
+    statement: Waiting for debian upstream fix
+    expired_at: 2027-02-01
