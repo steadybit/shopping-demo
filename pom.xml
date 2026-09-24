@@ -31,6 +31,7 @@
         <lombok.version>1.18.46</lombok.version>
         <tomcat.version>11.0.25</tomcat.version> <!-- remove when spring boot contains this version -->
         <jackson-bom.version>3.1.7</jackson-bom.version> <!-- remove when spring boot contains this version -->
+        <netty-bom.version>4.2.18.Final</netty-bom.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
@@ -85,6 +86,15 @@
                 <groupId>tools.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
                 <version>${jackson-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Netty override (CVE fixes in 4.2.18) - must be imported before the spring-boot-dependencies BOM to
+                 take precedence. Remove when spring boot contains this version. -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
