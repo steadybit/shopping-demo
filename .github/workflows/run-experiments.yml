@@ -11,7 +11,6 @@ jobs:
     name: Run Experiments
     permissions:
       contents: read
-      checks: write
     env:
       STEADYBIT_TOKEN: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
     steps:
@@ -21,15 +20,10 @@ jobs:
         uses: steadybit/cli@v6
 
       - name: Run experiment via Experiment Key
-        run: steadybit experiment run -k GITHUB-16 --yes --timeout 15m --report steadybit-key.xml
+        run: steadybit experiment run -k GITHUB-16 --yes --timeout 15m
         if: "!cancelled()"
 
       - name: Run versioned experiments
-        run: steadybit experiment run -f experiments/ -R --yes --timeout 15m --report steadybit-versioned.xml
+        run: steadybit experiment run -f experiments/ -R --yes --timeout 15m
         if: "!cancelled()"
 
-      - name: Publish experiment report
-        uses: mikepenz/action-junit-report@v5
-        if: always()
-        with:
-          report_paths: steadybit-*.xml
