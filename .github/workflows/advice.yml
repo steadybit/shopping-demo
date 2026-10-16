@@ -8,21 +8,15 @@ jobs:
   validate_advice:
     runs-on: ubuntu-latest
     name: Validate advice
+    permissions:
+      contents: read
+    env:
+      STEADYBIT_TOKEN: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v6
 
       - name: Install Steadybit CLI
-        run: |
-          npm install -g npm@12
-          npm install -g steadybit
-        shell: bash
-
-      - name: Add Mask
-        run: echo "::add-mask::${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
-
-      - name: Add Steadybit Profile with a Team Token
-        run: steadybit config profile add --name "CI/CD" --token "${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
-        shell: bash
+        uses: steadybit/cli@v6
 
       - name: Validate advice for Service Tier 1
         run: steadybit advice validate-status -e "Online Shop [Stage]" -q k8s.deployment.label.service-tier="1"
