@@ -9,26 +9,27 @@ jobs:
   run_experiments:
     runs-on: ubuntu-latest
     name: Run Experiments
+    permissions:
+      contents: read
+      checks: write
+    env:
+      STEADYBIT_TOKEN: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v6
 
       - name: Install Steadybit CLI
-        run: |
-          npm install -g npm@12
-          npm install -g steadybit
-        shell: bash
-
-      - name: Add Mask
-        run: echo "::add-mask::${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
-
-      - name: Add Steadybit Profile with a Team Token
-        run: steadybit config profile add --name "CI/CD" --token "${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}"
-        shell: bash
+        uses: steadybit/cli@v6
 
       - name: Run experiment via Experiment Key
-        run: steadybit experiment run -k GITHUB-16
+        run: steadybit experiment run -k GITHUB-16 --yes --timeout 15m --report steadybit-key.xml
         if: "!cancelled()"
 
       - name: Run versioned experiments
-        run: steadybit experiment run -f experiments/ --recursive
+        run: steadybit experiment run -f experiments/ -R --yes --timeout 15m --report steadybit-versioned.xml
         if: "!cancelled()"
+
+      - name: Publish experiment report
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: steadybit-*.xml
