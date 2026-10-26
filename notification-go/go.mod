@@ -6,7 +6,7 @@ require (
 	github.com/prometheus/client_golang v1.25.0
 	github.com/rabbitmq/amqp091-go v1.15.0
 	github.com/rs/zerolog v1.35.1
-	github.com/steadybit/extension-kit v1.12.1
+	github.com/steadybit/extension-kit v1.12.2
 )
 
 require (
