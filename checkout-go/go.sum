@@ -79,8 +79,8 @@ github.com/redis/go-redis/v9 v9.23.0 h1:/TTVdJa8BRNsybwwGGnmiYktHNlUXtbOQxlWpHBP
 github.com/redis/go-redis/v9 v9.23.0/go.mod h1:EWP2UUk+XDaI1s5nQB5mablZN6vccXlmBQTyfnF87D0=
 github.com/rs/zerolog v1.35.1 h1:m7xQeoiLIiV0BCEY4Hs+j2NG4Gp2o2KPKmhnnLiazKI=
 github.com/rs/zerolog v1.35.1/go.mod h1:EjML9kdfa/RMA7h/6z6pYmq1ykOuA8/mjWaEvGI+jcw=
-github.com/steadybit/extension-kit v1.12.1 h1:5OwTSzuB8mB4XtCPUfu+OtxI6x2ofhg4QR+wVivfA0c=
-github.com/steadybit/extension-kit v1.12.1/go.mod h1:vlOfQ4LkTRRLZhrSGkdLhvgi4YEZq8jR0yp05j9KYhI=
+github.com/steadybit/extension-kit v1.12.2 h1:YEPvK5WogwzeZPYkEaQwokePhtLZ7nHsFEQ7bBQhsfM=
+github.com/steadybit/extension-kit v1.12.2/go.mod h1:sZzKIafjnBBcj4ohDLER8hS5AjKjlFsfZosPDHoxR3Q=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
