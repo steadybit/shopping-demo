@@ -38,7 +38,7 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.5.2",
         "vite": "^7.3.7",
-        "vite-plugin-svgr": "^4.2.0",
+        "vite-plugin-svgr": "^5.2.0",
         "vite-tsconfig-paths": "^6.1.0"
     },
     "eslintConfig": {
