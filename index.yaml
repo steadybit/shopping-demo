@@ -83,7 +83,51 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:10.013851284Z"
+    created: "2026-10-26T05:48:06.338178592Z"
+    dependencies:
+    - alias: haproxy
+      condition: gateway.ingress.haproxy.enabled
+      name: kubernetes-ingress
+      repository: oci://ghcr.io/haproxytech/helm-charts
+      version: '*'
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: ~20
+    - condition: kafka.enabled
+      name: kafka
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: ~31
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: ~16
+    description: Steadybit shopping-demo application Helm chart for Kubernetes.
+    digest: 995c52a3e7b14022a02ac1c7f75e06174560ee9d9fc8ec23386ddea89afe54e8
+    home: https://www.steadybit.com/
+    icon: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+    maintainers:
+    - email: ansgar.schulte@steadybit.com
+      name: ansgarschulte
+    name: steadybit-shopping-demo
+    sources:
+    - https://github.com/steadybit/shopping-demo
+    type: application
+    urls:
+    - https://steadybit.github.io/shopping-demo/steadybit-shopping-demo-1.3.2-develop.20261026054801.tgz
+    version: 1.3.2-develop.20261026054801
+  - annotations:
+      artifacthub.io/images: |
+        - name: logo
+          image: https://steadybit-website-assets.s3.amazonaws.com/logo-symbol-transparent.png
+      artifacthub.io/links: |-
+        - name: Steadybit website
+          url: https://www.steadybit.com
+        - name: Steadybit reliability hub
+          url: https://hub.steadybit.com
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-10-26T05:48:06.316826697Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -127,7 +171,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.992902342Z"
+    created: "2026-10-26T05:48:06.293562793Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -171,7 +215,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.970047066Z"
+    created: "2026-10-26T05:48:06.27105058Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -215,7 +259,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.947534216Z"
+    created: "2026-10-26T05:48:06.24731185Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -259,7 +303,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.925329634Z"
+    created: "2026-10-26T05:48:06.222486563Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -303,7 +347,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.903350118Z"
+    created: "2026-10-26T05:48:06.199078242Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -347,7 +391,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.881071076Z"
+    created: "2026-10-26T05:48:06.175474339Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -391,7 +435,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.858303478Z"
+    created: "2026-10-26T05:48:06.151966655Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -435,7 +479,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.836290696Z"
+    created: "2026-10-26T05:48:06.125717956Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -479,7 +523,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.814084545Z"
+    created: "2026-10-26T05:48:06.103232698Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -523,7 +567,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.791740743Z"
+    created: "2026-10-26T05:48:06.081127956Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -567,7 +611,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.769283966Z"
+    created: "2026-10-26T05:48:06.057899775Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -611,7 +655,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.745448459Z"
+    created: "2026-10-26T05:48:06.035004163Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -655,7 +699,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.722009472Z"
+    created: "2026-10-26T05:48:06.01125377Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -699,7 +743,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.698190032Z"
+    created: "2026-10-26T05:48:05.988752519Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -743,7 +787,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.674879284Z"
+    created: "2026-10-26T05:48:05.961766265Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -787,7 +831,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.651597607Z"
+    created: "2026-10-26T05:48:05.939106941Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -831,7 +875,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.628608999Z"
+    created: "2026-10-26T05:48:05.915660018Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -919,7 +963,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.605957386Z"
+    created: "2026-10-26T05:48:05.892292099Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -963,7 +1007,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.58365843Z"
+    created: "2026-10-26T05:48:05.868794695Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1007,7 +1051,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.562677393Z"
+    created: "2026-10-26T05:48:05.842748259Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1051,7 +1095,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.539884448Z"
+    created: "2026-10-26T05:48:05.818308274Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1095,7 +1139,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.515869767Z"
+    created: "2026-10-26T05:48:05.794376324Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1139,7 +1183,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.492799152Z"
+    created: "2026-10-26T05:48:05.770033379Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1183,7 +1227,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.470354548Z"
+    created: "2026-10-26T05:48:05.738357656Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1227,7 +1271,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.449145574Z"
+    created: "2026-10-26T05:48:05.7074977Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1271,7 +1315,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.426595982Z"
+    created: "2026-10-26T05:48:05.679157703Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1315,7 +1359,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.403848902Z"
+    created: "2026-10-26T05:48:05.655544446Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1359,7 +1403,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.382428672Z"
+    created: "2026-10-26T05:48:05.631837584Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1403,7 +1447,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.360244183Z"
+    created: "2026-10-26T05:48:05.608081593Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1447,7 +1491,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.337516449Z"
+    created: "2026-10-26T05:48:05.584709327Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1491,7 +1535,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.314799084Z"
+    created: "2026-10-26T05:48:05.563450356Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1535,7 +1579,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.291457796Z"
+    created: "2026-10-26T05:48:05.540050523Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1579,7 +1623,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.268874231Z"
+    created: "2026-10-26T05:48:05.517108341Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1623,7 +1667,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.245921528Z"
+    created: "2026-10-26T05:48:05.493328119Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1667,7 +1711,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.223554199Z"
+    created: "2026-10-26T05:48:05.469170281Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1711,7 +1755,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.200400589Z"
+    created: "2026-10-26T05:48:05.445883703Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1755,7 +1799,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.177809643Z"
+    created: "2026-10-26T05:48:05.422568889Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1799,7 +1843,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.155632823Z"
+    created: "2026-10-26T05:48:05.399170698Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1843,7 +1887,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.1331301Z"
+    created: "2026-10-26T05:48:05.376727754Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1887,7 +1931,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.110459834Z"
+    created: "2026-10-26T05:48:05.353110241Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1931,7 +1975,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.087514145Z"
+    created: "2026-10-26T05:48:05.329764649Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -1975,7 +2019,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.064202551Z"
+    created: "2026-10-26T05:48:05.306347276Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2063,7 +2107,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.041671584Z"
+    created: "2026-10-26T05:48:05.28393976Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2107,7 +2151,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:09.018878821Z"
+    created: "2026-10-26T05:48:05.260970211Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2151,7 +2195,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.996519975Z"
+    created: "2026-10-26T05:48:05.238295941Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2195,7 +2239,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.97399158Z"
+    created: "2026-10-26T05:48:05.214682641Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2239,7 +2283,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.950618097Z"
+    created: "2026-10-26T05:48:05.191801589Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2283,7 +2327,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.928067833Z"
+    created: "2026-10-26T05:48:05.167869967Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2327,7 +2371,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.905338196Z"
+    created: "2026-10-26T05:48:05.144283843Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2371,7 +2415,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.8827931Z"
+    created: "2026-10-26T05:48:05.120584963Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2415,7 +2459,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.860224403Z"
+    created: "2026-10-26T05:48:05.097651288Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2459,7 +2503,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.83831735Z"
+    created: "2026-10-26T05:48:05.075953219Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2503,7 +2547,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.816563278Z"
+    created: "2026-10-26T05:48:05.052529656Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2547,7 +2591,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.793002072Z"
+    created: "2026-10-26T05:48:05.028677779Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2591,7 +2635,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.770246176Z"
+    created: "2026-10-26T05:48:05.004511066Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2635,7 +2679,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.747781742Z"
+    created: "2026-10-26T05:48:04.981630815Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2679,7 +2723,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.724638695Z"
+    created: "2026-10-26T05:48:04.960089168Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2723,7 +2767,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.701827479Z"
+    created: "2026-10-26T05:48:04.93704182Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2767,7 +2811,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.678363693Z"
+    created: "2026-10-26T05:48:04.913383231Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2811,7 +2855,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.655421278Z"
+    created: "2026-10-26T05:48:04.889454523Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2855,7 +2899,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.634349422Z"
+    created: "2026-10-26T05:48:04.86681128Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2899,7 +2943,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.611845993Z"
+    created: "2026-10-26T05:48:04.843822999Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2943,7 +2987,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.589855633Z"
+    created: "2026-10-26T05:48:04.821357708Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -2987,7 +3031,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.567182684Z"
+    created: "2026-10-26T05:48:04.798584621Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3031,7 +3075,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.54482648Z"
+    created: "2026-10-26T05:48:04.775079348Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3075,7 +3119,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.522494964Z"
+    created: "2026-10-26T05:48:04.751791208Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3119,7 +3163,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.499391791Z"
+    created: "2026-10-26T05:48:04.727915392Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3163,7 +3207,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.476338824Z"
+    created: "2026-10-26T05:48:04.70473847Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3207,7 +3251,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.453793528Z"
+    created: "2026-10-26T05:48:04.681163197Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3251,7 +3295,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.430798777Z"
+    created: "2026-10-26T05:48:04.656165388Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3295,7 +3339,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.408854164Z"
+    created: "2026-10-26T05:48:04.633577522Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3339,7 +3383,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.386856501Z"
+    created: "2026-10-26T05:48:04.611694437Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3383,7 +3427,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.364823271Z"
+    created: "2026-10-26T05:48:04.588222861Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3427,7 +3471,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.343181177Z"
+    created: "2026-10-26T05:48:04.5655336Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3471,7 +3515,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.320689966Z"
+    created: "2026-10-26T05:48:04.542380866Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3515,7 +3559,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.298500342Z"
+    created: "2026-10-26T05:48:04.519785715Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3559,7 +3603,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.276586925Z"
+    created: "2026-10-26T05:48:04.496504444Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3603,7 +3647,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.253882828Z"
+    created: "2026-10-26T05:48:04.474247821Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3647,7 +3691,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.230365802Z"
+    created: "2026-10-26T05:48:04.451335692Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3691,7 +3735,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.208424286Z"
+    created: "2026-10-26T05:48:04.428715325Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3779,7 +3823,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.18651112Z"
+    created: "2026-10-26T05:48:04.406139496Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3867,7 +3911,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.164393863Z"
+    created: "2026-10-26T05:48:04.383698263Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3911,7 +3955,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.137753201Z"
+    created: "2026-10-26T05:48:04.360071233Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -3955,7 +3999,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.113732857Z"
+    created: "2026-10-26T05:48:04.3353241Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4043,7 +4087,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.091314431Z"
+    created: "2026-10-26T05:48:04.313793989Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4087,7 +4131,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.067169037Z"
+    created: "2026-10-26T05:48:04.291012721Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4131,7 +4175,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.044403101Z"
+    created: "2026-10-26T05:48:04.267176405Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4175,7 +4219,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:08.022404705Z"
+    created: "2026-10-26T05:48:04.244374122Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4219,7 +4263,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.999901259Z"
+    created: "2026-10-26T05:48:04.22163408Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4263,7 +4307,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.978179212Z"
+    created: "2026-10-26T05:48:04.197569629Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4351,7 +4395,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.955669874Z"
+    created: "2026-10-26T05:48:04.175344981Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4439,7 +4483,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.932522389Z"
+    created: "2026-10-26T05:48:04.152159006Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4527,7 +4571,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.910291462Z"
+    created: "2026-10-26T05:48:04.129849756Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4571,7 +4615,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.887966928Z"
+    created: "2026-10-26T05:48:04.107026629Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4615,7 +4659,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.864500436Z"
+    created: "2026-10-26T05:48:04.084214648Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4659,7 +4703,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.842075878Z"
+    created: "2026-10-26T05:48:04.061025679Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4703,7 +4747,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.820604614Z"
+    created: "2026-10-26T05:48:04.037414245Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4747,7 +4791,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.797991103Z"
+    created: "2026-10-26T05:48:04.013649579Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4791,7 +4835,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.772240451Z"
+    created: "2026-10-26T05:48:03.989030224Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4835,7 +4879,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.738535641Z"
+    created: "2026-10-26T05:48:03.961446048Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4879,7 +4923,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.714672342Z"
+    created: "2026-10-26T05:48:03.939599413Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4923,7 +4967,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.687276223Z"
+    created: "2026-10-26T05:48:03.917092615Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -4967,7 +5011,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.652309814Z"
+    created: "2026-10-26T05:48:03.893036475Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -5011,7 +5055,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.629408695Z"
+    created: "2026-10-26T05:48:03.870771005Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -5055,7 +5099,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.608141301Z"
+    created: "2026-10-26T05:48:03.84702161Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -5099,7 +5143,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.5859556Z"
+    created: "2026-10-26T05:48:03.823430284Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -5143,7 +5187,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.564289712Z"
+    created: "2026-10-26T05:48:03.799218839Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -5187,7 +5231,7 @@ entries:
           url: https://hub.steadybit.com
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-26T05:36:07.541527476Z"
+    created: "2026-10-26T05:48:03.773753483Z"
     dependencies:
     - alias: haproxy
       condition: gateway.ingress.haproxy.enabled
@@ -6124,4 +6168,4 @@ entries:
     urls:
     - https://github.com/steadybit/shopping-demo/releases/download/steadybit-shopping-demo-0.1.0/steadybit-shopping-demo-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-26T05:36:07.519264127Z"
+generated: "2026-10-26T05:48:03.750523662Z"
