@@ -34,7 +34,7 @@
         <netty-bom.version>4.2.19.Final</netty-bom.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.16.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
         <typescript-generator-maven-plugin.version>4.2.1</typescript-generator-maven-plugin.version>
