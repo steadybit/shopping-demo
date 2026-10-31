@@ -30,7 +30,7 @@
         <spring-boot.version>4.1.2</spring-boot.version>
         <lombok.version>1.18.48</lombok.version>
         <tomcat.version>11.0.27</tomcat.version> <!-- remove when spring boot contains this version -->
-        <jackson-bom.version>3.1.7</jackson-bom.version> <!-- remove when spring boot contains this version -->
+        <jackson-bom.version>3.2.4</jackson-bom.version> <!-- remove when spring boot contains this version -->
         <netty-bom.version>4.2.19.Final</netty-bom.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
