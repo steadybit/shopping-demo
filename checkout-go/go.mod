@@ -4,12 +4,12 @@ go 1.26.5
 
 require (
 	github.com/IBM/sarama v1.61.1
-	github.com/go-stomp/stomp/v3 v3.1.5
+	github.com/go-stomp/stomp/v3 v3.2.1
 	github.com/gorilla/mux v1.8.1
 	github.com/prometheus/client_golang v1.25.0
 	github.com/redis/go-redis/v9 v9.23.0
 	github.com/rs/zerolog v1.35.1
-	github.com/steadybit/extension-kit v1.12.1
+	github.com/steadybit/extension-kit v1.12.2
 	github.com/xdg-go/scram v1.2.0
 	gorm.io/gorm v1.31.2
 )

@@ -1,5 +1,5 @@
 # Use official Golang image as builder
-FROM --platform=$BUILDPLATFORM golang:1.26 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.27 AS builder
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
 ARG TARGETOS
@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -a -o bestseller-to
 RUN make licenses-report
 
 # Use minimal image for deployment
-FROM alpine:3.18
+FROM alpine:3.24
 
 WORKDIR /app
 

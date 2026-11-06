@@ -13,7 +13,7 @@ jobs:
     env:
       STEADYBIT_TOKEN: ${{ secrets.STEADYBIT_API_ACCESS_TOKEN }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install Steadybit CLI
         uses: steadybit/cli@v6

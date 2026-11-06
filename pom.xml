@@ -27,18 +27,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>25</java.version>
-        <spring-boot.version>4.1.1</spring-boot.version>
-        <lombok.version>1.18.46</lombok.version>
-        <tomcat.version>11.0.25</tomcat.version> <!-- remove when spring boot contains this version -->
-        <jackson-bom.version>3.1.7</jackson-bom.version> <!-- remove when spring boot contains this version -->
-        <netty-bom.version>4.2.18.Final</netty-bom.version> <!-- remove when spring boot contains this version -->
+        <spring-boot.version>4.1.2</spring-boot.version>
+        <lombok.version>1.18.48</lombok.version>
+        <tomcat.version>11.0.27</tomcat.version> <!-- remove when spring boot contains this version -->
+        <jackson-bom.version>3.2.4</jackson-bom.version> <!-- remove when spring boot contains this version -->
+        <netty-bom.version>4.2.19.Final</netty-bom.version> <!-- remove when spring boot contains this version -->
 
         <!--plugins-->
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
-        <typescript-generator-maven-plugin.version>3.2.1263</typescript-generator-maven-plugin.version>
-        <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
+        <maven-compiler-plugin.version>3.16.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+        <exec-maven-plugin.version>3.6.4</exec-maven-plugin.version>
+        <typescript-generator-maven-plugin.version>4.2.1</typescript-generator-maven-plugin.version>
+        <flatten-maven-plugin.version>1.8.0</flatten-maven-plugin.version>
         <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
     </properties>
     <dependencyManagement>
