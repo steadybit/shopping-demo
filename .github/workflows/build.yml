@@ -2,8 +2,6 @@ name: Build
 
 on:
   push:
-    paths-ignore:
-    - '.trivyignore-*.yml'
   pull_request:
     branches:
       - main
@@ -12,8 +10,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Skips the jobs of a push that changes nothing but trivy ignores. A paths-ignore filter would skip the
+  # whole workflow instead, so "build" never reports and a release PR whose head is such a commit
+  # waits for its required checks forever; a skipped job reports and satisfies them.
+  changes:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      relevant: ${{ steps.filter.outputs.relevant }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          # With the default 'some', any file "not matching" a negated rule would count; 'every' makes the filter true
+          # only for files outside the excluded paths.
+          predicate-quantifier: 'every'
+          filters: |
+            relevant:
+              - '!.trivyignore-*.yml'
+
   build:
-    if: github.event_name != 'pull_request'
+    needs: [ changes ]
+    if: ${{ !cancelled() && github.event_name != 'pull_request' && needs.changes.outputs.relevant != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -183,7 +203,8 @@ jobs:
 
   build-fashion-lambda:
     name: "Build and Upload fashion-bestseller Lambda"
-    if: github.event_name != 'pull_request'
+    needs: [ changes ]
+    if: ${{ !cancelled() && github.event_name != 'pull_request' && needs.changes.outputs.relevant != 'false' }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -253,6 +274,8 @@ jobs:
 
   test-helm-charts:
     name: "Test Helm Charts"
+    needs: [ changes ]
+    if: ${{ !cancelled() && needs.changes.outputs.relevant != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
