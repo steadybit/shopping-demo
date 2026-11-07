@@ -9,7 +9,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.16.0
 	github.com/rs/zerolog v1.35.1
 	github.com/steadybit/extension-kit v1.12.2
-	github.com/xdg-go/scram v1.2.0
+	github.com/xdg-go/scram v1.3.0
 )
 
 require (
