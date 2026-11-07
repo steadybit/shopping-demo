@@ -32,7 +32,7 @@
         "@vitejs/plugin-react": "^5.1.4",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^30.5.2",
-        "jest-environment-jsdom": "^30.4.1",
+        "jest-environment-jsdom": "^30.5.2",
         "sass": "^1.106.1",
         "ts-jest": "^29.4.15",
         "ts-node": "^10.9.2",
