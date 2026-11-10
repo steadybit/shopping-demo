@@ -36,7 +36,7 @@
         "sass": "^1.106.1",
         "ts-jest": "^29.4.15",
         "ts-node": "^10.9.2",
-        "typescript": "^5.5.2",
+        "typescript": "^7.0.2",
         "vite": "^8.3.5",
         "vite-plugin-svgr": "^5.2.0",
         "vite-tsconfig-paths": "^6.1.0"
