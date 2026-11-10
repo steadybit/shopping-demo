@@ -62,11 +62,11 @@ jobs:
 
       - name: "[main] Set up Snyk CLI"
         if: github.ref == 'refs/heads/main'
-        uses: snyk/actions/setup@master
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
 
       - name: "[main] Synk monitor: maven (Java)"
         if: github.ref == 'refs/heads/main'
-        run: snyk monitor --all-projects --exclude=go.mod --prune-repeated-subdependencies --target-reference=${{ github.ref_name }} -- -s .github/workflows/maven-settings.xml
+        run: snyk monitor --all-projects --exclude=go.mod --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME" -- -s .github/workflows/maven-settings.xml
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: "[main] Synk monitor: maven (Go)"
         if: github.ref == 'refs/heads/main'
-        run: snyk monitor --all-projects --exclude=pom.xml --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        run: snyk monitor --all-projects --exclude=pom.xml --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
@@ -173,15 +173,19 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main') && ',linux/arm64' || '' }} #for branches we just do a load, and this supports no multi-arch
 
+      - name: "[main] Set up Snyk CLI"
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
+
       - name: "[main] Snyk monitor docker image"
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: snyk/actions/docker@master
-        with:
-          image: "steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }}"
-          args: --file=${{ matrix.image.folder }}/Dockerfile --target-reference=${{ github.ref_name }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-          command: monitor
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          SNYK_REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE: steadybit/${{ matrix.image.name || matrix.image.folder }}
+          FOLDER: ${{ matrix.image.folder }}
+        run: snyk container monitor "$IMAGE:$GITHUB_REF_NAME" --file="$FOLDER/Dockerfile" --target-reference="$GITHUB_REF_NAME"
 
   trigger-deployment:
     name: Trigger Deployment
@@ -223,11 +227,11 @@ jobs:
         working-directory: bestseller-fashion-lambda
       - name: "[main] setup snyk"
         if: github.ref == 'refs/heads/main'
-        uses: snyk/actions/setup@master
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
       - name: "[main] snyk monitor"
         if: github.ref == 'refs/heads/main'
         working-directory: bestseller-fashion-lambda
-        run: snyk monitor --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        run: snyk monitor --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Zip lambda
