@@ -50,3 +50,12 @@ vulnerabilities:
   - id: CVE-2026-113351
     statement: Waiting for debian upstream fix
     expired_at: 2027-02-01
+  - id: CVE-2026-115506
+    statement: "libexpat1 in Debian 12 base image, fix deferred upstream"
+    expired_at: 2027-02-01
+  - id: CVE-2026-76844
+    statement: "zlib1g in Debian 12 base image, no fix available"
+    expired_at: 2027-02-01
+  - id: CVE-2026-85091
+    statement: "zlib1g in Debian 12 base image, no fix available"
+    expired_at: 2027-02-01
