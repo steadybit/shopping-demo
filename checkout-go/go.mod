@@ -10,7 +10,7 @@ require (
 	github.com/redis/go-redis/v9 v9.23.0
 	github.com/rs/zerolog v1.35.1
 	github.com/steadybit/extension-kit v1.12.2
-	github.com/xdg-go/scram v1.2.0
+	github.com/xdg-go/scram v1.3.0
 	gorm.io/gorm v1.31.2
 )
 
@@ -40,7 +40,7 @@ require (
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	go.uber.org/atomic v1.12.0 // indirect
 	golang.org/x/crypto v0.58.0 // indirect
-	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect

@@ -11,7 +11,7 @@
     "dependencies": {
         "@bem-react/classname": "^1.5.12",
         "@testing-library/jest-dom": "^7.0.1",
-        "@testing-library/react": "^16.0.0",
+        "@testing-library/react": "^16.3.3",
         "@testing-library/user-event": "^14.6.8",
         "axios": "^1.21.0",
         "bootstrap": "^5.3.3",
@@ -32,12 +32,12 @@
         "@vitejs/plugin-react": "^5.1.4",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^30.5.2",
-        "jest-environment-jsdom": "^30.4.1",
+        "jest-environment-jsdom": "^30.5.2",
         "sass": "^1.106.1",
         "ts-jest": "^29.4.15",
         "ts-node": "^10.9.2",
         "typescript": "^5.5.2",
-        "vite": "^7.3.7",
+        "vite": "^8.3.5",
         "vite-plugin-svgr": "^5.2.0",
         "vite-tsconfig-paths": "^6.1.0"
     },
