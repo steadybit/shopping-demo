@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:26 AS builder
+FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:27 AS builder
 ARG BUILDPLATFORM
 ARG TARGETPLATFORM
 ARG TARGETARCH
@@ -9,7 +9,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
-FROM azul/zulu-openjdk-debian:26
+FROM azul/zulu-openjdk-debian:27
 WORKDIR /application
 
 RUN apt-get update && \
