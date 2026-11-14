@@ -9,7 +9,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.16.0
 	github.com/rs/zerolog v1.35.1
 	github.com/steadybit/extension-kit v1.12.3
-	github.com/xdg-go/scram v1.3.0
+	github.com/xdg-go/scram v1.4.0
 )
 
 require (
@@ -32,7 +32,6 @@ require (
 	github.com/prometheus/common v0.72.1 // indirect
 	github.com/prometheus/procfs v0.22.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20250401214520-65e299d6c5c9 // indirect
-	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	golang.org/x/crypto v0.58.0 // indirect
 	golang.org/x/net v0.62.0 // indirect
