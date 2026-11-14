@@ -26,8 +26,8 @@ github.com/rabbitmq/amqp091-go v1.16.0 h1:1O8oQqnj9hLACoo6CVMgn57z2pLWXvgemhh4Gs
 github.com/rabbitmq/amqp091-go v1.16.0/go.mod h1:Hy4jKW5kQART1u+JkDTF9YYOQUHXqMuhrgxOEeS7G4o=
 github.com/rs/zerolog v1.35.1 h1:m7xQeoiLIiV0BCEY4Hs+j2NG4Gp2o2KPKmhnnLiazKI=
 github.com/rs/zerolog v1.35.1/go.mod h1:EjML9kdfa/RMA7h/6z6pYmq1ykOuA8/mjWaEvGI+jcw=
-github.com/steadybit/extension-kit v1.12.2 h1:YEPvK5WogwzeZPYkEaQwokePhtLZ7nHsFEQ7bBQhsfM=
-github.com/steadybit/extension-kit v1.12.2/go.mod h1:sZzKIafjnBBcj4ohDLER8hS5AjKjlFsfZosPDHoxR3Q=
+github.com/steadybit/extension-kit v1.12.3 h1:rkMnw6BuDde8FDNSa/zEq8gMZGqimiB+29p3uXBgCJc=
+github.com/steadybit/extension-kit v1.12.3/go.mod h1:y4v/gfjy261arjb8MALI5Rq+RjPu254VNBGpjAQb9g0=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
