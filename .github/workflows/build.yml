@@ -62,11 +62,11 @@ jobs:
 
       - name: "[main] Set up Snyk CLI"
         if: github.ref == 'refs/heads/main'
-        uses: snyk/actions/setup@master
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
 
       - name: "[main] Synk monitor: maven (Java)"
         if: github.ref == 'refs/heads/main'
-        run: snyk monitor --all-projects --exclude=go.mod --prune-repeated-subdependencies --target-reference=${{ github.ref_name }} -- -s .github/workflows/maven-settings.xml
+        run: snyk monitor --all-projects --exclude=go.mod --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME" -- -s .github/workflows/maven-settings.xml
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: "[main] Synk monitor: maven (Go)"
         if: github.ref == 'refs/heads/main'
-        run: snyk monitor --all-projects --exclude=pom.xml --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        run: snyk monitor --all-projects --exclude=pom.xml --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
@@ -105,6 +105,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+      # Docker Hub login as the workflow, without a stored password.
+      id-token: write
     strategy:
       matrix:
         image:
@@ -125,12 +127,19 @@ jobs:
           name: demo-jars
           path: .
 
+      # Docker Hub exchanges the identity of this job for a token that lasts a few minutes and may
+      # only push the images of this repository. The connection id names the OIDC connection of
+      # the steadybit Docker organisation; it is not a secret.
+      # A Dependabot branch only builds the image locally from public base images, so a failed
+      # login is tolerated there and nowhere else.
       - name: Log in to the Docker container registry
         uses: docker/login-action@v4
+        continue-on-error: ${{ github.actor == 'dependabot[bot]' }}
+        env:
+          DOCKERHUB_OIDC_CONNECTIONID: cb9fd54c-9f94-4732-b0ce-53c03b0a008e
         with:
           registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: steadybit
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4
@@ -173,15 +182,17 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main') && ',linux/arm64' || '' }} #for branches we just do a load, and this supports no multi-arch
 
+      - name: "[main] Set up Snyk CLI"
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
+
       - name: "[main] Snyk monitor docker image"
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: snyk/actions/docker@master
-        with:
-          image: "steadybit/${{ matrix.image.name || matrix.image.folder }}:${{ github.ref_name }}"
-          args: --file=${{ matrix.image.folder }}/Dockerfile --target-reference=${{ github.ref_name }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-          command: monitor
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          IMAGE: steadybit/${{ matrix.image.name || matrix.image.folder }}
+          FOLDER: ${{ matrix.image.folder }}
+        run: snyk container monitor "$IMAGE:$GITHUB_REF_NAME" --file="$FOLDER/Dockerfile" --target-reference="$GITHUB_REF_NAME"
 
   trigger-deployment:
     name: Trigger Deployment
@@ -223,11 +234,11 @@ jobs:
         working-directory: bestseller-fashion-lambda
       - name: "[main] setup snyk"
         if: github.ref == 'refs/heads/main'
-        uses: snyk/actions/setup@master
+        uses: steadybit/extension-kit/.github/actions/setup-snyk@main # NOSONAR githubactions:S7637 - our own action
       - name: "[main] snyk monitor"
         if: github.ref == 'refs/heads/main'
         working-directory: bestseller-fashion-lambda
-        run: snyk monitor --prune-repeated-subdependencies --target-reference=${{ github.ref_name }}
+        run: snyk monitor --prune-repeated-subdependencies --target-reference="$GITHUB_REF_NAME"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Zip lambda
