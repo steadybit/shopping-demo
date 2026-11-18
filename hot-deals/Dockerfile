@@ -12,7 +12,10 @@ RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --dest
 FROM azul/zulu-openjdk-debian:27
 WORKDIR /application
 
-RUN apt-get update && \
+# The base image pins the zulu packages to the JDK version it was built with (/etc/apt/preferences), so a plain
+# upgrade never picks up a JDK security update before Azul publishes a new image. Dropping the pin lets it.
+RUN rm -f /etc/apt/preferences && \
+    apt-get update && \
     apt-get upgrade -y && \
     apt-get clean
 
