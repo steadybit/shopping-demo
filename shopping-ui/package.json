@@ -12,7 +12,7 @@
         "@bem-react/classname": "^1.5.12",
         "@testing-library/jest-dom": "^7.0.1",
         "@testing-library/react": "^16.3.3",
-        "@testing-library/user-event": "^14.6.8",
+        "@testing-library/user-event": "^14.6.12",
         "axios": "^1.21.1",
         "bootstrap": "^5.3.9",
         "react": "^19.2.4",
